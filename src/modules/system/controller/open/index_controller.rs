@@ -11,7 +11,6 @@ use tera::Context;
 use crate::core::service::templates_service;
 use crate::modules::articles::entity::article_model::{ArticlesListData, ArticlesListRequest};
 use crate::modules::articles::service::article_service;
-use crate::modules::naming::service::{ surname_service};
 use crate::modules::user::entity::user_model::{UserLoginSession};
 
 pub async fn index(session: Session, user: Option<Identity>) -> HttpResponse {
@@ -92,14 +91,6 @@ pub async fn index(session: Session, user: Option<Identity>) -> HttpResponse {
     let tera = templates_service::get_templates();
 
     tera_ctx.insert("articleList", &result);
-
-    //推荐姓氏
-    match surname_service::get_surname_recommend(1).await {
-        Ok(data) => {
-            tera_ctx.insert("surname_list", &data);
-        }
-        _ => {}
-    };
 
 
     if let Some(user) = user {

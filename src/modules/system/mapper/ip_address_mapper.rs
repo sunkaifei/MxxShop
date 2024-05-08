@@ -1,4 +1,4 @@
-use rbatis::{crud, impl_select, impl_select_page, py_sql, RBatis};
+use rbatis::{crud, impl_select_page, py_sql, RBatis};
 
 use crate::modules::system::entity::ip_address_entity::IpAddress;
 use crate::modules::system::entity::ip_address_model::IpAddressPageDTO;

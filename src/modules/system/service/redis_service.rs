@@ -6,7 +6,7 @@ use redis::aio:: MultiplexedConnection;
 use redis::RedisResult;
 
 use crate::core::errors::error::{Error, Result};
-use crate::modules::website::service::cache_service::ICacheService;
+use crate::modules::system::service::cache_service::ICacheService;
 
 ///Redis Cache service
 pub struct RedisService {

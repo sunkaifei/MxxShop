@@ -7,7 +7,7 @@ use captcha::Captcha;
 use captcha::filters::{Dots, Noise, Wave};
 
 use crate::core::web::response::ResVO;
-use crate::modules::website::service::cache_service::CacheService;
+use crate::modules::system::service::cache_service::CacheService;
 
 // 定义验证码路由处理函数
 #[get("/pub/captcha/get")]

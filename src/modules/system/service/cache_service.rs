@@ -6,8 +6,9 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 
 use crate::core::errors::error::{Result};
-use crate::modules::website::service::mem_service::MemService;
-use crate::modules::website::service::redis_service::RedisService;
+use crate::modules::system::service::mem_service::MemService;
+use crate::modules::system::service::redis_service::RedisService;
+
 use crate::utils::settings::Settings;
 
 pub trait ICacheService: Sync + Send {
