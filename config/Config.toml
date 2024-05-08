@@ -1,0 +1,30 @@
+[server]
+server_url = "127.0.0.1:8088"
+#jwt的令牌
+jwt_secret = "fly_mall"
+#默认模版
+tpl_default = "default"
+#缓存设置 choose ("mem","redis")
+cache_type = "redis"
+
+
+[database]
+mysql_url = "mysql://登录名:密码@服务器ip:3306/fly_mall_db?prefer_socket=false"
+#cache_type=“redis” enabled
+redis_url = "redis://127.0.0.1:6379"
+#database pool len
+db_pool_len = 32
+#pool get timeout
+db_pool_timeout = 60
+
+[attach]
+attach_path = "./storage/Attach/"
+#上传路径，需要/结尾
+upload_path = "./storage/upload/"
+upload_url = "/upload/"
+
+#时区
+[time]
+timezone = "Asia/Shanghai"
+
+
