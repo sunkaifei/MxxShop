@@ -1,0 +1,2 @@
+pub mod article_admin_controller;
+pub mod article_category_admin_controller;
