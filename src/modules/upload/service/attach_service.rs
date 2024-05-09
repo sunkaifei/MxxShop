@@ -17,7 +17,7 @@ use crate::utils::time_utils::current_date;
 use crate::modules::system::service::config_service;
 use crate::modules::upload::entity::attach_model::AttachPageBO;
 
-pub async fn upload_totem_image(module: String, form: ImageForm) -> HttpResponse {
+pub async fn upload_product_image(module: String, form: ImageForm) -> HttpResponse {
     let file_name = form.file.file_name.unwrap_or_else(|| "".to_string());
 
     if file_name.as_str() == "" {
