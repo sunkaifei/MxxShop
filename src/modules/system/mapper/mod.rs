@@ -8,10 +8,12 @@
 //! 版权所有，侵权必究！
 //!
 
-pub mod dept_mapper;
-pub mod menu_mapper;
+pub mod depts_mapper;
+pub mod menus_mapper;
 pub mod role_mapper;
 pub mod admin_mapper;
 pub mod config_mapper;
 pub mod dict_mapper;
 pub mod ip_address_mapper;
+pub mod system_log_mapper;
+mod language_mapper;

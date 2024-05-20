@@ -13,15 +13,15 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct SystemMenu {
-    pub id: u64,
+    pub id: Option<u64>,
     /// 菜单名称
-    pub menu_name: String,
+    pub menu_name: Option<String>,
     /// 父菜单ID
-    pub parent_id: u64,
+    pub parent_id: Option<u64>,
     /// 组件名称
-    pub name: String,
+    pub name: Option<String>,
     ///路由地址
-    pub path: String,
+    pub path: Option<String>,
     ///请求api地址
     pub api_url: Option<String>,
     /// 显示顺序
@@ -37,9 +37,9 @@ pub struct SystemMenu {
     ///菜单高亮
     pub active: Option<String>,
     ///菜单类型（M目录 C菜单 F按钮）
-    pub menu_type: String,
+    pub menu_type: Option<String>,
     ///是否隐藏（0显示 1隐藏）
-    pub is_hide: i8,
+    pub is_hide: Option<i8>,
     ///权限标识
     pub perms: Option<String>,
     ///菜单图标
@@ -49,7 +49,7 @@ pub struct SystemMenu {
     ///颜色值
     pub color: Option<String>,
     ///是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
-    pub is_iframe: i8,
+    pub is_iframe: Option<i8>,
     ///创建者
     pub create_by: Option<String>,
     ///创建时间

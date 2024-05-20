@@ -10,7 +10,7 @@
 
 use actix_web::{HttpRequest};
 use crate::core::permission::jwt_util::JWTToken;
-use crate::utils::error::WhoUnfollowedError;
+use crate::core::errors::error::WhoUnfollowedError;
 use crate::utils::settings::Settings;
 
 pub fn get_user(req: HttpRequest) -> Result<JWTToken, WhoUnfollowedError> {

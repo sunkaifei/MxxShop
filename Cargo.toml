@@ -1,5 +1,5 @@
 [package]
-name = "MxxShop"
+name = "mxx-shop"
 version = "0.1.0"
 edition = "2021"
 
@@ -88,6 +88,7 @@ time = "0.3.36"
 
 #任务调度
 job_scheduler = "1.2.1"
+
 
 [profile.release]
 opt-level = "z"

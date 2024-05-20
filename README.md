@@ -1,7 +1,10 @@
-# FlyMall商城
+# MxxShop商城
 
 #### 介绍
-FlyMall Rust版，是基于actix-web和rbatis的商城管理系统，一款面向全球的多语言、多业态电子商务平台，系统提供管理、支付、物流、售后等众多应用功能，满足跨境市场的基本需 求，助力更多商户走出国门，大力开拓国外市场，为广大用户提供一站式的国际化电商运营解决方案
+MxxShop Rust版，是基于actix-web和rbatis的商城管理系统，一款面向全球的多语言、多业态电子商务平台，系统提供管理、支付、物流、售后等众多应用功能，满足跨境市场的基本需 求，助力更多商户走出国门，大力开拓国外市场，为广大用户提供一站式的国际化电商运营解决方案
+
+###### 后台管理UI
+[https://gitee.com/rust-shop/MxxShop-Admin-UI.git](https://gitee.com/rust-shop/MxxShop-Admin-UI.git) 
 
 ###### 已完成功能
 1. 管理员登录

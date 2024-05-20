@@ -25,9 +25,9 @@ pub struct RedisService {
 
 impl RedisService {
     pub fn new(url: &str) -> Self {
-        println!("[fly_admin] connect redis ({})...", url);
+        println!("[MxxShop_admin] connect redis ({})...", url);
         let client = redis::Client::open(url).unwrap();
-        println!("[fly_admin] connect redis success!");
+        println!("[MxxShop_admin] connect redis success!");
         Self { client }
     }
 

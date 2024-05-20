@@ -9,7 +9,7 @@ use crate::core::errors::error::Result;
 use serde_json::json;
 use crate::core::web::response::ResVO;
 use crate::modules::upload::entity::attach_entity::{Attach, ImageForm};
-use crate::RB;
+use crate::pool;
 use crate::utils::encryption_utils;
 use crate::utils::settings::Settings;
 use crate::utils::snowflake_id::generate_snowflake_id;
@@ -64,7 +64,7 @@ pub async fn upload_product_image(module: String, form: ImageForm) -> HttpRespon
     };
     
     // 判断是否有相同
-    let attach_data = Attach::select_by_md5(&RB.clone(), md5.as_str()).await;
+    let attach_data = Attach::select_by_md5(pool!(), md5.as_str()).await;
     match attach_data {
         Ok(attach_option) => {
             match attach_option {
@@ -117,7 +117,7 @@ pub async fn upload_product_image(module: String, form: ImageForm) -> HttpRespon
         status: i32::from(1),
         add_time: DateTime::now().into(),
     };
-    let rows = Attach::insert(&RB.clone(), &create_data.clone()).await;
+    let rows = Attach::insert(pool!(), &create_data.clone()).await;
     return if rows.unwrap_or_default().rows_affected > 0 {
         //result_map.insert("code".to_string(), "200".to_string());
         result_map.insert("fileName".to_string(), file_name.clone().to_string());
@@ -167,7 +167,7 @@ pub async fn upload_image(module: String, form: ImageForm) -> HttpResponse {
     let mut result_map: HashMap<String, String> = HashMap::new();
 
     // 判断是否有相同
-    let attach_data = Attach::select_by_md5(&RB.clone(), md5.as_str()).await;
+    let attach_data = Attach::select_by_md5(pool!(), md5.as_str()).await;
     match attach_data {
         Ok(attach_option) => {
             match attach_option {
@@ -205,7 +205,7 @@ pub async fn upload_image(module: String, form: ImageForm) -> HttpResponse {
         add_time: DateTime::now().into(),
     };
     //let mut tx = RB.acquire_begin().await?;
-    let rows = Attach::insert(&RB.clone(), &create_data.clone()).await;
+    let rows = Attach::insert(pool!(), &create_data.clone()).await;
     //tx.commit().await?;
     //tx.rollback().await?;
     if rows.is_ok() {
@@ -267,18 +267,18 @@ pub fn is_image(extension: String) -> bool {
 
 ///批量删除附件信息
 pub async fn delete_in_column(ids: Vec<Option<String>>) -> Result<u64> {
-    let result = Attach::delete_in_column(&RB.clone(), "id", &ids).await;
+    let result = Attach::delete_in_column(pool!(), "id", &ids).await;
     return Ok(result.unwrap_or_default().rows_affected);
 }
 
 ///更新附件信息
 pub async fn update_attach(item: &Attach) -> Result<u64> {
-    let result = Attach::update_by_column(&RB.clone(), item, "id").await;
+    let result = Attach::update_by_column(pool!(), item, "id").await;
     return Ok(result.unwrap_or_default().rows_affected); 
 }
 
 pub async fn select_attach_page(item: AttachPageBO) -> rbatis::Result<Page<Attach>> {
     let page_req = &PageRequest::new(item.page_num.clone(), item.page_size.clone());
-    let result = Attach::select_attach_page(&RB.clone(), page_req, item).await;
+    let result = Attach::select_attach_page(pool!(), page_req, item).await;
     Ok(result?)
 }

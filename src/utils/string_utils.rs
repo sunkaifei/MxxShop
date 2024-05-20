@@ -74,6 +74,19 @@ pub fn deserialize_string_to_i8<'de, D>(deserializer: D) -> Result<Option<i8>, D
     Ok(opt_i8)
 }
 
+pub fn serialize_option_i8_to_string<S>(
+    value: &Option<i8>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+{
+    match value {
+        Some(val) => serializer.serialize_str(&val.to_string()),
+        None => serializer.serialize_none(),
+    }
+}
+
 ///字符串转为<Option<u64>
 pub fn deserialize_string_to_u64<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
 where

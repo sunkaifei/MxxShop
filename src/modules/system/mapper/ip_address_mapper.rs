@@ -16,7 +16,7 @@ use crate::modules::system::entity::ip_address_model::IpAddressPageDTO;
 
 crud!(IpAddress {}, "fly_ip_address");
 
-/// 查询ip
+// 查询ip
 #[py_sql("
     `select count(*) from fly_ip_address where start_ip >= #{start_ip} and start_ip <= #{end_ip} ORDER BY start_ip asc`
 ")]
@@ -32,7 +32,7 @@ pub async fn find_ip_address_by_ip(rb: &RBatis, ip: &Option<u32>) -> rbatis::Res
     impled!()
 }
 
-/// 分页查询
+// 分页查询
 impl_select_page!(IpAddress{select_page(dto: &IpAddressPageDTO) =>"
     trim end=' where ':
       ` where `

@@ -20,11 +20,11 @@ use crate::modules::system::entity::role_entity::SystemRole;
 use crate::modules::system::entity::role_menu_entity::SystemRoleMenu;
 use crate::modules::system::entity::role_model::{RoleDTO};
 use crate::modules::system::mapper::role_mapper;
-use crate::RB;
+use crate::pool;
 use crate::utils::snowflake_id::{generate_snowflake_id};
 
 pub async fn save_role(payload: &RoleDTO) -> Result<u64> {
-    let unique_num = role_mapper::find_role_by_name_unique(&RB.clone(), &payload.role_name, &None).await.unwrap_or_default();
+    let unique_num = role_mapper::find_role_by_name_unique(pool!(), &payload.role_name, &None).await.unwrap_or_default();
     if unique_num > 0 {
         return Err(Error::from("该角色已存在!".to_string()));
     }
@@ -34,7 +34,7 @@ pub async fn save_role(payload: &RoleDTO) -> Result<u64> {
     role_entity.process_role_dto(&payload);
     role_entity.create_time = Option::from(DateTime::now());
     role_entity.update_time = Option::from(DateTime::now());
-    let result = SystemRole::insert(&RB.clone(), &role_entity).await?;
+    let result = SystemRole::insert(pool!(), &role_entity).await?;
 
     let rows = result.rows_affected;
     let last_insert_id = result.last_insert_id.as_u64();
@@ -73,7 +73,7 @@ pub async fn save_role(payload: &RoleDTO) -> Result<u64> {
 }
 
 pub async fn insert_batch(menu_ids: Vec<Option<u64>>, role_id: &Option<u64>) -> Result<u64> {
-    let role_menu_result = SystemRoleMenu::delete_by_column(&RB.clone(), "role_id", &role_id).await;
+    let role_menu_result = SystemRoleMenu::delete_by_column(pool!(), "role_id", &role_id).await;
     return match role_menu_result {
         Ok(_) => {
             let mut menu_role: Vec<SystemRoleMenu> = Vec::new();
@@ -89,7 +89,7 @@ pub async fn insert_batch(menu_ids: Vec<Option<u64>>, role_id: &Option<u64>) -> 
                 })
             }
 
-            let result = SystemRoleMenu::insert_batch(&RB.clone(), &menu_role, menu_ids.len() as u64).await;
+            let result = SystemRoleMenu::insert_batch(pool!(), &menu_role, menu_ids.len() as u64).await;
 
             Ok(result?.rows_affected)
         }
@@ -105,13 +105,13 @@ pub async fn delete_in_column(ids_vec: Vec<Option<String>>) -> Result<u64> {
     return if ids_vec.is_empty() {
         Err(Error::from("删除的ID不能为空".to_string()))
     } else {
-        let user_role_list = SystemAdminRole::select_in_column(&RB.clone(), "role_id", &ids_vec).await.unwrap_or_default();
+        let user_role_list = SystemAdminRole::select_in_column(pool!(), "role_id", &ids_vec).await.unwrap_or_default();
         if user_role_list.len() > 0 {
             return Err(Error::from("删除的ID不能为空".to_string()));
         }
-        let result = SystemRole::delete_in_column(&RB.clone(), "id", &ids_vec).await?;
+        let result = SystemRole::delete_in_column(pool!(), "id", &ids_vec).await?;
         if result.rows_affected > 0 {
-            SystemRoleMenu::delete_in_column(&RB.clone(), "role_id", &ids_vec).await?;
+            SystemRoleMenu::delete_in_column(pool!(), "role_id", &ids_vec).await?;
         }
         Ok(result.rows_affected)
     }
@@ -119,7 +119,7 @@ pub async fn delete_in_column(ids_vec: Vec<Option<String>>) -> Result<u64> {
 
 ///按id批量删除角色和菜单关联信息
 pub async fn delete_role_menu_column(id: &u64) -> Result<u64> {
-    let result = SystemRoleMenu::delete_by_column(&RB.clone(), "role_id", &id).await;
+    let result = SystemRoleMenu::delete_by_column(pool!(), "role_id", &id).await;
     return Ok(result.unwrap_or_default().rows_affected);
 }
 
@@ -132,7 +132,7 @@ pub async fn update_user_role(item: UpdateUserRoleRequest) -> HttpResponse {
         HttpResponse::Ok().json(ResVO::<String>::error_msg("不能修改超级管理员的角色".to_string()));
     }
 
-    let sys_result = SystemAdminRole::delete_by_column(&RB.clone(), "user_id", admin_id).await;
+    let sys_result = SystemAdminRole::delete_by_column(pool!(), "user_id", admin_id).await;
 
     if sys_result.is_err() {
         HttpResponse::Ok().json(ResVO::<String>::error_msg("更新用户角色异常".to_string()));
@@ -148,7 +148,7 @@ pub async fn update_user_role(item: UpdateUserRoleRequest) -> HttpResponse {
         })
     }
 
-    let result = SystemAdminRole::insert_batch(&RB.clone(), &sys_role_user_list, len as u64).await;
+    let result = SystemAdminRole::insert_batch(pool!(), &sys_role_user_list, len as u64).await;
 
     return HttpResponse::Ok().json(ResVO::<u64>::handle_result(Ok(result.unwrap_or_default().rows_affected)));
 }
@@ -158,7 +158,7 @@ pub async fn update_role(payload: &RoleDTO) -> Result<u64> {
     role_entity.process_role_dto(&payload);
     role_entity.update_by = payload.admin.user_name.clone();
     role_entity.update_time = Option::from(DateTime::now());
-    let result = SystemRole::update_by_column(&RB.clone(), &role_entity, "id").await?;
+    let result = SystemRole::update_by_column(pool!(), &role_entity, "id").await?;
     let rows = result.rows_affected;
     return if rows > 0 {
         if payload.menu_ids.clone().is_some_and(|vec| !vec.is_empty() && !vec.iter().all(|item| item.is_none())) {
@@ -188,7 +188,7 @@ pub async fn update_role(payload: &RoleDTO) -> Result<u64> {
                 }
             }
         }else{
-            SystemRoleMenu::delete_by_column(&RB.clone(), "role_id", &role_entity.id).await?;
+            SystemRoleMenu::delete_by_column(pool!(), "role_id", &role_entity.id).await?;
         }
         Ok(rows)
     } else {
@@ -198,38 +198,38 @@ pub async fn update_role(payload: &RoleDTO) -> Result<u64> {
 
 /// 查询角色名称是否已存在
 pub async fn find_role_by_name_unique(role_name: Option<String>, id: Option<u64>) -> Result<u64> {
-    return Ok(role_mapper::find_role_by_name_unique(&RB.clone(), &role_name, &id).await.unwrap_or_default());
+    return Ok(role_mapper::find_role_by_name_unique(pool!(), &role_name, &id).await.unwrap_or_default());
 }
 
 ///查询角色详情
 pub async fn get_role_detail(id: u64) -> rbatis::Result<Option<SystemRole>> {
-    Ok(SystemRole::select_by_column(&RB.clone(),"id", id).await?
+    Ok(SystemRole::select_by_column(pool!(),"id", id).await?
         .into_iter()
         .next())
 }
 
 ///角色id查询所有关联的菜单id
 pub async fn get_merge_by_role_id(role_id: Option<u64>) -> Result<Vec<Option<String>>> {
-    let result = role_mapper::get_merge_by_role_id(&RB.clone(), role_id).await?;
+    let result = role_mapper::get_merge_by_role_id(pool!(), role_id).await?;
     let ids: Vec<Option<String>> = result.iter().map(|merge| merge.menu_id.map(|menu_id| menu_id.to_string())).collect();
     return Ok(ids);
 }
 
 ///查询角色是否已被关联
 pub async fn select_in_column(ids: &Vec<String>) -> rbatis::Result<Vec<SystemAdminRole>> {
-    let result = SystemAdminRole::select_in_column(&RB.clone(), "role_id", &ids).await;
+    let result = SystemAdminRole::select_in_column(pool!(), "role_id", &ids).await;
     return result;
 }
 
 ///查询用户关联的角色列表
 pub async fn query_admin_by_role(admin_id: u64) -> rbatis::Result<Vec<SystemRole>> {
-    let result = role_mapper::query_admin_by_role(&RB.clone(), admin_id).await;
+    let result = role_mapper::query_admin_by_role(pool!(), admin_id).await;
     return result;
 }
 
 ///查询当前菜单id关联的所有角色ID
-pub async fn query_menu_by_role(menu_id : u64) -> Vec<u64> {
-    let result = role_mapper::query_menu_by_role(&RB.clone(), menu_id).await;
+pub async fn query_menu_by_role(menu_id : Option<u64>) -> Vec<u64> {
+    let result = role_mapper::query_menu_by_role(pool!(), menu_id).await;
     let mut vec_of_u64: Vec<u64> = Vec::new();
     match result {
         Ok(v) => {
@@ -249,18 +249,18 @@ pub async fn query_menu_by_role(menu_id : u64) -> Vec<u64> {
 
 ///查询所有角色列表
 pub async fn get_role_all() -> rbatis::Result<Vec<SystemRole>> {
-    let result = SystemRole::select_all(&RB.clone()).await;
+    let result = SystemRole::select_all(pool!()).await;
     return result;
 }
 
 ///查询用户权限关联的所有权限标识
 pub async fn get_admin_by_role(admin_id: u64) -> rbatis::Result<Vec<String>> {
-    let result = role_mapper::get_admin_by_role(&RB.clone(), admin_id).await;
+    let result = role_mapper::get_admin_by_role(pool!(), admin_id).await;
     return result;
 }
 
 ///查询角色分页
 pub async fn page(role_name: &str, status: &str, page_req: PageRequest, ) -> rbatis::Result<Page<SystemRole>> {
-    let result = SystemRole::select_page(&RB.clone(), &page_req, role_name, status).await;
+    let result = SystemRole::select_page(pool!(), &page_req, role_name, status).await;
     return result;
 }

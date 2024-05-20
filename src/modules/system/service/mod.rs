@@ -18,3 +18,5 @@ pub mod ip_address_servive;
 pub mod cache_service;
 pub mod mem_service;
 pub mod redis_service;
+pub mod system_log_service;
+pub mod language_servive;

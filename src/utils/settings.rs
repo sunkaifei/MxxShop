@@ -14,19 +14,20 @@ use lazy_static::lazy_static;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub struct Database {
-    pub mysql_url: String,
-    pub redis_url: String,
-    pub db_pool_len: usize,
-    pub db_pool_timeout: usize,
-}
-
-#[derive(Debug, Deserialize)]
 pub struct Server {
     pub server_url: String,
     pub jwt_secret: String,
     pub tpl_default: String,
     pub cache_type: String,
+    pub debug: bool,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Database {
+    pub mysql_url: String,
+    pub redis_url: String,
+    pub db_pool_len: usize,
+    pub db_pool_timeout: usize,
 }
 
 #[derive(Debug, Deserialize)]

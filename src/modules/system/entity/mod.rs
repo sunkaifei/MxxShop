@@ -31,4 +31,8 @@ pub mod dict_type_model;
 pub mod ip_address_entity;
 pub mod ip_address_model;
 pub mod catpcha_model;
+pub mod system_log_entity;
+pub mod system_log_model;
+pub mod language_entity;
+pub mod language_model;
 

@@ -47,23 +47,23 @@ impl_select_page!(SystemRole{select_page(role_name:&str,status:&str) =>"
        ` order by sort asc`"},"fly_system_role");
 
 //增删改查菜单与角色关联
-rbatis::crud!(SystemRoleMenu {}, "fly_system_role_menu");
+rbatis::crud!(SystemRoleMenu {}, "fly_system_role_menus");
 
 /// 查询角色和菜单是否已关联
-#[py_sql("select count(*) from fly_system_role_menu where role_id = #{role_id} and menu_id = #{menu_id}")]
+#[py_sql("select count(*) from fly_system_role_menus where role_id = #{role_id} and menu_id = #{menu_id}")]
 pub async fn find_merge_by_unique(rb: &RBatis, role_id: Option<u64>, menu_id: Option<u64>, ) -> rbatis::Result<u64> {
     impled!()
 }
 
 ///角色id查询所有关联的菜单id
-#[sql("select * from fly_system_role_menu where role_id = ?")]
+#[sql("select * from fly_system_role_menus where role_id = ?")]
 pub async fn get_merge_by_role_id(rb: &RBatis,role_id: Option<u64>,) -> rbatis::Result<Vec<SystemRoleMenu>> {
     impled!()
 }
 
 ///查询当前菜单id关联的所有角色ID
-#[sql("select role_id from fly_system_role_menu where menu_id = ?")]
-pub async fn query_menu_by_role(rb: &RBatis, menu_id: u64, ) -> rbatis::Result<Vec<HashMap<String, u64>>> {
+#[sql("select role_id from fly_system_role_menus where menu_id = ?")]
+pub async fn query_menu_by_role(rb: &RBatis, menu_id: Option<u64>, ) -> rbatis::Result<Vec<HashMap<String, u64>>> {
     impled!()
 }
 
@@ -78,11 +78,11 @@ pub async fn query_admin_by_role(rb: &RBatis, admin_id: u64, ) -> rbatis::Result
 ///查询当前用户权限
 #[sql("select distinct m.perms
 		from fly_system_menu m
-			 left join fly_system_role_menu rm on m.id = rm.menu_id
+			 left join fly_system_role_menus rm on m.id = rm.menu_id
 			 left join fly_system_admin_role ur on rm.role_id = ur.role_id
 			 left join fly_system_role ro on ur.role_id = ro.id
 			 left join fly_system_admin u on ur.admin_id = u.id
 		where u.id = ? and ro.status = 0 and ro.status = 0")]
-pub async fn get_admin_by_role(rb: &RBatis, admin_id: u64, ) -> rbatis::Result<Vec<String>> {
+pub async fn get_admin_by_role(rb: &RBatis, admin_id: u64) -> rbatis::Result<Vec<String>> {
     impled!()
 }

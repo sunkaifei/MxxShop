@@ -9,6 +9,7 @@
 //!
 
 use std::error::Error as StdError;
+use thiserror::Error;
 use std::fmt::{self, Debug, Display};
 use std::io;
 
@@ -127,4 +128,20 @@ impl<'de> Deserialize<'de> for Error {
         let r = deserializer.deserialize_string(ErrorVisitor)?;
         return Ok(Error::from(r));
     }
+}
+
+#[derive(Error, Debug)]
+pub enum WhoUnfollowedError {
+    // #[error("Failed to complete an HTTP request")]
+    // Http { #[from] source: reqwest::Error },
+    //
+    #[error("Failed to read the cache file")]
+    DiskCacheRead { source: Error },
+    //
+    // #[error("Failed to update the cache file")]
+    // DiskCacheWrite { source: std::io::Error },
+
+    #[error("")]
+    JwtTokenError(String),
+
 }

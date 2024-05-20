@@ -25,7 +25,8 @@ r#"`select `
     if do_count == false:
      ` u.* `
     ` from fly_system_admin u`
-    ` left join fly_system_dept d on u.dept_id = d.id`
+    ` left join fly_system_admin_depts_merge m on u.admin_id = m.admin_id`
+    ` left join fly_system_depts d on m.dept_id = d.id`
     ` where u.del_flag = 0`
     if item.admin_id != '' && item.admin_id != null:
      ` AND u.id = #{item.admin_id}`
@@ -40,7 +41,7 @@ r#"`select `
     if item.end_time != '' && item.end_time != null:
      ` AND date_format(u.create_time,"%y%m%d") <= date_format(#{item.end_time},"%y%m%d")`
     if item.dept_id != '' && item.dept_id != null:
-     ` AND (u.dept_id = #{item.dept_id} OR u.dept_id IN ( SELECT t.id FROM fly_system_dept t WHERE FIND_IN_SET (#{item.dept_id},ancestors) ))`
+     ` AND (u.dept_id = #{item.dept_id} OR u.dept_id IN ( SELECT t.id FROM fly_system_depts t WHERE FIND_IN_SET (#{item.dept_id},ancestors) ))`
     if !sql.contains('count'):
      ` order by u.id desc`
     if do_count == false:

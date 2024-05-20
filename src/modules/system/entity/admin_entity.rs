@@ -12,7 +12,6 @@ use rbatis::rbdc::datetime::DateTime;
 use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Default, Clone, Debug, Serialize, Deserialize)]
-#[serde(rename_all(serialize = "camelCase"))]
 pub struct SystemAdmin {
     ///用户ID
     pub id: Option<u64>,

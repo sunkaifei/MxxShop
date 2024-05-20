@@ -10,9 +10,10 @@
 
 extern crate bcrypt;
 
-use actix_web::{delete, get, HttpResponse, post, put, web};
+use actix_web::{delete, get, HttpRequest, HttpResponse, post, put, web};
 use actix_web_grants::protect;
 use bcrypt::verify;
+use rbatis::rbdc::DateTime;
 
 use crate::core::permission::jwt_util::JWTToken;
 use crate::core::web::entity::common::{BathIdRequest, InfoId};
@@ -20,9 +21,9 @@ use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
 use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateUserPasswordRequest, UserListData, UserListRequest, UserLoginRequest, UserLoginResponse, UserUpdateRequest};
 use crate::modules::system::entity::admin_role_model::UpdateUserRoleRequest;
 use crate::modules::system::entity::menu_model::{Router};
-use crate::modules::system::service::{admin_service, menu_service, role_service};
+use crate::modules::system::service::{admin_service, menu_service, role_service, system_log_service};
 use crate::modules::system::service::cache_service::CacheService;
-use crate::utils::error::WhoUnfollowedError;
+use crate::core::errors::error::WhoUnfollowedError;
 use crate::utils::settings::Settings;
 
 // 添加用户信息
@@ -43,7 +44,7 @@ pub async fn save_admin(item: web::Json<AdminSaveRequest>) -> HttpResponse {
 
 /// 后台用户登录
 #[post("/system/login")]
-pub async fn login(item: web::Json<UserLoginRequest>) -> HttpResponse {
+pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> HttpResponse {
     if item.username.as_ref().map_or(true, |username| username.trim().is_empty()) {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("角色名称不能为空".to_string()));
     }
@@ -116,7 +117,27 @@ pub async fn login(item: web::Json<UserLoginRequest>) -> HttpResponse {
                                 permissions: admin_role.clone(),
                                 username: user_info.user_name.clone(),
                             };
+                            // 记录登录日志
+                            let method = request.method().to_string();
+                            let _ = system_log_service::save_system_log(&request, Some("用户登录".to_string()), Some(0),Some("system_admin_controller::login".to_string()), Some(method.to_string()),Some(1)).await;
 
+                            let update_user = UserUpdateRequest{
+                                id: user_info.id.clone(),
+                                mobile: None,
+                                user_name: None,
+                                user_type: None,
+                                nick_name: None,
+                                avatar: None,
+                                email: None,
+                                sex: None,
+                                login_ip: Option::from(request.connection_info().realip_remote_addr().unwrap_or_default().to_string()),
+                                login_date: Option::from(DateTime::now()),
+                                sort: None,
+                                status: None,
+                                remark: None,
+                            };
+                            let _ = admin_service::update_by_user(update_user).await;
+                            
                             HttpResponse::Ok().json(ResVO::ok_with_data(user_login))
                         }
                         Err(err) => {

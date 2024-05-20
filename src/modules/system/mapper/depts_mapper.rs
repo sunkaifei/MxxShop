@@ -14,11 +14,11 @@ use crate::modules::system::entity::dept_entity::SystemDept;
 use crate::modules::system::entity::dept_model::DeptPageBO;
 
 //增删改查菜单
-rbatis::crud!(SystemDept {}, "fly_system_dept");
+rbatis::crud!(SystemDept {}, "fly_system_depts");
 
 /// 查询同目录级别下部门是否已存在
 #[py_sql("
-    `select count(*) from fly_system_dept`
+    `select count(*) from fly_system_depts`
     ` where dept_name = #{dept_name} `
     `and parent_id = #{parent_id} `
      if id != null:
@@ -29,7 +29,7 @@ pub async fn find_by_dept_name_unique(rb: &RBatis, dept_name: Option<String>, pa
 }
 
 #[py_sql("
-    `select * from fly_system_dept `
+    `select * from fly_system_depts `
      trim end=' where ':
        ` where `
        trim ' and ':

@@ -15,11 +15,9 @@ use actix_session::{SessionMiddleware};
 use actix_session::storage::CookieSessionStore;
 use actix_web::{App, HttpServer};
 use actix_web::cookie::{Key};
-use once_cell::sync::Lazy;
-use rbatis::RBatis;
 
 
-use crate::core::service::data_service;
+use crate::core::service::{CONTEXT};
 use crate::routes::{open_routes, system_routes, user_routes};
 use crate::utils::settings::Settings;
 
@@ -27,15 +25,14 @@ pub mod core;
 pub mod utils;
 pub mod modules;
 pub mod routes;
+pub mod plugins;
 
-pub static RB: Lazy<RBatis> = Lazy::new(|| RBatis::new());
-
-#[actix_web::main] // or #[tokio::main]
+#[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let setting = Settings::get();
     log4rs::init_file("./config/log4rs.yaml", Default::default()).unwrap_or_default();
 
-    data_service::init_db().await;
+    CONTEXT.init_database().await;
     log::info!("starting HTTP server at https://{:?}",&setting.server.server_url.as_str());
     // 创建一个 Redis 客户端
     //let client = Client::open("redis://127.0.0.1/").unwrap();
@@ -47,8 +44,8 @@ async fn main() -> std::io::Result<()> {
     /* let secret_key = Key::generate();
      let redis_connection_string = "redis://127.0.0.1:6379";
      let store = RedisSessionStore::new(redis_connection_string).await.unwrap();
- */
-
+    */
+    
     HttpServer::new(move || {
         let cors = Cors::default()
             .allow_any_origin()
@@ -62,12 +59,9 @@ async fn main() -> std::io::Result<()> {
 
         App::new().wrap(cors)
             .wrap(IdentityMiddleware::default())
-            //.wrap(SessionMiddleware::new(store.clone(), secret_key.clone()))
             .wrap(
                 SessionMiddleware::new(CookieSessionStore::default(), signing_key.clone())
             )
-            //.wrap(auth_interceptor)
-            //.app_data(Data::new(tera.clone()))
             .configure(open_routes::configure_routes)
             .configure(user_routes::configure_routes)
             .configure(system_routes::configure_routes)

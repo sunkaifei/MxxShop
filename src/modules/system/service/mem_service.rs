@@ -15,20 +15,21 @@ use std::time::{Duration, Instant};
 
 use futures_util::future::BoxFuture;
 use parking_lot::Mutex;
+use rbatis::dark_std::sync::SyncHashMap;
 
 use crate::core::errors::error::{Error, Result};
 use crate::modules::system::service::cache_service::ICacheService;
 
 ///Memory Cache Service
+#[derive(Debug)]
 pub struct MemService {
-    pub cache: Mutex<HashMap<String, (String, Option<(Instant, Duration)>), RandomState>>,
+    pub cache: SyncHashMap<String, (String, Option<(Instant, Duration)>)>,
 }
 
 impl MemService {
     pub fn recycling(&self) {
-        let mut map_lock_guard = self.cache.lock();
         let mut need_removed = vec![];
-        for (k, v) in map_lock_guard.iter() {
+        for (k, v) in self.cache.iter() {
             if let Some((i, d)) = v.1 {
                 if i.elapsed() >= d {
                     //out of time
@@ -36,8 +37,11 @@ impl MemService {
                 }
             }
         }
-        for x in need_removed {
-            map_lock_guard.remove(&x);
+        if need_removed.len() != 0 {
+            for x in need_removed {
+                self.cache.remove(&x);
+            }
+            self.cache.shrink_to_fit();
         }
     }
 }
@@ -55,8 +59,9 @@ impl ICacheService for MemService {
         self.recycling();
         let k = k.to_string();
         let v = v.to_string();
-        let mut guard = self.cache.lock();
-        guard.insert(k.to_string(), (v.clone(), None));
+        log::info!("==========11========");
+        let ff = self.cache.insert(k.to_string(), (v.clone(), None));
+        log::info!("=================={:?}",ff);
         Box::pin(async move {
             return Ok(v.to_string());
         })
@@ -65,9 +70,8 @@ impl ICacheService for MemService {
     fn get_string(&self, k: &str) -> BoxFuture<Result<String>> {
         self.recycling();
         let k = k.to_string();
-        let guard = self.cache.lock();
         let mut v = String::new();
-        if let Some(r) = guard.get(&k) {
+        if let Some(r) = self.cache.get(&k) {
             v = r.0.to_string();
         }
         Box::pin(async move { Ok(v) })
@@ -77,25 +81,19 @@ impl ICacheService for MemService {
         self.recycling();
         let k = k.to_string();
         let v = v.to_string();
-        let mut locked = self.cache.lock();
-        let mut e = Option::None;
+        let mut e = None;
         if let Some(ex) = t {
             e = Some((Instant::now(), ex));
         }
-        let inserted = locked.insert(k, (v.clone(), e));
+        _ = self.cache.insert(k.to_string(), (v.clone(), e));
         Box::pin(async move {
-            if inserted.is_some() {
-                return Ok(v.to_string());
-            }
-            return Err(crate::core::errors::error::Error::E("[fly_admin][mem_service]insert fail!".to_string()));
+            return Ok(v.to_string());
         })
     }
 
     fn ttl(&self, k: &str) -> BoxFuture<Result<i64>> {
         self.recycling();
-        let locked = self.cache.lock();
-        let v = locked.get(k).cloned();
-        drop(locked);
+        let v = self.cache.get(k).cloned();
         let v = match v {
             None => -2,
             Some((_r, o)) => match o {
@@ -116,12 +114,11 @@ impl ICacheService for MemService {
     fn del(&self, k: &str) -> BoxFuture<Result<i64>> {
         self.recycling();
         let k = k.to_string();
-        let mut guard = self.cache.lock();
 
-        if guard.remove(&k).is_some() {
+        if self.cache.remove(&k).is_some() {
             Box::pin(async { Ok(1) })
         } else {
-            let error_msg = "[fly_admin][mem_service] delete failed!";
+            let error_msg = "[MxxShop_admin][mem_service] delete failed!";
             Box::pin(async { Err(Error::from(error_msg.to_string())) })
         }
     }

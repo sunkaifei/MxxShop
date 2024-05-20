@@ -13,25 +13,25 @@ use serde::{Deserialize, Serialize};
 
 use crate::modules::system::entity::menu_entity::SystemMenu;
 use crate::modules::system::entity::role_entity::SystemRole;
-use crate::utils::string_utils::{string_to_i8,
-                                 i8_to_string,
-                                 u64_to_string,
-                                 string_to_u64
+use crate::utils::string_utils::{deserialize_string_to_i8,
+                                 serialize_option_i8_to_string,
+                                 deserialize_string_to_u64,
+                                 serialize_option_u64_to_string
 };
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct MenuSaveRequest {
     /// 菜单名称
     #[serde(rename = "menuName")]
-    pub menu_name: String,
+    pub menu_name: Option<String>,
     /// 父菜单ID
-    #[serde(rename = "parentId")]
-    #[serde(deserialize_with = "string_to_u64")]
-    pub parent_id: u64,
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub parent_id: Option<u64>,
     /// 组件名称
-    pub name: String,
+    pub name: Option<String>,
     ///路由地址
-    pub path: String,
+    pub path: Option<String>,
     ///权限组ID
     pub roles: Vec<u64>,
     ///请求api地址
@@ -41,35 +41,28 @@ pub struct MenuSaveRequest {
     ///组件路径
     pub component: Option<String>,
     ///是否为外链（0是 1否）
-    #[serde(rename = "isLink")]
     pub is_link: Option<i8>,
     ///是否缓存（0缓存 1不缓存）
-    #[serde(rename = "isKeepAlive")]
     pub is_keep_alive: Option<i8>,
     ///外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isFrame:true 2、链接地址不为空`
-    #[serde(rename = "linkUrl")]
     pub link_url: Option<String>,
     ///菜单高亮
     pub active: Option<String>,
     ///菜单类型（M目录 C菜单 F按钮）
-    #[serde(rename = "menuType")]
-    pub menu_type: String,
+    pub menu_type: Option<String>,
     ///是否隐藏（0显示 1隐藏）
-    #[serde(deserialize_with = "string_to_i8")]
-    #[serde(rename = "isHide")]
-    pub is_hide: i8,
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
+    pub is_hide: Option<i8>,
     ///权限标识
     pub perms: Option<String>,
     ///菜单图标
     pub icon: Option<String>,
     ///是否固定，类似首页控制台在标签中是没有关闭按钮的
-    #[serde(rename = "isAffix")]
     pub is_affix: Option<i8>,
     ///颜色值
     pub color: Option<String>,
     ///是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
-    #[serde(rename = "isIframe")]
-    pub is_iframe: i8,
+    pub is_iframe: Option<i8>,
     ///备注
     pub remark: Option<String>,
     ///状态（0正常 1停用）
@@ -79,7 +72,7 @@ pub struct MenuSaveRequest {
 impl From<MenuSaveRequest> for SystemMenu {
     fn from(arg: MenuSaveRequest) -> Self {
         Self {
-            id: 0,
+            id: None,
             menu_name: arg.menu_name,
             parent_id: arg.parent_id,
             name: arg.name,
@@ -109,20 +102,20 @@ impl From<MenuSaveRequest> for SystemMenu {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct MenuUpdateRequest {
-    #[serde(deserialize_with = "string_to_u64")]
-    pub id: u64,
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub id: Option<u64>,
     /// 菜单名称
     #[serde(rename = "menuName")]
-    pub menu_name: String,
+    pub menu_name: Option<String>,
     /// 父菜单ID
-    #[serde(rename = "parentId")]
-    #[serde(deserialize_with = "string_to_u64")]
-    pub parent_id: u64,
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub parent_id: Option<u64>,
     /// 组件名称
-    pub name: String,
+    pub name: Option<String>,
     ///路由地址
-    pub path: String,
+    pub path: Option<String>,
     ///权限组ID
     pub roles: Vec<u64>,
     ///请求api地址
@@ -135,32 +128,26 @@ pub struct MenuUpdateRequest {
     #[serde(rename = "isLink")]
     pub is_link: Option<i8>,
     ///是否缓存（0缓存 1不缓存）
-    #[serde(rename = "isKeepAlive")]
     pub is_keep_alive: Option<i8>,
     ///外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isFrame:true 2、链接地址不为空`
-    #[serde(rename = "linkUrl")]
     pub link_url: Option<String>,
     ///菜单高亮
     pub active: Option<String>,
     ///菜单类型（M目录 C菜单 F按钮）
-    #[serde(rename = "menuType")]
-    pub menu_type: String,
+    pub menu_type: Option<String>,
     ///是否隐藏（0显示 1隐藏）
-    #[serde(deserialize_with = "string_to_i8")]
-    #[serde(rename = "isHide")]
-    pub is_hide: i8,
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
+    pub is_hide: Option<i8>,
     ///权限标识
     pub perms: Option<String>,
     ///菜单图标
     pub icon: Option<String>,
     ///是否固定，类似首页控制台在标签中是没有关闭按钮的
-    #[serde(rename = "isAffix")]
     pub is_affix: Option<i8>,
     ///颜色值
     pub color: Option<String>,
     ///是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
-    #[serde(rename = "isIframe")]
-    pub is_iframe: i8,
+    pub is_iframe: Option<i8>,
     ///是否整页打开路由（脱离框架系），例如：fullpage: true
     pub fullpage: Option<i8>,
     ///更新者
@@ -208,15 +195,15 @@ impl From<MenuUpdateRequest> for SystemMenu {
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Router {
-    #[serde(serialize_with = "u64_to_string")]
-    pub id: u64,
-    pub parent_id: u64,
+    #[serde(serialize_with = "serialize_option_u64_to_string")]
+    pub id: Option<u64>,
+    pub parent_id: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<Router>>,
     pub component: Option<String>,
     pub meta: Meta,
-    pub name: String,
-    pub path: String,
+    pub name: Option<String>,
+    pub path: Option<String>,
     pub sort: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redirect: Option<String>,
@@ -225,7 +212,7 @@ pub struct Router {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Meta {
-    pub title: String,
+    pub title: Option<String>,
     ///是否固定，类似首页控制台在标签中是没有关闭按钮的
     pub is_affix: bool,
     ///是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
@@ -243,33 +230,33 @@ pub struct Meta {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all(serialize = "camelCase"))]
 pub struct SystemMenuPage {
-    pub id: u64,
-    pub menu_name: String,
-    pub parent_id: u64,
-    pub order_num: i8,
-    pub path: String,
+    pub id: Option<u64>,
+    pub menu_name: Option<String>,
+    pub parent_id: Option<u64>,
+    pub order_num: Option<i8>,
+    pub path: Option<String>,
     pub component: Option<String>,
     pub query: Option<String>,
-    pub is_frame: i8,
-    pub is_cache: i8,
-    pub menu_type: String,
-    pub visible: String,
-    pub status: String,
+    pub is_frame: Option<i8>,
+    pub is_cache: Option<i8>,
+    pub menu_type: Option<String>,
+    pub visible: Option<String>,
+    pub status: Option<String>,
     pub perms: Option<String>,
-    pub icon: String,
-    pub create_by: String,
-    pub create_time: DateTime,
-    pub update_by: String,
+    pub icon: Option<String>,
+    pub create_by: Option<String>,
+    pub create_time: Option<DateTime>,
+    pub update_by: Option<String>,
     pub update_time: Option<DateTime>,
-    pub remark: String,
+    pub remark: Option<String>,
 }
 
 #[derive(Debug, Serialize, Clone)]
 pub struct MenuTree {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<MenuTree>>,
-    pub id: u64,
-    pub label: String,
+    pub id: Option<u64>,
+    pub label: Option<String>,
 }
 
 /// 用户查询所在的角色和菜单路由
@@ -283,17 +270,17 @@ pub struct RoleMenuRoutes {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all(serialize = "camelCase"))]
 pub struct SystemMenuResponse {
-    #[serde(serialize_with = "u64_to_string")]
-    pub id: u64,
+    #[serde(serialize_with = "serialize_option_u64_to_string")]
+    pub id: Option<u64>,
     /// 菜单名称
-    pub menu_name: String,
+    pub menu_name: Option<String>,
     /// 父菜单ID
-    #[serde(serialize_with = "u64_to_string")]
-    pub parent_id: u64,
+    #[serde(serialize_with = "serialize_option_u64_to_string")]
+    pub parent_id: Option<u64>,
     /// 组件名称
-    pub name: String,
+    pub name: Option<String>,
     ///路由地址
-    pub path: String,
+    pub path: Option<String>,
     ///请求api地址
     pub api_url: Option<String>,
     /// 显示顺序
@@ -309,10 +296,10 @@ pub struct SystemMenuResponse {
     ///菜单高亮
     pub active: Option<String>,
     ///菜单类型（M目录 C菜单 F按钮）
-    pub menu_type: String,
+    pub menu_type: Option<String>,
     ///是否隐藏（0显示 1隐藏）
-    #[serde(serialize_with = "i8_to_string")]
-    pub is_hide: i8,
+    #[serde(serialize_with = "serialize_option_i8_to_string")]
+    pub is_hide: Option<i8>,
     ///权限标识
     pub perms: Option<String>,
     ///菜单图标
@@ -322,7 +309,7 @@ pub struct SystemMenuResponse {
     ///颜色值
     pub color: Option<String>,
     ///是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
-    pub is_iframe: i8,
+    pub is_iframe: Option<i8>,
     ///备注
     pub remark: Option<String>,
     ///状态（0正常 1停用）
@@ -376,28 +363,28 @@ pub struct MenuAndRoleResponse {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all(serialize = "camelCase"))]
 pub struct MenuListData {
-    #[serde(serialize_with = "u64_to_string")]
-    pub id: u64,
-    pub menu_name: String,
-    #[serde(serialize_with = "u64_to_string")]
-    pub parent_id: u64,
-    pub name: String,
-    pub path: String,
+    #[serde(serialize_with = "serialize_option_u64_to_string")]
+    pub id: Option<u64>,
+    pub menu_name: Option<String>,
+    #[serde(serialize_with = "serialize_option_u64_to_string")]
+    pub parent_id: Option<u64>,
+    pub name: Option<String>,
+    pub path: Option<String>,
     pub sort: Option<i32>,
     pub component: Option<String>,
     pub is_link: Option<i8>,
     pub is_keep_alive: Option<i8>,
     pub active: Option<String>,
-    pub menu_type: String,
+    pub menu_type: Option<String>,
     ///是否隐藏（0显示 1隐藏）
-    pub is_hide: i8,
+    pub is_hide: Option<i8>,
     pub link_url: Option<String>,
     pub perms: Option<String>,
     pub icon: Option<String>,
     pub is_affix: Option<i8>,
     pub color: Option<String>,
     ///是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
-    pub is_iframe: i8,
+    pub is_iframe: Option<i8>,
     pub remark: Option<String>,
     pub status: Option<i8>,
     pub children: Option<Vec<MenuListData>>,
@@ -405,13 +392,13 @@ pub struct MenuListData {
 
 #[derive(Debug, Deserialize)]
 pub struct MenuDeleteRequest {
-    pub id: u64,
+    pub id: Option<u64>,
 }
 
 /// 更新菜单和角色关联信息
 #[derive(Debug, Deserialize)]
 pub struct UpdateRoleMenuRequest {
-    pub menu_id: u64,
+    pub menu_id: Option<u64>,
     pub role_ids: Vec<u64>,
 }
 

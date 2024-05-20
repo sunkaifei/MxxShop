@@ -41,20 +41,20 @@ impl CacheService {
         let setting = Settings::get();
         match setting.server.cache_type.as_str() {
             "mem" => {
-                println!("[fly_admin] cache_type: mem");
+                println!("[MxxShop_admin] cache_type: mem");
                 Ok(Self {
                     inner: Box::new(MemService::default()),
                 })
             }
             "redis" => {
-                println!("[fly_admin] cache_type: redis");
+                println!("[MxxShop_admin] cache_type: redis");
                 Ok(Self {
                     inner: Box::new(RedisService::new(&setting.database.redis_url)),
                 })
             }
             e => {
                 panic!(
-                    "[fly_admin] unknown of cache_type: \"{}\",current support 'mem' or 'redis'",
+                    "[MxxShop_admin] unknown of cache_type: \"{}\",current support 'mem' or 'redis'",
                     e
                 );
             }

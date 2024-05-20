@@ -10,7 +10,6 @@
 
 use std::collections::HashMap;
 use std::time::Duration;
-use actix_session::{SessionExt};
 use actix_web::{get, HttpRequest, HttpResponse};
 use base64::{Engine, engine};
 use captcha::Captcha;
@@ -36,7 +35,7 @@ pub async fn get_captcha() -> Result<HttpResponse, Box<dyn std::error::Error>> {
     //用于验证码校验
     let uuid = uuid::Uuid::new_v4().to_string();
     //写入缓存里，该验证码缓存一天，未使用的验证码自动删除
-    let result = CacheService::new()?.inner.set_string_ex(&format!("captch:cache_{}", uuid.as_str()), &captcha_str.as_str(), Some(Duration::from_secs(60*60*24))).await;
+    let result = CacheService::new()?.inner.set_string(&format!("captch:cache_{}", uuid.as_str()), &captcha_str.as_str()).await;
     if result.is_err() {
         return Ok(HttpResponse::Ok().json(ResVO::<String>::error_msg("创建验证码失败".to_string())));
     }

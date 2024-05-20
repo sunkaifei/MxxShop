@@ -14,7 +14,7 @@ use rbatis::rbdc::Error;
 use crate::modules::articles::entity::article_category_entity::ArticleCategory;
 use crate::modules::articles::entity::article_category_model::{ArticleCategorySaveRequest, CategoryPageRequest, CategoryTree, CategoryTreeVO};
 use crate::modules::articles::mapper::article_category_mapper;
-use crate::RB;
+use crate::pool;
 use crate::utils::{short_url, snowflake_id};
 
 ///添加菜单
@@ -29,7 +29,7 @@ pub async fn save_category(payload: ArticleCategorySaveRequest) -> rbatis::Resul
         }
     }
 
-    let unique_num = article_category_mapper::find_by_category_name_unique(&RB.clone(), &category_data.category_name).await?;
+    let unique_num = article_category_mapper::find_by_category_name_unique(pool!(), &category_data.category_name).await?;
     if unique_num > 0 {
         return Err(Error::from("栏目名称已存在".to_string()));
     }
@@ -37,7 +37,7 @@ pub async fn save_category(payload: ArticleCategorySaveRequest) -> rbatis::Resul
     //获取短网址唯一性
     category_data.short_url = find_short_url_unique().await;
 
-    return ArticleCategory::insert(&RB.clone(), &category_data).await;
+    return ArticleCategory::insert(pool!(), &category_data).await;
 }
 
 
@@ -46,7 +46,7 @@ pub async fn find_short_url_unique() -> Option<String> {
     for _ in 0..5 {
         //获取短网址
         let short_url = short_url::generate_random_code(5).unwrap_or_default();
-        let unique_num = article_category_mapper::find_by_short_url_unique(&RB.clone(), &short_url).await;
+        let unique_num = article_category_mapper::find_by_short_url_unique(pool!(), &short_url).await;
         if unique_num.unwrap_or(0) == 0 {
             new_short_url = Some(short_url);
             break;
@@ -57,7 +57,7 @@ pub async fn find_short_url_unique() -> Option<String> {
 
 ///获取所有菜单列表树
 pub async fn all_ategory_tree() -> rbatis::Result<Vec<CategoryTree>> {
-    let list: Vec<ArticleCategory> = ArticleCategory::select_all(&mut RB.clone()).await?;
+    let list: Vec<ArticleCategory> = ArticleCategory::select_all(pool!()).await?;
     let mut router_list = Vec::<CategoryTree>::new();
     ategory_arr_to_tree(&mut router_list, list, 0);
     Ok(router_list)
@@ -118,7 +118,7 @@ pub fn ategory_list_arr_to_tree(re_list: &mut Vec<CategoryTreeVO>, ori_arr: Vec<
 
 // 查询部门所有数据列表
 pub async fn select_all_list(item: CategoryPageRequest) -> rbatis::Result<Vec<CategoryTreeVO>> {
-    let list: Vec<ArticleCategory> = ArticleCategory::select_all(&mut RB.clone()).await?;
+    let list: Vec<ArticleCategory> = ArticleCategory::select_all(pool!()).await?;
     let mut dept_list = Vec::<CategoryTreeVO>::new();
     ategory_list_arr_to_tree(&mut dept_list, list, 0);
     Ok(dept_list)
