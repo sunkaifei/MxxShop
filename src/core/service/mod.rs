@@ -11,6 +11,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use once_cell::sync::Lazy;
 use rbatis::RBatis;
+use crate::modules::system::service::cache_service::CacheService;
 use crate::plugins::authority_intercept::AuthorityIdPlugin;
 use crate::utils::settings::Settings;
 
@@ -26,6 +27,7 @@ macro_rules! pool {
 }
 pub struct ServiceContext {
     pub rb: RBatis,
+    pub cache_service: CacheService,
 }
 
 impl ServiceContext {
@@ -50,11 +52,12 @@ impl Default for ServiceContext {
             rb: {
                 let rb = RBatis::new();
                 let setting = Settings::get();
-                if rb.is_debug_mode() == false && setting.server.debug.eq(&true) {
+                if rb.is_debug_mode() == false && setting.server.debug == true {
                     panic!(r#"please edit config/Config.toml file   “debug: false” "#);
                 }
                 rb
             },
+            cache_service: CacheService::new().unwrap(),
         }
     }
 }

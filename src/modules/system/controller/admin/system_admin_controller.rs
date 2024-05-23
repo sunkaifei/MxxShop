@@ -22,8 +22,8 @@ use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminV
 use crate::modules::system::entity::admin_role_model::UpdateUserRoleRequest;
 use crate::modules::system::entity::menu_model::{Router};
 use crate::modules::system::service::{admin_service, menu_service, role_service, system_log_service};
-use crate::modules::system::service::cache_service::CacheService;
 use crate::core::errors::error::WhoUnfollowedError;
+use crate::core::service::CONTEXT;
 use crate::utils::settings::Settings;
 
 // 添加用户信息
@@ -57,7 +57,7 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
         }
 
         // 查询缓存内的验证码
-        let cache_captch = CacheService::new().unwrap().inner.get_string(&format!("captch:cache_{}", uuid.as_str())).await.unwrap_or_default();
+        let cache_captch = CONTEXT.cache_service.get_string(&format!("captch:cache_{}", uuid.as_str())).await.unwrap_or_default();
         if cache_captch.is_empty() {
             return HttpResponse::Ok().json(ResVO::<String>::error_msg("验证码已过期或者不存在".to_string()));
         }
@@ -68,7 +68,7 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
         }
 
         // 删除验证码缓存
-        CacheService::new().unwrap().inner.del(&format!("captch:cache_{}", uuid.as_str())).await.unwrap_or_default();
+        CONTEXT.cache_service.del(&format!("captch:cache_{}", uuid.as_str())).await.unwrap_or_default();
     } else {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("验证不能为空或者参数错误".to_string()));
     }

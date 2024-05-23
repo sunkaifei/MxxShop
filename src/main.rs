@@ -43,7 +43,7 @@ async fn main() -> std::io::Result<()> {
     // 将 Redis 连接包装成 RedisStore
     /* let secret_key = Key::generate();
      let redis_connection_string = "redis://127.0.0.1:6379";
-     let store = RedisSessionStore::new(redis_connection_string).await.unwrap();
+     let search = RedisSessionStore::new(redis_connection_string).await.unwrap();
     */
     
     HttpServer::new(move || {

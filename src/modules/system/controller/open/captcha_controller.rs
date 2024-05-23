@@ -14,6 +14,7 @@ use actix_web::{get, HttpRequest, HttpResponse};
 use base64::{Engine, engine};
 use captcha::Captcha;
 use captcha::filters::{Dots, Noise, Wave};
+use crate::core::service::CONTEXT;
 
 use crate::core::web::response::ResVO;
 use crate::modules::system::service::cache_service::CacheService;
@@ -35,11 +36,13 @@ pub async fn get_captcha() -> Result<HttpResponse, Box<dyn std::error::Error>> {
     //用于验证码校验
     let uuid = uuid::Uuid::new_v4().to_string();
     //写入缓存里，该验证码缓存一天，未使用的验证码自动删除
-    let result = CacheService::new()?.inner.set_string(&format!("captch:cache_{}", uuid.as_str()), &captcha_str.as_str()).await;
+    let result = CONTEXT.cache_service.set_string(&format!("captch:cache_{}", uuid.as_str()), &captcha_str.as_str()).await;
     if result.is_err() {
         return Ok(HttpResponse::Ok().json(ResVO::<String>::error_msg("创建验证码失败".to_string())));
     }
+    //let cache_captch = CONTEXT.cache_service.get_string(&format!("captch:cache_{}", uuid.as_str())).await.unwrap_or_default();
     
+    //log::info!("==================={:?}", cache_captch);
     let png = captcha.as_png().unwrap_or_default();
     let base64_captcha = engine::general_purpose::STANDARD.encode(png);
     let mut hashmap = HashMap::new();

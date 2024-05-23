@@ -8,6 +8,7 @@
 //! 版权所有，侵权必究！
 //!
 
+use std::fmt::Debug;
 use std::format;
 use std::time::Duration;
 
@@ -21,7 +22,7 @@ use crate::modules::system::service::redis_service::RedisService;
 
 use crate::utils::settings::Settings;
 
-pub trait ICacheService: Sync + Send {
+pub trait ICacheService: Sync + Send+ Debug {
     fn set_string(&self, k: &str, v: &str) -> BoxFuture<Result<String>>;
 
     fn get_string(&self, k: &str) -> BoxFuture<Result<String>>;

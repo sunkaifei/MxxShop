@@ -23,7 +23,7 @@ pub async fn user_login() -> HttpResponse {
     let tera_ctx = Context::new();
     //tera_ctx .insert("field", &result);
     let tera = templates_service::get_templates();
-    let rendered = tera.render("default/user/login.html", &tera_ctx).unwrap_or_default();
+    let rendered = tera.await.render("default/user/login.html", &tera_ctx).unwrap_or_default();
     HttpResponse::Ok().body(rendered)
 }
 
@@ -62,7 +62,7 @@ pub async fn get_signup() -> HttpResponse {
     let tera_ctx = Context::new();
     //tera_ctx .insert("field", &result);
     let tera = templates_service::get_templates();
-    let rendered = tera.render("default/user/signup.html", &tera_ctx).unwrap_or_default();
+    let rendered = tera.await.render("default/user/signup.html", &tera_ctx).unwrap_or_default();
     HttpResponse::Ok().body(rendered)
 }
 
@@ -83,7 +83,7 @@ pub async fn user_index(user: Option<Identity>) -> HttpResponse {
 
     // 取出用户名
     let tera = templates_service::get_templates();
-    let rendered = tera.render("default/user/index.html", &tera_ctx).unwrap_or_default();
+    let rendered = tera.await.render("default/user/index.html", &tera_ctx).unwrap_or_default();
     HttpResponse::Ok().body(rendered)
 }
 
@@ -97,6 +97,6 @@ pub async fn user_forgot() -> HttpResponse {
     let tera_ctx = Context::new();
     //tera_ctx .insert("field", &result);
     let tera = templates_service::get_templates();
-    let rendered = tera.render("default/user/forgot.html", &tera_ctx).unwrap_or_default();
+    let rendered = tera.await.render("default/user/forgot.html", &tera_ctx).unwrap_or_default();
     HttpResponse::Ok().body(rendered)
 }

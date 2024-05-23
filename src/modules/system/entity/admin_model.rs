@@ -33,7 +33,6 @@ impl From<AdminSaveRequest> for SystemAdmin {
     fn from(req: AdminSaveRequest) -> Self {
         Self {
             id: None,
-            dept_id: None,
             user_name: req.user_name,
             nick_name: req.nick_name,
             user_type: req.user_type,
@@ -78,7 +77,6 @@ impl From<UserUpdateRequest> for SystemAdmin {
     fn from(req: UserUpdateRequest) -> Self {
         Self {
             id: req.id,
-            dept_id: None,
             user_name: req.user_name,
             user_type: req.user_type,
             email: req.email,
@@ -177,18 +175,44 @@ pub struct MenuUserList {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct UserListRequest {
-    #[serde(rename = "pageNum")]
-    pub page_no: u64,
-    #[serde(rename = "pageSize")]
+    pub page_num: u64,
     pub page_size: u64,
     pub admin_id: Option<u64>,
     pub user_name: Option<String>,
     pub mobile: Option<String>,
-    //#[serde(rename = "deptId")]
-    pub dept_id: Option<String>,
+    pub depts_id: Option<String>,
     pub begin_time: Option<String>,
     pub end_time: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserListDTO {
+    pub page_num: u64,
+    pub page_size: u64,
+    pub admin_id: Option<u64>,
+    pub user_name: Option<String>,
+    pub mobile: Option<String>,
+    pub depts_id: Option<String>,
+    pub begin_time: Option<String>,
+    pub end_time: Option<String>,
+}
+
+impl From<UserListRequest>  for UserListDTO {
+    fn from(req: UserListRequest) -> Self {
+        Self {
+            page_num: req.page_num,
+            page_size: req.page_size,
+            admin_id: req.admin_id,
+            user_name: req.user_name,
+            mobile: req.mobile,
+            depts_id: req.depts_id,
+            begin_time: req.begin_time,
+            end_time: req.end_time,
+        }
+    }
+    
 }
 
 
@@ -231,8 +255,6 @@ pub struct UpdateUserPasswordRequest {
 pub struct SystemAdminVO {
     ///用户ID
     pub id: Option<u64>,
-    ///部门ID
-    pub dept_id: Option<u64>,
     ///用户账号
     pub user_name: Option<String>,
     ///用户昵称
@@ -275,7 +297,6 @@ impl From<SystemAdmin> for SystemAdminVO {
     fn from(arg: SystemAdmin) -> Self {
         Self {
             id: arg.id,
-            dept_id: arg.dept_id,
             user_name: arg.user_name,
             nick_name: arg.nick_name,
             user_type: arg.user_type,

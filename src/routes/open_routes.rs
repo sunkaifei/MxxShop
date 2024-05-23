@@ -20,7 +20,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
     cfg
         .service(ActixFiles::new("/static/", "static/").prefer_utf8(true))
         .service(ActixFiles::new("/upload/", "storage/upload/").prefer_utf8(true))
-        .service(web::resource("/").route(web::get().to(index_controller::index))) //首页
+        .service(index_controller::index) //首页
         .service(web::resource("/service/privacy").route(web::get().to(service_controller::service_privacy)))
         .service(web::resource("/service/faq").route(web::get().to(service_controller::service_faq)))
         .service(web::resource("/service/contacts").route(web::get().to(service_controller::service_contacts)))

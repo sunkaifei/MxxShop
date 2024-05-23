@@ -25,7 +25,7 @@ pub async fn article_add(user: Option<Identity>) -> HttpResponse {
         let user: UserLoginSession = serde_json::from_str(&user.id().unwrap_or_default()).unwrap();
         tera_ctx.insert("user", &user);
         let tera = templates_service::get_templates();
-        let rendered = tera.render("default/article/add_article.html", &tera_ctx).unwrap_or_default();
+        let rendered = tera.await.render("default/article/add_article.html", &tera_ctx).unwrap_or_default();
         HttpResponse::Ok().body(rendered)
     } else {
         HttpResponse::TemporaryRedirect()

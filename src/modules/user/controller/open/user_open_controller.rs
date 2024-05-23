@@ -34,17 +34,17 @@ pub async fn user_index(user: Option<Identity>,path: web::Path<QueryUrl>) -> Htt
                     tera_ctx.insert("userInfo", &user_info);
                 }
                 None => {
-                    let rendered = tera.render("default/error/404.html", &tera_ctx).unwrap_or_default();
+                    let rendered = tera.await.render("default/error/404.html", &tera_ctx).unwrap_or_default();
                     return HttpResponse::Ok().body(rendered);
                 }
             }
         }
         Err(_) => {
-            let rendered = tera.render("default/error/500.html", &tera_ctx).unwrap_or_default();
+            let rendered = tera.await.render("default/error/500.html", &tera_ctx).unwrap_or_default();
             return HttpResponse::Ok().body(rendered);
         }
     }
 
-    let rendered = tera.render("default/user/index.html", &tera_ctx).unwrap_or_default();
+    let rendered = tera.await.render("default/user/index.html", &tera_ctx).unwrap_or_default();
     HttpResponse::Ok().body(rendered)
 }

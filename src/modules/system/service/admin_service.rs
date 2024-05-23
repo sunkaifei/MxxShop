@@ -13,7 +13,7 @@ use crate::core::errors::error::Result;
 use rbatis::plugin::{Page, PageRequest};
 
 use crate::modules::system::entity::admin_entity::SystemAdmin;
-use crate::modules::system::entity::admin_model::{AdminSaveRequest, UserListRequest, UserLoginRequest, UserUpdateRequest};
+use crate::modules::system::entity::admin_model::{AdminSaveRequest, UserListDTO, UserListRequest, UserLoginRequest, UserUpdateRequest};
 use crate::modules::system::mapper::admin_mapper;
 use crate::pool;
 use crate::utils::snowflake_id::generate_snowflake_id;
@@ -60,7 +60,8 @@ pub async fn select_by_username(item: &UserLoginRequest) -> rbatis::Result<Optio
 }
 
 pub async fn select_user_page(item: UserListRequest) -> rbatis::Result<Page<SystemAdmin>> {
-    let page_req = &PageRequest::new(item.page_no.clone(), item.page_size.clone());
+    let item: UserListDTO = item.into();
+    let page_req = &PageRequest::new(item.page_num.clone(), item.page_size.clone());
     let result = admin_mapper::select_user_page(pool!(), page_req, &item).await;
     Ok(result?)
 }

@@ -37,7 +37,7 @@ pub async fn find_by_key_unique(rb: &RBatis, config_key: Option<String>, id: Opt
     impled!()
 }
 
-impl_select!(SystemConfig{select_by_key(config_key:&str) -> Option => "`where config_key = #{config_key} limit 1`"},"fly_system_config");
+impl_select!(SystemConfig{select_by_key(config_key :&Option<String>) -> Option => "`where config_key = #{config_key} limit 1`"},"fly_system_config");
 
 impl_select_page!(SystemConfig{select_config_page(item: ConfigPageBO) =>"
     trim end=' where ':

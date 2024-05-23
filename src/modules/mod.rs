@@ -23,8 +23,8 @@ pub mod articles;
 ///统计模块
 pub mod statistics;
 
-///店铺模块
-pub mod store;
+///搜索模块
+pub mod search;
 
 ///物流模块
 pub mod shipping;

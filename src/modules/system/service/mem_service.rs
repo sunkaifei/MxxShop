@@ -59,9 +59,7 @@ impl ICacheService for MemService {
         self.recycling();
         let k = k.to_string();
         let v = v.to_string();
-        log::info!("==========11========");
-        let ff = self.cache.insert(k.to_string(), (v.clone(), None));
-        log::info!("=================={:?}",ff);
+        self.cache.insert(k.to_string(), (v.clone(), None));
         Box::pin(async move {
             return Ok(v.to_string());
         })

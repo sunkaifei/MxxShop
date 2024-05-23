@@ -12,10 +12,28 @@ use std::collections::HashMap;
 
 use serde_json::{to_value};
 use tera::{Error, Result, Tera, try_get_value, Value};
+use crate::modules::system::service::config_service;
 use crate::utils::time_utils::compare_with_current_time;
 
-pub fn get_templates() -> Tera {
-    let mut tera = Tera::new("./templates/**/*").unwrap_or_default();
+pub async fn get_templates() -> Tera {
+    let config_result = config_service::select_by_key(&Option::from("pc_template".to_string())).await;
+    let config_template = match config_result {
+        Ok(config_option) => {
+            match config_option {
+                Some(config_option) => {
+                    config_option.config_value.unwrap_or_default()
+                }
+                None => {
+                    "default".to_string()
+                }
+            }
+        }
+        Err(_) => {
+            "default".to_string()
+        }
+    };
+    let template_url = format!("./templates/{}/*", config_template);
+    let mut tera = Tera::new(&template_url).unwrap_or_default();
     tera.autoescape_on(vec!["html"]);
     // 注册自定义标签
     tera.register_function("upper_case", custom_function);
@@ -28,17 +46,13 @@ pub fn get_templates() -> Tera {
 
 pub fn json_to_hashmap(json: &Value) -> HashMap<String, String> {
     let mut hashmap = HashMap::new();
-    log::info!("======json1========：{:?}", &json.clone());
     match json {
         Value::Object(obj) => {
-            log::info!("======obj========：{:?}", &obj.clone());
             for (key, value) in obj.iter() {
                 if let Some(s) = value.as_str() {
-                    log::info!("======k1========：{:?}", &key.clone());
                     hashmap.insert(key.clone(), s.to_string());
                 } else {
                     let sub_hashmap = json_to_hashmap(value);
-                    log::info!("======k2========：{:?}", &key.clone());
                     hashmap.insert(key.clone(), serde_json::to_string(&sub_hashmap).unwrap_or_default());
                 }
             }

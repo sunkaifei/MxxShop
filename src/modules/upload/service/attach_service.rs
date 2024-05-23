@@ -46,7 +46,7 @@ pub async fn upload_product_image(module: String, form: ImageForm) -> HttpRespon
     
     
     let mut result_map: HashMap<String, String> = HashMap::new();
-    let config_web = config_service::select_by_key(&"localStorage".to_string()).await;
+    let config_web = config_service::select_by_key(&Option::from("localStorage".to_string())).await;
     let local_storage = match config_web {
         Ok(config) => { 
             match config {  

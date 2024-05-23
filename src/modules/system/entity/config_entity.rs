@@ -11,7 +11,7 @@
 use rbatis::rbdc::datetime::DateTime;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct SystemConfig {
     ///配置id
     pub config_id: u64,

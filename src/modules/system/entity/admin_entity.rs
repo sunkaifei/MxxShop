@@ -15,8 +15,6 @@ use serde::{Deserialize, Serialize};
 pub struct SystemAdmin {
     ///用户ID
     pub id: Option<u64>,
-    ///部门ID
-    pub dept_id: Option<u64>,
     ///用户账号
     pub user_name: Option<String>,
     ///用户昵称

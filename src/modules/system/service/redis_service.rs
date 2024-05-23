@@ -19,6 +19,7 @@ use crate::core::errors::error::{Error, Result};
 use crate::modules::system::service::cache_service::ICacheService;
 
 ///Redis Cache service
+#[derive(Debug)]
 pub struct RedisService {
     pub client: redis::Client,
 }

@@ -11,22 +11,22 @@
 use rbatis::{impl_select, impl_select_page};
 
 use crate::modules::system::entity::admin_entity::SystemAdmin;
-use crate::modules::system::entity::admin_model::UserListRequest;
+use crate::modules::system::entity::admin_model::{UserListDTO, UserListRequest};
 use crate::modules::system::entity::admin_role_entity::SystemAdminRole;
 
 rbatis::crud!(SystemAdmin {}, "fly_system_admin");
 
 
 
-rbatis::pysql_select_page!(select_user_page(item: &UserListRequest) -> SystemAdmin =>
+rbatis::pysql_select_page!(select_user_page(item: &UserListDTO) -> SystemAdmin =>
 r#"`select `
     if do_count == true:
      ` count(1) as count `
     if do_count == false:
      ` u.* `
     ` from fly_system_admin u`
-    ` left join fly_system_admin_depts_merge m on u.admin_id = m.admin_id`
-    ` left join fly_system_depts d on m.dept_id = d.id`
+    ` left join fly_system_admin_depts_merge m on u.id = m.admin_id`
+    ` left join fly_system_depts d on m.depts_id = d.id`
     ` where u.del_flag = 0`
     if item.admin_id != '' && item.admin_id != null:
      ` AND u.id = #{item.admin_id}`
@@ -40,8 +40,8 @@ r#"`select `
      ` AND date_format(u.create_time,"%y%m%d") >= date_format(#{item.begin_time},"%y%m%d")`
     if item.end_time != '' && item.end_time != null:
      ` AND date_format(u.create_time,"%y%m%d") <= date_format(#{item.end_time},"%y%m%d")`
-    if item.dept_id != '' && item.dept_id != null:
-     ` AND (u.dept_id = #{item.dept_id} OR u.dept_id IN ( SELECT t.id FROM fly_system_depts t WHERE FIND_IN_SET (#{item.dept_id},ancestors) ))`
+    if item.depts_id != '' && item.depts_id != null:
+     ` and m.depts_id IN (WITH RECURSIVE DeptTree AS (SELECT d1.id, d1.parent_id FROM fly_system_depts d1 WHERE d1.id = #{item.depts_id} UNION ALL SELECT d2.id, d2.parent_id FROM fly_system_depts d2 INNER JOIN DeptTree dt ON d2.parent_id = dt.id) SELECT dt.id FROM DeptTree dt
     if !sql.contains('count'):
      ` order by u.id desc`
     if do_count == false:

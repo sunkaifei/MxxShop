@@ -82,7 +82,7 @@ pub async fn article_list(info: web::Path<Info>) -> HttpResponse {
     tera_ctx.insert("articleList", &result);
 
 
-    let rendered = tera.render("default/article/list_article.html", &tera_ctx).unwrap_or_default();
+    let rendered = tera.await.render("default/article/list_article.html", &tera_ctx).unwrap_or_default();
     HttpResponse::Ok().body(rendered)
 }
 
@@ -153,7 +153,7 @@ pub async fn article_detail(user: Option<Identity>, path: web::Path<QueryUrl>) -
         tera_ctx.insert("user", &user);
     }
     let tera = templates_service::get_templates();
-    let rendered = tera.render("default/article/detail_article.html", &tera_ctx).unwrap_or_default();
+    let rendered = tera.await.render("default/article/detail_article.html", &tera_ctx).unwrap_or_default();
     Ok(HttpResponse::Ok().body(rendered))
 }
 
