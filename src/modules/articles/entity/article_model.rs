@@ -19,9 +19,10 @@ use crate::modules::user::entity::user_entity::User;
 use crate::utils::string_utils::deserialize_string_to_u64;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct ArticlesSaveRequest {
     //用户ID
-    pub user_id: u64,
+    pub user_id: Option<u64>,
     //文章分类ID
     #[serde(deserialize_with = "deserialize_string_to_u64")]
     pub category_id: Option<u64>,
@@ -46,7 +47,7 @@ pub struct ArticlesSaveRequest {
 impl From<ArticlesSaveRequest> for Articles {
     fn from(arg: ArticlesSaveRequest) -> Self {
         Self {
-            id: 0,
+            id: Option::from(0),
             short_url: None,
             category_id: arg.category_id,
             category_ids: arg.category_ids,
@@ -82,12 +83,16 @@ impl From<ArticlesSaveRequest> for Articles {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct ArticlesUpdateRequest {
     ///用户的 UID
-    pub id: u64,
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub id: Option<u64>,
     //用户ID
-    pub user_id: u64,
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub user_id: Option<u64>,
     //文章分类ID
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
     pub category_id: Option<u64>,
     //所属所有的父级至子级分类
     pub category_ids: Option<String>,
@@ -150,7 +155,7 @@ impl From<ArticlesUpdateRequest> for Articles {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ArticlesDetailData {
     //文章ID
-    pub id: u64,
+    pub id: Option<u64>,
     //短网址
     pub short_url: Option<String>,
     //文章分类ID
@@ -158,7 +163,7 @@ pub struct ArticlesDetailData {
     //所属所有的父级至子级分类
     pub category_ids: Option<String>,
     //用户ID
-    pub user_id: u64,
+    pub user_id: Option<u64>,
     //文章标题
     pub title: Option<String>,
     //简短标题
@@ -217,13 +222,13 @@ pub struct ArticlesPageRequest {
 #[serde(rename_all = "camelCase")]
 pub struct ArticlesPageData {
     //文章ID
-    pub id: u64,
+    pub id: Option<u64>,
     //文章分类ID
     pub category_id: Option<u64>,
     //所属所有的父级至子级分类
     pub category_ids: Option<String>,
     //用户ID
-    pub user_id: u64,
+    pub user_id: Option<u64>,
     //文章标题
     pub title: Option<String>,
     //文章主图
@@ -255,7 +260,7 @@ pub struct ArticlesListRequest {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ArticlesListData {
     //文章ID
-    pub id: u64,
+    pub id: Option<u64>,
     //短网址
     pub short_url: Option<String>,
     //文章分类ID
@@ -349,7 +354,7 @@ pub struct Info {
 #[serde(rename_all = "camelCase")]
 pub struct ArticleUser {
     ///用户的 UID
-    pub id: u64,
+    pub id: Option<u64>,
     ///短网址
     pub short_url: Option<String>,
     ///用户名

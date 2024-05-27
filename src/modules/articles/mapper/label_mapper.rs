@@ -14,11 +14,11 @@ use rbatis::RBatis;
 use crate::modules::articles::entity::label_entity::{Label, LabelMerge};
 use crate::modules::articles::entity::label_model::LabelPageBO;
 
-crud!(Label {}, "fly_article_label");
+crud!(Label {}, "mxx_article_label");
 
-crud!(LabelMerge {}, "fly_article_label_merge");
+crud!(LabelMerge {}, "mxx_article_label_merge");
 
-#[sql("select count(*) from fly_article_label where short_url = ?")]
+#[sql("select count(*) from mxx_article_label where short_url = ?")]
 pub async fn find_by_short_url_unique(
     rb: &RBatis,
     short_url: &str,
@@ -26,7 +26,7 @@ pub async fn find_by_short_url_unique(
     impled!()
 }
 
-#[sql("select count(*) from fly_article_label where title = ?")]
+#[sql("select count(*) from mxx_article_label where title = ?")]
 pub async fn find_by_title_unique(
     rb: &RBatis,
     title: &Option<String>,
@@ -48,4 +48,4 @@ impl_select_page!(Label{select_comment_page(item: &LabelPageBO) =>"
           when item.status == 2:
             ` and status = 1 `
     if !sql.contains('count'):
-      order by create_time desc"},"fly_article_label");
+      order by create_time desc"},"mxx_article_label");

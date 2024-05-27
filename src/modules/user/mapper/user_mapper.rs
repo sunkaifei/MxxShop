@@ -16,15 +16,15 @@ use rbatis::rbdc::Error;
 use crate::modules::user::entity::user_entity::User;
 use crate::modules::user::entity::user_model::UserSaveDTO;
 
-rbatis::crud!(User{}, "fly_users");
+rbatis::crud!(User{}, "mxx_users");
 
-impl_select!(User{select_by_username(username: &Option<String>) -> Option => "`where user_name = #{username} limit 1`"},"fly_users");
+impl_select!(User{select_by_username(username: &Option<String>) -> Option => "`where user_name = #{username} limit 1`"},"mxx_users");
 
 
 htmlsql!(add_user(rb: &RBatis, user: &UserSaveDTO) -> Result<ExecResult, Error> =>
 r#"<mapper>
     <insert id="add_user">
-        `insert into fly_users(`
+        `insert into mxx_users(`
         `<if test="user.id != null && user.id != 0">id,</if>
 		<if test="user.user_name != null && user.user_name != ''">user_name,</if>
 		<if test="user.email != null && user.email != ''">email,</if>
@@ -54,7 +54,7 @@ r#"<mapper>
 
 //in用户id查出用户信息
 #[py_sql("
-    `select * from fly_users`
+    `select * from mxx_users`
     ` where id in (`
      trim ',': for item in user_id:
        #{item},

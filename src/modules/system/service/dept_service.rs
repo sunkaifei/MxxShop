@@ -12,7 +12,7 @@ use crate::core::web::entity::common::BathIdRequest;
 
 use crate::core::errors::error::{Error, Result};
 use crate::modules::system::entity::dept_entity::SystemDept;
-use crate::modules::system::entity::dept_model::{DeptPageBO, DeptPageRequest, DeptSaveRequest, DeptTree, DeptTreeData, DeptUpdateRequest};
+use crate::modules::system::entity::dept_model::{DeptPageDTO, DeptPageRequest, DeptSaveRequest, DeptTree, DeptTreeData, DeptUpdateRequest};
 use crate::modules::system::mapper::depts_mapper;
 use crate::pool;
 use crate::utils::snowflake_id::generate_snowflake_id;
@@ -127,7 +127,7 @@ pub async fn get_dept_detail(id: u64) -> rbatis::Result<Option<SystemDept>> {
 
 // 查询部门所有数据列表
 pub async fn select_all_list(item: DeptPageRequest) -> rbatis::Result<Vec<DeptTreeData>> {
-    let dept_page:DeptPageBO = item.into();
+    let dept_page:DeptPageDTO = item.into();
     let list: Vec<SystemDept> = depts_mapper::select_dept_list(pool!(), &dept_page).await?;
     let mut dept_list = Vec::<DeptTreeData>::new();
     if dept_page.dept_name.is_some() || dept_page.status.is_some() {

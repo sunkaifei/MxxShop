@@ -13,11 +13,11 @@ use rbatis::{impl_select, impl_select_page, py_sql, RBatis};
 use crate::modules::system::entity::config_entity::SystemConfig;
 use crate::modules::system::entity::config_model::ConfigPageBO;
 
-rbatis::crud!(SystemConfig {}, "fly_system_config");
+rbatis::crud!(SystemConfig {}, "mxx_system_config");
 
 /// 查询config_name的参数名称是否已存在
 #[py_sql("
-  `select count(*) from fly_system_config`
+  `select count(*) from mxx_system_config`
   ` where config_name = #{config_name} `
   if id != null:
     ` and id != #{id}`
@@ -28,7 +28,7 @@ pub async fn find_by_name_unique(rb: &RBatis, config_name: Option<String>, id: O
 
 /// 查询config_key是否已存在
 #[py_sql("
-  `select count(*) from fly_system_config`
+  `select count(*) from mxx_system_config`
   ` where config_key = #{config_key} `
   if id != null:
     ` and id != #{id}`
@@ -37,9 +37,9 @@ pub async fn find_by_key_unique(rb: &RBatis, config_key: Option<String>, id: Opt
     impled!()
 }
 
-impl_select!(SystemConfig{select_by_key(config_key :&Option<String>) -> Option => "`where config_key = #{config_key} limit 1`"},"fly_system_config");
+impl_select!(SystemConfig{select_by_key(config_key :&Option<String>) -> Option => "`where config_key = #{config_key} limit 1`"},"mxx_system_config");
 
-impl_select_page!(SystemConfig{select_config_page(item: ConfigPageBO) =>"
+impl_select_page!(SystemConfig{select_by_page(item: ConfigPageBO) =>"
     trim end=' where ':
       ` where `
       trim ' and ':
@@ -53,5 +53,5 @@ impl_select_page!(SystemConfig{select_config_page(item: ConfigPageBO) =>"
           when item.config_type == 2:
             ` and config_type = 1 `
      if !sql.contains('count'):
-       order by create_time desc"},"fly_system_config");
+       order by create_time desc"},"mxx_system_config");
 

@@ -12,4 +12,4 @@
 use rbatis::crud;
 use crate::modules::system::entity::system_log_entity::SystemLog;
 
-crud!(SystemLog {},"fly_system_log");
+crud!(SystemLog {},"mxx_system_log");

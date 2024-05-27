@@ -41,7 +41,7 @@ impl Intercept for AuthorityIdPlugin {
             // 拦截删除语句并转换为更新删除标志的语句
             // ...
             log::info!("拦截删除语句: {}", sql);
-        } else if sql.contains("from fly_system_menu"){
+        } else if sql.contains("from mxx_system_menu"){
             // 添加过滤条件
             // ...
             // 修改 SQL 语句，使其只返回特定的列

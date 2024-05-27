@@ -16,6 +16,7 @@ use actix_web_grants::GrantsMiddleware;
 
 use crate::core::permission::jwt_util::JWTToken;
 use crate::modules::articles::controller::admin::{article_admin_controller, article_category_admin_controller};
+use crate::modules::product::controller::admin::product_admin_controller;
 use crate::modules::system::controller::admin::{config_admin_controller, dept_admin_controller, ip_admin_controller, menu_admin_controller, role_admin_controller, system_admin_controller, system_dict_controller};
 use crate::utils::settings::Settings;
 
@@ -60,7 +61,8 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             .service(system_admin_controller::user_delete)// 删除管理员
             .service(system_admin_controller::update_user_role)// 更新用户角色
             .service(system_admin_controller::user_update)
-            .service(system_admin_controller::update_admin_password)//更新管理员密码
+            .service(system_admin_controller::update_admin_password)//更新其他管理员密码
+            .service(system_admin_controller::update_my_password)
             .service(system_admin_controller::get_user_detail)
             .service(system_admin_controller::login)   // 管理员登录
             .service(system_admin_controller::admin_list)// 管理员列表
@@ -103,5 +105,6 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             //.service(web::resource("/system/ip/batch_delete").route(web::delete().to(ip_admin_controller::batch_delete_ip)))
             //.service(web::resource("/system/ip/update").route(web::put().to(ip_admin_controller::update_ip)))
             //.service(web::resource("/system/ip/detail/{id}").route(web::get().to(ip_admin_controller::get_ip_detail)))
+            .service(product_admin_controller::get_product_list)
     );
 }

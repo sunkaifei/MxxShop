@@ -14,7 +14,7 @@ use crate::modules::system::entity::language_entity::{LangType, LangCountry, Lan
 use crate::modules::system::entity::language_model::{QueryTypePageDTO, QueryCountryPageDTO, QueryCodePageDTO};
 
 // 语言类型增删改查
-crud!(LangType {}, "fly_lang_type");
+crud!(LangType {}, "mxx_lang_type");
 
 // 分页查询
 impl_select_page!(LangType{select_page(dto: &QueryTypePageDTO) =>"
@@ -38,12 +38,12 @@ impl_select_page!(LangType{select_page(dto: &QueryTypePageDTO) =>"
           when dto.is_del == 2:
             ` and status = 1 `
     if !sql.contains('count'):
-      ` order by id desc `"},"fly_lang_type");
+      ` order by id desc `"},"mxx_lang_type");
 
 
 
 // 语言国家类型增删改查
-crud!(LangCountry {}, "fly_lang_country");
+crud!(LangCountry {}, "mxx_lang_country");
 
 // 分页查询
 impl_select_page!(LangCountry{select_page(dto: &QueryCountryPageDTO) =>"
@@ -57,11 +57,11 @@ impl_select_page!(LangCountry{select_page(dto: &QueryCountryPageDTO) =>"
         if dto.country_name != null && dto.country_name != '':
           ` and country_name like concat('%', #{dto.country_name}, '%') `
     if !sql.contains('count'):
-      ` order by id desc `"},"fly_lang_country");
+      ` order by id desc `"},"mxx_lang_country");
 
 
 // 语言code表增删改查
-crud!(LangCode {}, "fly_lang_code");
+crud!(LangCode {}, "mxx_lang_code");
 
 // 分页查询
 impl_select_page!(LangCode{select_page(dto: &QueryCodePageDTO) =>"
@@ -75,4 +75,4 @@ impl_select_page!(LangCode{select_page(dto: &QueryCodePageDTO) =>"
         if dto.is_admin != null && dto.is_admin != '':
           ` and is_admin = #{dto.is_admin} `
     if !sql.contains('count'):
-      ` order by id desc `"},"fly_lang_code");
+      ` order by id desc `"},"mxx_lang_code");

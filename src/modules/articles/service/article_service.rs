@@ -23,7 +23,7 @@ use crate::utils::snowflake_id::generate_snowflake_id;
 ///添加文章
 pub async fn save_article(payload: ArticlesSaveRequest) -> Result<u64> {
     let mut article_data: Articles = payload.into();
-    article_data.id = generate_snowflake_id();
+    article_data.id = Some(generate_snowflake_id());
     //log::info!("========article_data====: {:?}", &article_data.user_id);
     let unique_num = article_mapper::find_by_title_unique(pool!(), &article_data.title, &article_data.user_id).await?;
     if unique_num > 0 {

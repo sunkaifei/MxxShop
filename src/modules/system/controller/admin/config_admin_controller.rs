@@ -42,7 +42,7 @@ pub async fn get_config_detail(item: web::Path<InfoId>) -> HttpResponse {
 #[get("/system/config/list")]
 pub async fn get_config_page(item: web::Query<ConfigPageRequest>) -> HttpResponse {
     let page_req : ConfigPageBO = item.0.into();
-    let page_result = config_service::select_config_page(page_req).await;
+    let page_result = config_service::select_by_page(page_req).await;
     return match page_result {
         Ok(page) => {
             let mut list_data: Vec<SystemConfigVO> = Vec::new();

@@ -65,14 +65,14 @@ pub struct UserLoginRequest {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserLoginResponse {
     ///用户的 UID
-    pub id: u64,
+    pub id: Option<u64>,
     pub username: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserLoginSession {
     ///用户的 UID
-    pub id: u64,
+    pub id: Option<u64>,
     pub username: Option<String>,
 }
 
@@ -80,7 +80,7 @@ pub struct UserLoginSession {
 #[serde(rename_all = "camelCase")]
 pub struct UserInfo{
     ///用户的 UID
-    pub id: u64,
+    pub id: Option<u64>,
     ///短网址
     pub short_url: Option<String>,
     ///用户名

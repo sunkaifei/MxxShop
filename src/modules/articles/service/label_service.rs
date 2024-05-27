@@ -40,8 +40,8 @@ pub async fn update_label(payload: LabelUpdateRequest) -> Result<ExecResult, Err
     return rows;
 }
 
-/*pub async fn get_label_by_id(id: u64) -> rbatis::Result<Option<Label>> {
-    let st = Label::find_by_id(pool!(), id).await?
+pub async fn get_label_by_id(id: Option<u64>) -> rbatis::Result<Option<Label>> {
+    let st = Label::select_by_column(pool!(), "id",id).await?
         .into_iter().next();
     Ok(st)
-}*/
+}

@@ -49,7 +49,7 @@ impl JWTToken {
             aud: String::from("rust_admin"), // (audience)：受众
             exp: (now + m30).as_secs() as usize,
             iat: now.as_secs() as usize,  // (Issued At)：签发时间
-            iss: String::from("flycms"),     // (issuer)：签发人
+            iss: String::from("mxx_shop"),     // (issuer)：签发人
             nbf: now.as_secs() as usize,  // (Not Before)：生效时间
             sub: String::from("rust_admin"), // (subject)：主题
             jti: String::from("ignore"),  // (JWT ID)：编号

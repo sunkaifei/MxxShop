@@ -94,12 +94,12 @@ pub struct DeptPageRequest {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct DeptPageBO {
+pub struct DeptPageDTO {
     pub dept_name: Option<String>,
     pub status: Option<i8>,
 }
 
-impl From<DeptPageRequest> for DeptPageBO {
+impl From<DeptPageRequest> for DeptPageDTO {
     fn from(s: DeptPageRequest) -> Self {
         Self {
             dept_name: s.dept_name,

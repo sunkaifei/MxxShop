@@ -11,14 +11,14 @@
 use rbatis::{py_sql, RBatis};
 
 use crate::modules::system::entity::dept_entity::SystemDept;
-use crate::modules::system::entity::dept_model::DeptPageBO;
+use crate::modules::system::entity::dept_model::DeptPageDTO;
 
 //增删改查菜单
-rbatis::crud!(SystemDept {}, "fly_system_depts");
+rbatis::crud!(SystemDept {}, "mxx_system_depts");
 
 /// 查询同目录级别下部门是否已存在
 #[py_sql("
-    `select count(*) from fly_system_depts`
+    `select count(*) from mxx_system_depts`
     ` where dept_name = #{dept_name} `
     `and parent_id = #{parent_id} `
      if id != null:
@@ -29,7 +29,7 @@ pub async fn find_by_dept_name_unique(rb: &RBatis, dept_name: Option<String>, pa
 }
 
 #[py_sql("
-    `select * from fly_system_depts `
+    `select * from mxx_system_depts `
      trim end=' where ':
        ` where `
        trim ' and ':
@@ -46,7 +46,7 @@ pub async fn find_by_dept_name_unique(rb: &RBatis, dept_name: Option<String>, pa
             ' and status >= 0 '
      `order by sort desc`
     ")]
-pub async fn select_dept_list(rb: &RBatis, item: &DeptPageBO) -> rbatis::Result<Vec<SystemDept>> {
+pub async fn select_dept_list(rb: &RBatis, item: &DeptPageDTO) -> rbatis::Result<Vec<SystemDept>> {
     impled!()
 }
 

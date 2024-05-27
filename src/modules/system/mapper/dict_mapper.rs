@@ -16,7 +16,7 @@ use crate::modules::system::entity::dict_type_entity::DictType;
 use crate::modules::system::entity::dict_type_model::{DictTypePageBO};
 
 //增删改查字典数据
-rbatis::crud!(DictData {}, "fly_system_dict_data");
+rbatis::crud!(DictData {}, "mxx_system_dict_data");
 
 //字典数据分页查询
 impl_select_page!(DictData{select_page(dto: &QueryDictDataPageBO) =>"
@@ -35,10 +35,10 @@ impl_select_page!(DictData{select_page(dto: &QueryDictDataPageBO) =>"
            when dto.status == 2:
              ` and status = 1 `
      if !sql.contains('count'):
-        ` order by id desc `"},"fly_system_dict_data");
+        ` order by id desc `"},"mxx_system_dict_data");
 
 //增删改查字典数据类型
-rbatis::crud!(DictType {}, "fly_system_dict_type");
+rbatis::crud!(DictType {}, "mxx_system_dict_type");
 
 impl_select_page!(DictType{select_page(dto: &DictTypePageBO) =>"
     trim end=' where ':
@@ -56,6 +56,6 @@ impl_select_page!(DictType{select_page(dto: &DictTypePageBO) =>"
           when dto.status == 2:
             ` and status = 1 `
     if !sql.contains('count'):
-      ` order by id desc `"},"fly_system_dict_type");
+      ` order by id desc `"},"mxx_system_dict_type");
 
 

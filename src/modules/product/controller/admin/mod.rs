@@ -9,4 +9,4 @@
 //!
 
 
-pub mod admin;
+pub mod product_admin_controller;

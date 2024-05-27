@@ -13,20 +13,33 @@ use serde::{Deserialize, Serialize};
 
 use crate::modules::system::entity::admin_entity::SystemAdmin;
 use crate::modules::system::entity::menu_model::Router;
-use crate::utils::string_utils::{serialize_option_u64_to_string};
+use crate::utils::string_utils::{serialize_option_u64_to_string,deserialize_string_to_u64};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct AdminSaveRequest {
-    pub mobile: Option<String>,
+    ///用户账号
     pub user_name: Option<String>,
+    ///用户昵称
     pub nick_name: Option<String>,
+    ///用户类型：0普通用户，1超级管理员
+    pub user_type: Option<i8>,
+    ///用户邮箱
+    pub email: Option<String>,
+    ///手机号码
+    pub mobile: Option<String>,
+    ///用户性别（0男 1女 2未知）
+    pub sex: Option<i8>,
+    ///头像地址
+    pub avatar: Option<String>,
     ///密码
     pub password: Option<String>,
-    pub user_type: Option<i8>,
-    pub email: Option<String>,
-    pub sort: Option<i32>,
-    pub remark: Option<String>,
+    ///帐号状态（0正常 1停用）
     pub status: Option<i8>,
+    ///备注
+    pub remark: Option<String>,
+    ///用户排序
+    pub sort: Option<i32>,
 }
 
 impl From<AdminSaveRequest> for SystemAdmin {
@@ -38,25 +51,27 @@ impl From<AdminSaveRequest> for SystemAdmin {
             user_type: req.user_type,
             email: req.email,
             mobile: req.mobile,
-            sex: Option::from(0),
-            avatar: None,
+            sex: req.sex,
+            avatar: req.avatar,
             password: req.password,
-            status: Option::from(0),
+            status: req.status,
             del_flag: Option::from(0),
             login_ip: None,
             login_date: None,
             create_by: None,
-            create_time: None,
+            create_time: Option::from(DateTime::now()),
             update_by: None,
-            update_time: None,
-            remark: None,
-            sort: None,
+            update_time: Option::from(DateTime::now()),
+            remark: req.remark,
+            sort: req.sort,
         }
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct UserUpdateRequest {
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
     pub id: Option<u64>,
     pub mobile: Option<String>,
     pub user_name: Option<String>,
@@ -86,14 +101,14 @@ impl From<UserUpdateRequest> for SystemAdmin {
             password: None,
             status: req.status,
             del_flag: None,
-            login_ip: req.login_ip,
-            login_date: req.login_date,
+            login_ip: None,
+            login_date: None,
             create_by: None,
             create_time: None,
             update_by: None,
-            update_time: None,
+            update_time: Option::from(DateTime::now()),
             remark: req.remark,
-            nick_name: None,
+            nick_name: req.nick_name,
             sort: req.sort,
         }
     }
@@ -215,25 +230,19 @@ impl From<UserListRequest>  for UserListDTO {
     
 }
 
-
-#[derive(Debug, Serialize)]
-pub struct UserListResp {
-    pub msg: String,
-    pub code: i32,
-    pub success: bool,
-    pub total: u64,
-    pub data: Option<Vec<UserListData>>,
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct UserListData {
+pub struct AdminListVO {
     #[serde(serialize_with = "serialize_option_u64_to_string")]
     pub id:  Option<u64>,
     pub mobile: Option<String>,
     pub user_name: Option<String>,
     ///用户昵称
     pub nick_name: Option<String>,
+    ///所有拥有的权限组名称
+    pub role_name: Option<Vec<Option<String>>>,
+    ///所有的所在部门名称
+    pub depts_name: Option<Vec<Option<String>>>,
     pub remark: Option<String>,
     pub sort:  Option<i32>,
     pub status:  Option<i8>,
@@ -244,11 +253,40 @@ pub struct UserListData {
 
 
 ///用户更新密码结构体
-#[derive(Debug, Deserialize)]
-pub struct UpdateUserPasswordRequest {
-    pub id: Option<u64>,
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateAdminPasswordRequest {
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub user_id: Option<u64>,
     pub password: Option<String>,
     pub re_password: Option<String>,
+}
+
+impl From<UpdateAdminPasswordRequest> for SystemAdmin {
+    fn from(req: UpdateAdminPasswordRequest) -> Self {
+        Self{
+            id: req.user_id,
+            user_name: None,
+            nick_name: None,
+            user_type: None,
+            email: None,
+            mobile: None,
+            sex: None,
+            avatar: None,
+            password: req.password,
+            status: None,
+            del_flag: None,
+            login_ip: None,
+            login_date: None,
+            create_by: None,
+            create_time: None,
+            update_by: None,
+            update_time: None,
+            remark: None,
+            sort: None,
+        }
+    }
+
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

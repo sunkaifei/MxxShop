@@ -15,7 +15,7 @@ use crate::modules::search::entity::store_entity::Store;
 use crate::modules::search::entity::store_model::{QueryStorePageDTO};
 
 
-crud!(Store {}, "fly_store");
+crud!(Store {}, "mxx_store");
 
 // 分页查询
 impl_select_page!(Store{select_page(dto: &QueryStorePageDTO) =>"
@@ -36,4 +36,4 @@ impl_select_page!(Store{select_page(dto: &QueryStorePageDTO) =>"
           when dto.store_disable == 2:
             ` and store_disable = 1 `
     if !sql.contains('count'):
-      ` order by id desc `"},"fly_store");
+      ` order by id desc `"},"mxx_store");

@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub struct User {
     ///用户的 UID
-    pub id: u64,
+    pub id: Option<u64>,
     ///短网址
     pub short_url: Option<String>,
     ///用户名

@@ -12,18 +12,20 @@ extern crate bcrypt;
 
 use actix_web::{delete, get, HttpRequest, HttpResponse, post, put, web};
 use actix_web_grants::protect;
-use bcrypt::verify;
+use bcrypt::{DEFAULT_COST, hash, verify};
 use rbatis::rbdc::DateTime;
 
 use crate::core::permission::jwt_util::JWTToken;
 use crate::core::web::entity::common::{BathIdRequest, InfoId};
 use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
-use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateUserPasswordRequest, UserListData, UserListRequest, UserLoginRequest, UserLoginResponse, UserUpdateRequest};
+use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateAdminPasswordRequest, AdminListVO, UserListRequest, UserLoginRequest, UserLoginResponse, UserUpdateRequest};
 use crate::modules::system::entity::admin_role_model::UpdateUserRoleRequest;
 use crate::modules::system::entity::menu_model::{Router};
 use crate::modules::system::service::{admin_service, menu_service, role_service, system_log_service};
 use crate::core::errors::error::WhoUnfollowedError;
 use crate::core::service::CONTEXT;
+use crate::core::web::base_controller::get_user;
+use crate::modules::system::entity::admin_entity::SystemAdmin;
 use crate::utils::settings::Settings;
 
 // 添加用户信息
@@ -34,6 +36,13 @@ pub async fn save_admin(item: web::Json<AdminSaveRequest>) -> HttpResponse {
     }
     if item.password.as_ref().map_or(true, |password| password.trim().is_empty()) {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("密码名称不能为空".to_string()));
+    }
+
+    let user = admin_service::select_by_username(&item.user_name).await;
+    if let Ok(user_op) = user {
+        if let Some(_) = user_op {
+            return HttpResponse::Ok().json(ResVO::<String>::error_msg("该登录用户名已被占用".to_string()));
+        }
     }
     let admin = admin_service::save_admin(item.0).await;
     if admin.unwrap_or_default() == 0 {
@@ -73,11 +82,15 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("验证不能为空或者参数错误".to_string()));
     }
     
-    let user_result = admin_service::select_by_username(&item).await;
+    let user_result = admin_service::select_by_username(&item.username).await;
     match user_result {
         Ok(u) => {
             match u {
                 None => {
+                    // 记录登录日志
+                    let method = request.method().to_string();
+                    let _ = system_log_service::save_system_log(&request, Some("用户登录失败".to_string()), Some(0),Some("system_admin_controller::login".to_string()), Some(method.to_string()),Some(1)).await;
+                    
                     HttpResponse::Ok().json(ResVO::<String>::error_msg("用户不存在".to_string()))
                 }
                 Some(user_info) => {
@@ -152,8 +165,7 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
             }
         }
 
-        Err(err) => {
-            log::info!("select_by_column: {:?}",err);
+        Err(_err) => {
             HttpResponse::Ok().json(ResVO::<String>::error_msg("查询用户异常".to_string()))
         }
     }
@@ -162,16 +174,22 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
 // 删除用户信息
 #[delete("/system/user/delete")]
 pub async fn user_delete(item: web::Json<BathIdRequest>) -> HttpResponse {
-    //log::info!("user_delete params: {:?}", &item);
-
     if let Some(ids_vec) = item.ids.clone() {
-        if ids_vec.is_empty() {
-            HttpResponse::Ok().json(ResVO::<String>::error_msg("删除的ID不能为空".to_string()))
-        } else {
-            let result = admin_service::delete_in_column(ids_vec).await;
-            HttpResponse::Ok().json(&ResVO::<u64>::handle_result(result))
+        for id_opt in ids_vec.iter() {
+            if let Some(id) = id_opt {
+                if id == "1" {
+                    return HttpResponse::Ok().json(ResVO::<String>::error_msg("含有不能删除的超级管理员账户".to_string()));
+                }
+            }
         }
-    }else {
+
+        if ids_vec.is_empty() {
+            return HttpResponse::Ok().json(ResVO::<String>::error_msg("删除的ID不能为空".to_string()));
+        }
+
+        let result = admin_service::delete_in_column(&ids_vec).await;
+        HttpResponse::Ok().json(&ResVO::<u64>::handle_result(result))
+    } else {
         HttpResponse::Ok().json(ResVO::<String>::error_msg("删除的ID不能为空".to_string()))
     }
 }
@@ -215,14 +233,51 @@ pub async fn user_update(item: web::Json<UserUpdateRequest>) -> HttpResponse {
     }
 }
 
-
-
 // 更新用户密码
 #[put("/system/admin/update_password")]
-pub async fn update_admin_password(item: web::Json<UpdateUserPasswordRequest>) -> HttpResponse {
-    //log::info!("update_user_pwd params: {:?}", &item);
+pub async fn update_admin_password(req: HttpRequest, item: web::Json<UpdateAdminPasswordRequest>) -> HttpResponse {
+    let mut admin_pwd:SystemAdmin = item.0.into();
+    if admin_pwd.password.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("密码不能为空".to_string()));
+    }
+    //获取当前用户id
+    let admin_token:JWTToken = get_user(req).unwrap_or_default();
+    //这里是为了防止账户未退出时被人修改里密码，但是漏洞是可修改其他管理员后登录再改这个密码
+    if admin_token.id == admin_pwd.id {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("不可通过列表页面修改当前用户密码".to_string()));
+    }
+    
+    let sys_admin_result = admin_service::select_by_id(&admin_pwd.id).await;
+    return match sys_admin_result {
+        Ok(admin_result) => {
+            match admin_result {
+                None => {
+                    HttpResponse::Ok().json(ResVO::<String>::error_msg("用户不存在".to_string()))
+                }
+                Some(_) => {
+                    let hashed = hash(admin_pwd.password.clone().unwrap_or_default(), DEFAULT_COST).unwrap_or_default();
+                    admin_pwd.password = Option::from(hashed);
+                    let result = admin_service::update_by_password(&admin_pwd).await;
+                    return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result))
+                }
+            }
+        }
+        Err(err) => {
+            HttpResponse::Ok().json(ResVO::<String>::error_msg(err.to_string()))
+        }
+    }
+}
+
+// 更新用户密码
+#[put("/system/admin/update_my_password")]
+pub async fn update_my_password(req: HttpRequest, item: web::Json<UpdateAdminPasswordRequest>) -> HttpResponse {
     let user_pwd = item.0;
-    let sys_user_result = admin_service::select_by_id(&user_pwd.id).await;
+    if user_pwd.password.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("密码不能为空".to_string()));
+    }
+    //获取当前用户id
+    let admin_token:JWTToken = get_user(req).unwrap_or_default();
+    let sys_user_result = admin_service::select_by_id(&admin_token.id).await;
     return match sys_user_result {
         Ok(user_result) => {
             match user_result {
@@ -281,13 +336,13 @@ pub async fn get_user_detail(item: web::Path<InfoId>) -> HttpResponse {
 pub async fn admin_list(item: web::Query<UserListRequest>) -> HttpResponse {
     //log::info!("query user_list params: {:?}", &item);
     let admin_request = item.0;
-    let result = admin_service::select_user_page(admin_request).await;
+    let result = admin_service::select_by_page(admin_request).await;
 
     return match result {
         Ok(page) => {
-            let mut list_data: Vec<UserListData> = Vec::new();
+            let mut list_data: Vec<AdminListVO> = Vec::new();
             for user in page.records {
-                list_data.push(UserListData {
+                list_data.push(AdminListVO {
                     id: user.id,
                     sort: user.sort,
                     status: user.status,

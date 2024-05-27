@@ -32,14 +32,12 @@ pub async fn get_config_by_id(id: Option<u64>) -> rbatis::Result<Option<SystemCo
 
 ///查询参数key信息
 pub async fn select_by_key(config_key: &Option<String>) -> rbatis::Result<Option<SystemConfig>> {
-    log::info!("================333333333333===================");
     let result = SystemConfig::select_by_key(pool!(), config_key).await;
-    log::info!("================444444444444===================");
     return result;
 }
 
-pub async fn select_config_page(item: ConfigPageBO) -> rbatis::Result<Page<SystemConfig>> {
+pub async fn select_by_page(item: ConfigPageBO) -> rbatis::Result<Page<SystemConfig>> {
     let page_req = &PageRequest::new(item.page_num.clone(), item.page_size.clone());
-    let result = SystemConfig::select_config_page(pool!(),page_req, item).await;
+    let result = SystemConfig::select_by_page(pool!(),page_req, item).await;
     Ok(result?)
 }

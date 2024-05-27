@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Articles {
     //文章ID
-    pub id: u64,
+    pub id: Option<u64>,
     //短网址
     pub short_url: Option<String>,
     //文章分类ID
@@ -23,7 +23,7 @@ pub struct Articles {
     //所属所有的父级至子级分类
     pub category_ids: Option<String>,
     //用户ID
-    pub user_id: u64,
+    pub user_id: Option<u64>,
     //发布用户类型，1管理员，0前台用户
     pub user_type: i8,
     //文章标题
