@@ -14,25 +14,17 @@ use serde_json::{to_value};
 use tera::{Error, Result, Tera, try_get_value, Value};
 use crate::modules::system::service::config_service;
 use crate::utils::time_utils::compare_with_current_time;
+use crate::core::web::tags::i18n_tags::lang_function;
 
 pub async fn get_templates() -> Tera {
-    let config_result = config_service::select_by_key(&Option::from("pc_template".to_string())).await;
-    let config_template = match config_result {
-        Ok(config_option) => {
-            match config_option {
-                Some(config_option) => {
-                    config_option.config_value.unwrap_or_default()
-                }
-                None => {
-                    "default".to_string()
-                }
-            }
-        }
-        Err(_) => {
-            "default".to_string()
-        }
-    };
-    let template_url = format!("./templates/{}/*", config_template);
+    let config_template = config_service::select_by_key(&Option::from("pc_template".to_string()))
+        .await
+        .map_or("default".to_string(), |config_option| {
+            config_option
+                .map(|c| c.config_value.unwrap_or_default())
+                .unwrap_or_else(|| "default".to_string())
+        });
+    let template_url = format!("./templates/{}/**/*", config_template);
     let mut tera = Tera::new(&template_url).unwrap_or_default();
     tera.autoescape_on(vec!["html"]);
     // 注册自定义标签
@@ -40,6 +32,7 @@ pub async fn get_templates() -> Tera {
     tera.register_filter("html_filter", html_filter);
     tera.register_function("format_time", time_function);
     tera.register_function("format_json", json_function);
+    tera.register_function("lang", lang_function);
     let _ = tera.full_reload();
     tera
 }
@@ -119,3 +112,4 @@ pub fn time_function(args: &HashMap<String, Value>) -> Result<Value> {
     // 如果没有找到参数，则返回错误信息
     Err(Error::from("格式时间错误".to_string()))
 }
+

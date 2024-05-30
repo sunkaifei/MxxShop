@@ -8,10 +8,8 @@
 //! 版权所有，侵权必究！
 //!
 
-use std::sync::Arc;
 use crate::core::web::entity::common::BathIdRequest;
 use actix_web::{delete, get, HttpRequest, HttpResponse, post, put, web};
-use rbatis::intercept::Intercept;
 use crate::core::permission::jwt_util::JWTToken;
 
 use crate::core::web::base_controller::get_user;
@@ -21,8 +19,6 @@ use crate::modules::system::entity::admin_entity::SystemAdmin;
 use crate::modules::system::entity::menu_model::{MenuSaveRequest, MenuUpdateRequest, SystemMenuResponse, MenuAndRoleResponse, RoleMenuRoutes, RoleMenuResponse};
 use crate::modules::system::entity::role_entity::SystemRole;
 use crate::modules::system::service::{admin_service, menu_service, role_service};
-use crate::plugins::authority_intercept::AuthorityIdPlugin;
-use crate::pool;
 
 
 // 添加菜单

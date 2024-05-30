@@ -8,10 +8,10 @@
 //! 版权所有，侵权必究！
 //!
 
-use rbatis::{impl_select, impl_select_page, py_sql, RBatis};
+use rbatis::{impl_select_page, py_sql, RBatis};
 
 use crate::modules::system::entity::admin_entity::SystemAdmin;
-use crate::modules::system::entity::admin_model::{UserListDTO, UserListRequest};
+use crate::modules::system::entity::admin_model::{UserListDTO};
 use crate::modules::system::entity::admin_role_entity::SystemAdminRole;
 
 rbatis::crud!(SystemAdmin {}, "mxx_system_admin");

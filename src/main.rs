@@ -8,6 +8,7 @@
 //! 版权所有，侵权必究！
 //!
 
+
 use actix_cors::Cors;
 use actix_http::header;
 use actix_identity::IdentityMiddleware;
@@ -15,7 +16,9 @@ use actix_session::{SessionMiddleware};
 use actix_session::storage::CookieSessionStore;
 use actix_web::{App, HttpServer};
 use actix_web::cookie::{Key};
-
+#[allow(unused_imports)]
+#[macro_use] 
+extern crate rust_i18n;
 
 use crate::core::service::{CONTEXT};
 use crate::routes::{open_routes, system_routes, user_routes};
@@ -27,6 +30,7 @@ pub mod modules;
 pub mod routes;
 pub mod plugins;
 
+rust_i18n::i18n!("locales");
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let setting = Settings::get();
@@ -39,13 +43,12 @@ async fn main() -> std::io::Result<()> {
     //let connection = client.get_connection().unwrap();
 
     let signing_key = Key::generate();
-
+    
     // 将 Redis 连接包装成 RedisStore
     /* let secret_key = Key::generate();
      let redis_connection_string = "redis://127.0.0.1:6379";
      let search = RedisSessionStore::new(redis_connection_string).await.unwrap();
     */
-    
     HttpServer::new(move || {
         let cors = Cors::default()
             .allow_any_origin()

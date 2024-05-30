@@ -13,7 +13,7 @@ use crate::core::errors::error::Result;
 use rbatis::plugin::{Page, PageRequest};
 
 use crate::modules::system::entity::admin_entity::SystemAdmin;
-use crate::modules::system::entity::admin_model::{AdminSaveRequest, UserListDTO, UserListRequest, UserLoginRequest, UserUpdateRequest};
+use crate::modules::system::entity::admin_model::{AdminSaveRequest, UserListDTO, UserListRequest, UserUpdateRequest};
 use crate::modules::system::mapper::admin_mapper;
 use crate::pool;
 

@@ -11,7 +11,6 @@
 use actix_web::{HttpResponse};
 use rbatis::rbdc::{DateTime};
 
-use crate::core::errors::error::Error;
 use crate::core::errors::error::Result;
 use crate::core::web::response::ResVO;
 use crate::modules::system::entity::menu_entity::SystemMenu;

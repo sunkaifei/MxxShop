@@ -349,6 +349,8 @@ pub async fn admin_list(item: web::Query<UserListRequest>) -> HttpResponse {
                     mobile: user.mobile,
                     user_name: user.user_name,
                     nick_name: user.nick_name,
+                    role_name: None,
+                    depts_name: None,
                     remark: user.remark,
                     create_time: user.create_time.clone().map(|t| t.format("YYYY-MM-DD hh:mm:ss")).unwrap_or_default(),
                 })

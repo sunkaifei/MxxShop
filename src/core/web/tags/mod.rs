@@ -8,7 +8,5 @@
 //! 版权所有，侵权必究！
 //!
 
-pub mod response;
-pub mod base_controller;
-pub mod entity;
-pub mod tags;
+
+pub mod i18n_tags;

@@ -1,0 +1,32 @@
+
+user:
+  register:  '注册'
+  login: '登录'
+  logout: '退出'
+  welcome: '你好，%{name}'
+  password_reset: '重置密码'
+  password_send_instructions: '发送密码重置邮件'
+  password_change: '更改密码'
+  password_set: '设置密码'
+  password_new: '新密码'
+  password_confirm: '确认密码'
+  password_current: '当前密码'
+  error_not_found: '找不到用户'
+  error_not_allowed: '不允许更改密码'
+  error_invalid: '密码不正确'
+  error_mismatch: '密码不匹配'
+  error_blank: '密码不能为空'
+  error_expired: '密码已过期'
+  error_expired_login: '密码已过期，请重新登录'
+  error_locked: '用户被锁定'
+  error_locked_login: '用户被锁定，请重新登录'
+  error_not_confirmed: '用户未确认'
+  error_not_confirmed_login: '用户未确认，请重新登录'
+  error_not_confirmed_resend: '用户未确认，请重新发送确认邮件'
+  error_not_confirmed_resend_sent: '确认邮件已发送'
+  error_not_confirmed_resend_failed: '确认邮件发送失败'
+
+
+
+
+

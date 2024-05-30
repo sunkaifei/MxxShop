@@ -47,15 +47,7 @@ pub async fn upload_avatar(user: Option<Identity>, form: MultipartForm<AvatarFor
             fs::create_dir_all(avatar_dir.as_str())?;
         }
 
-        // let mut id: u64 = 0;
-        // let user: UserLoginSession = serde_json::from_str(&user.id().unwrap_or_default()).unwrap();
-        // id = user.id;
-
-        let id: u64 = if let user_id = user.id()?.clone() {
-            serde_json::from_str(&user_id).unwrap_or_default()
-        } else {
-            0
-        };
+        let id: u64 = user.id().map_or(0, |user_id| serde_json::from_str(&user_id).unwrap_or_default());
         
 
         let name = encryption_utils::sha1(id.to_string().as_str());

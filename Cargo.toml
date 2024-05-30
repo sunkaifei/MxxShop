@@ -7,8 +7,8 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1.37.0", features = ["full"] }
-actix-web = { version = "4.5.1", default-features = false, features = ["cookies","macros"] }
-actix-http = "3.6.0"
+actix-web = { version = "4.6.0", default-features = false, features = ["cookies","macros"] }
+actix-http = "3.7.0"
 actix-redis = "0.13.0"
 actix-cors = "0.7.0"
 actix-files = "0.6.5"
@@ -20,10 +20,10 @@ actix-web-httpauth = "0.8.1"
 
 
 futures-util = "0.3.30"
-parking_lot = "0.12.2"
+parking_lot = "0.12.3"
 
 json = "0.12.4"
-serde = { version = "1.0.201", features = ["derive"] }
+serde = { version = "1.0.203", features = ["derive"] }
 serde_json = "1.0.117"
 validator = { version = "0.18.1", features = ["derive"] }
 
@@ -41,12 +41,12 @@ snowflake-multi-threaded = "0.1.4"
 redis = { version = "0.25.3", features = ["tokio-comp"] }
 
 futures = { version = "0.3.30", default-features = false }
-thiserror = "1.0.58"
+thiserror = "1.0.61"
 base64 = "0.22.0"
 bcrypt = "0.15.1"
 once_cell = "1.19.0"
 lazy_static = "1.4.0"
-toml = "0.8.12"
+toml = "0.8.13"
 chinese-lunisolar-calendar = "0.2.0"
 unicode-segmentation = "1.11.0"
 uuid = { version = "1.8.0", features = [
@@ -54,7 +54,8 @@ uuid = { version = "1.8.0", features = [
     "fast-rng", # Use a faster (but still sufficiently random) RNG
     "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
 ] }
-tera = "1.19.1"
+# 模板引擎
+tera = "1.20.0"
 rand = "0.9.0-alpha.1"
 random-fast-rng = "0.1.1"
 idgenerator = "2.0.0"
@@ -70,9 +71,9 @@ scraper = "0.19.0"
 #captcha
 captcha = "0.0.9"
 
-proc-macro2 = "1.0.81"
+proc-macro2 = "1.0.84"
 quote = "1.0.36"
-syn = { version = "2.0.60", features = ["full"] }
+syn = { version = "2.0.66", features = ["full"] }
 #elasticsearch操作
 elasticsearch = "8.5.0-alpha.1"
 #中文分词
@@ -83,6 +84,7 @@ config = "0.14.0"
 rust-crypto = "0.2.36"
 sanitize-filename = "0.5.0"
 headers = "0.4.0"
+#国际化包
 rust-i18n = "3.0.1"
 time = "0.3.36"
 

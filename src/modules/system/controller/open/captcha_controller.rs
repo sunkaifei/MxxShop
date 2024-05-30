@@ -9,7 +9,6 @@
 //!
 
 use std::collections::HashMap;
-use std::time::Duration;
 use actix_web::{get, HttpRequest, HttpResponse};
 use base64::{Engine, engine};
 use captcha::Captcha;
@@ -17,7 +16,6 @@ use captcha::filters::{Dots, Noise, Wave};
 use crate::core::service::CONTEXT;
 
 use crate::core::web::response::ResVO;
-use crate::modules::system::service::cache_service::CacheService;
 
 // 定义验证码路由处理函数
 #[get("/pub/captcha/get")]
@@ -40,9 +38,6 @@ pub async fn get_captcha() -> Result<HttpResponse, Box<dyn std::error::Error>> {
     if result.is_err() {
         return Ok(HttpResponse::Ok().json(ResVO::<String>::error_msg("创建验证码失败".to_string())));
     }
-    //let cache_captch = CONTEXT.cache_service.get_string(&format!("captch:cache_{}", uuid.as_str())).await.unwrap_or_default();
-    
-    //log::info!("==================={:?}", cache_captch);
     let png = captcha.as_png().unwrap_or_default();
     let base64_captcha = engine::general_purpose::STANDARD.encode(png);
     let mut hashmap = HashMap::new();

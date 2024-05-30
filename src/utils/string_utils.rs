@@ -194,3 +194,15 @@ pub fn user_agent_browser(user_agent: &str) -> Option<String> {
         Some("Others".to_string())
     }
 }
+
+///将下划线转换为点
+/// 例如："hello_world" => "hello.world"
+pub fn convert_to_dot_notation(input: Option<&str>) -> Option<String> {
+    if let Some(value) = input {
+        let result = value.replace("_", ".");
+        return Some(result);
+    } else {
+        None
+    }
+}
+

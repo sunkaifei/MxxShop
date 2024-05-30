@@ -6,7 +6,7 @@ MxxShop Rust版，是基于actix-web和rbatis的商城管理系统，一款面�
 ###### 后台管理UI
 [https://gitee.com/rust-shop/MxxShop-Admin-UI.git](https://gitee.com/rust-shop/MxxShop-Admin-UI.git) 
 
-###### 商场功能说明
+###### 目标实现商城的功能说明
 1. **统计**：产品销售统计、销售趋势、销售排行、销售分析、销售报表；
 2. **商品**：商品列表、商品分类、商品品牌、商品属性、商品评论、商品SKU、商品库存、商品规格、商品规格值、商品规格图片、商品规格SKU、商品SKU库存、商品SKU规格值、商品SKU规格图片；
 3. **订单**：订单列表、订单详情、订单发货、订单收货、订单退款、订单评价、订单统计、订单报表；
@@ -38,7 +38,7 @@ MxxShop Rust版，是基于actix-web和rbatis的商城管理系统，一款面�
 #### 安装教程
 
 1.  进入 docs/sql 目录 ， 根据 MySQL 版本选择对应的脚本；
-先执行 mxx_shop_DB.sql 完成数据库的创建；
+先执行 mxx_shop_db.sql 完成数据库的创建；
 2.  xxxx
 
 #### 使用说明
@@ -46,6 +46,13 @@ MxxShop Rust版，是基于actix-web和rbatis的商城管理系统，一款面�
 1.  xxxx
 2.  xxxx
 3.  xxxx
+
+##### 部分UI演示
+1. 首页
+![](/docs/img/index.jpg)
+2. 后台菜单管理
+![](/docs/img/menus.jpg)
+3. 
 
 
 #### 提交反馈

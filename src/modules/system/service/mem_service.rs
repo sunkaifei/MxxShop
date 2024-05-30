@@ -8,13 +8,10 @@
 //! 版权所有，侵权必究！
 //!
 
-use std::collections::hash_map::RandomState;
-use std::collections::HashMap;
 use std::ops::Sub;
 use std::time::{Duration, Instant};
 
 use futures_util::future::BoxFuture;
-use parking_lot::Mutex;
 use rbatis::dark_std::sync::SyncHashMap;
 
 use crate::core::errors::error::{Error, Result};

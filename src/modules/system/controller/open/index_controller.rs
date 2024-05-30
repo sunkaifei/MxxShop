@@ -22,6 +22,7 @@ use crate::modules::articles::entity::article_model::{ArticlesListData, Articles
 use crate::modules::articles::service::article_service;
 use crate::modules::system::service::config_service;
 use crate::modules::user::entity::user_model::{UserLoginSession};
+use rust_i18n::t;
 
 #[get("/")]
 pub async fn index() -> HttpResponse {
@@ -101,8 +102,11 @@ pub async fn index() -> HttpResponse {
     //     let user: UserLoginSession = serde_json::from_str(&user.id().unwrap_or_default()).unwrap();
     //     tera_ctx.insert("user", &user);
     // }
+
+    let locale = "zh-CN";
     
-    ///let templatr_url:str = format!("{:?}{}", template_name, "/index.html".to_string()).as_str();
+    tera_ctx.insert("lang_login", &t!("system.site.login", locale = locale));
+    tera_ctx.insert("lang_signup", &t!("system.site.register", locale = locale));
     let rendered = tera.await.render("index.html", &tera_ctx).unwrap_or_default();
 
     // 将渲染后的 HTML 内容写入静态文件

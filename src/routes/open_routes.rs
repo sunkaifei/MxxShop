@@ -8,7 +8,8 @@
 //! 版权所有，侵权必究！
 //!
 
-use actix_files::Files as ActixFiles;
+use actix_files::{Files as ActixFiles, NamedFile};
+use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
 use actix_web::web;
 
 use crate::modules::articles::controller::open::article_open_controller;
@@ -18,8 +19,14 @@ use crate::modules::user::controller::open::user_open_controller;
 
 pub fn configure_routes(cfg: &mut web::ServiceConfig) {
     cfg
-        .service(ActixFiles::new("/static/", "static/").prefer_utf8(true))
-        .service(ActixFiles::new("/upload/", "storage/upload/").prefer_utf8(true))
+        .service(ActixFiles::new("/static", "./static")
+                     .default_handler(fn_service(|req: ServiceRequest| async {
+                         let (req, _) = req.into_parts();
+                         let file = NamedFile::open_async("./static/404.html").await?;
+                         let res = file.into_response(&req);
+                         Ok(ServiceResponse::new(req, res))
+                     })))
+        .service(ActixFiles::new("/upload/", "storage/upload/").show_files_listing())
         .service(index_controller::index) //首页
         .service(web::resource("/service/privacy").route(web::get().to(service_controller::service_privacy)))
         .service(web::resource("/service/faq").route(web::get().to(service_controller::service_faq)))
