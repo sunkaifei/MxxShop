@@ -18,10 +18,10 @@ use rbatis::rbdc::DateTime;
 use crate::core::permission::jwt_util::JWTToken;
 use crate::core::web::entity::common::{BathIdRequest, InfoId};
 use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
-use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateAdminPasswordRequest, AdminListVO, UserListRequest, UserLoginRequest, UserLoginResponse, UserUpdateRequest};
+use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateAdminPasswordRequest, AdminListVO, UserListRequest, UserLoginRequest, UserLoginResponse, UserUpdateRequest, RoleAndPostVO};
 use crate::modules::system::entity::admin_role_model::UpdateUserRoleRequest;
-use crate::modules::system::entity::menu_model::{Router};
-use crate::modules::system::service::{admin_service, menu_service, role_service, system_log_service};
+use crate::modules::system::entity::menus_model::{Router};
+use crate::modules::system::service::{admin_service, dept_service, menus_service, post_service, role_service, system_log_service};
 use crate::core::errors::error::WhoUnfollowedError;
 use crate::core::service::CONTEXT;
 use crate::core::web::base_controller::get_user;
@@ -102,7 +102,7 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
                     let is_admin = user_info.user_type == Option::from(1);
 
                     //查询出用户菜单权限
-                    let result = menu_service::get_router_tree(&is_admin, &user_info.id).await;
+                    let result = menus_service::get_router_tree(&is_admin, &user_info.id).await;
                     let routers: Vec<Router> = match result {
                         Ok(v) => v.clone(),
                         Err(err) => {
@@ -114,7 +114,7 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
                         return HttpResponse::Ok().json(ResVO::<String>::error_msg("用户没有分配角色或者菜单,不能登录".to_string()));
                     };
                     //查询用户所在权限组
-                    let admin_role: Vec<String> = match menu_service::query_btn_menu(&is_admin, &user_info.id).await {
+                    let admin_role: Vec<String> = match menus_service::query_btn_menu(&is_admin, &user_info.id).await {
                         Ok(role_list) => role_list.clone(),
                         Err(err) => {
                             return HttpResponse::Ok().json(ResVO::<String>::error_msg(format!("权限组查询失败, {}", err)));
@@ -328,6 +328,14 @@ pub async fn get_user_detail(item: web::Path<InfoId>) -> HttpResponse {
             HttpResponse::Ok().json(ResVO::<String>::error_msg(err.to_string()))
         }
     }
+}
+
+#[get("/system/user/params")]
+pub async fn get_user_params() -> HttpResponse {
+    return HttpResponse::Ok().json(ResVO::ok_with_data(RoleAndPostVO {
+        role_list: role_service::select_all().await.unwrap_or_default(),
+        post_list: post_service::select_all().await.unwrap_or_default(),
+    }));
 }
 
 // 查询用户列表

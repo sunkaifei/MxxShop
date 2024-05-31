@@ -12,8 +12,8 @@ pub mod admin_entity;
 pub mod admin_model;
 pub mod dept_entity;
 pub mod dept_model;
-pub mod menu_entity;
-pub mod menu_model;
+pub mod menus_entity;
+pub mod menus_model;
 pub mod role_entity;
 pub mod role_menu_entity;
 pub mod role_menu_model;
@@ -35,4 +35,6 @@ pub mod system_log_entity;
 pub mod system_log_model;
 pub mod language_entity;
 pub mod language_model;
+pub mod post_entity;
+pub mod post_model;
 

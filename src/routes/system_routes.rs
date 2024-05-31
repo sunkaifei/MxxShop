@@ -17,7 +17,7 @@ use actix_web_grants::GrantsMiddleware;
 use crate::core::permission::jwt_util::JWTToken;
 use crate::modules::articles::controller::admin::{article_admin_controller, article_category_admin_controller};
 use crate::modules::product::controller::admin::product_admin_controller;
-use crate::modules::system::controller::admin::{config_admin_controller, dept_admin_controller, ip_admin_controller, menu_admin_controller, role_admin_controller, system_admin_controller, system_dict_controller};
+use crate::modules::system::controller::admin::{config_admin_controller, dept_admin_controller, ip_admin_controller, menus_admin_controller, post_admin_controller, role_admin_controller, system_admin_controller, system_dict_controller};
 use crate::utils::settings::Settings;
 
 async fn extract(req: &ServiceRequest) -> Result<HashSet<String>, Error> {
@@ -73,13 +73,13 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             .service(role_admin_controller::update_role)// 角色更新
             .service(role_admin_controller::role_list)// 角色列表
             .service(role_admin_controller::get_role_detail)// 角色详情
-            .service(menu_admin_controller::menu_list)// 菜单列表
-            .service(menu_admin_controller::menu_save)// 菜单保存
-            .service(menu_admin_controller::menu_delete) // 菜单删除
-            .service(menu_admin_controller::menu_update)// 菜单更新
-            .service(menu_admin_controller::menu_detail)
-            .service(menu_admin_controller::get_menu_params)
-            .service(menu_admin_controller::get_user_menu)//重新获取用户菜单权限信息
+            .service(menus_admin_controller::menu_list)// 菜单列表
+            .service(menus_admin_controller::menu_save)// 菜单保存
+            .service(menus_admin_controller::menu_delete) // 菜单删除
+            .service(menus_admin_controller::menu_update)// 菜单更新
+            .service(menus_admin_controller::menu_detail)
+            .service(menus_admin_controller::get_menu_params)
+            .service(menus_admin_controller::get_user_menu)//重新获取用户菜单权限信息
             .service(system_dict_controller::save_dict_type)
             .service(system_dict_controller::batch_delete_type)
             .service(system_dict_controller::update_dict_type)
@@ -96,6 +96,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             .service(dept_admin_controller::query_dept_tree)// 查询部门树
             .service(dept_admin_controller::get_dept_detail)
             .service(dept_admin_controller::dept_list)// 部门列表
+            .service(post_admin_controller::get_post_page)// 岗位列表
             .service(dept_admin_controller::dept_batch_delete)// 批量部门删除
             .service(config_admin_controller::get_config_page)
             .service(config_admin_controller::get_config_detail)

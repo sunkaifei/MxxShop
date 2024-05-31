@@ -9,68 +9,68 @@
 //!
 
 use actix_web::{HttpResponse};
+use rbatis::executor::RBatisTxExecutor;
 use rbatis::rbdc::{DateTime};
 
 use crate::core::errors::error::Result;
 use crate::core::web::response::ResVO;
-use crate::modules::system::entity::menu_entity::SystemMenu;
-use crate::modules::system::entity::menu_model::{MenuListData,
-                                                 MenuSaveRequest,
-                                                 MenuUpdateRequest,
-                                                 Meta,
-                                                 Router,
-                                                 UpdateRoleMenuRequest};
+use crate::modules::system::entity::menus_entity::SystemMenu;
+use crate::modules::system::entity::menus_model::{MenuListData, MenuSaveRequest, MenuUpdateRequest, Meta, Router, UpdateRoleMenuRequest};
 use crate::modules::system::entity::role_menu_entity::SystemRoleMenu;
 use crate::modules::system::mapper::menus_mapper;
 use crate::pool;
 use crate::utils::snowflake_id::generate_snowflake_id;
 
-pub async fn add_menu(payload: MenuSaveRequest) -> HttpResponse {
-    let mut menu_entity: SystemMenu = payload.clone().into();
-    let result_menu = SystemMenu::insert(pool!(), &menu_entity).await;
-    match result_menu {
-        Ok(v) => {
-            let role_menu = UpdateRoleMenuRequest {
-                menu_id: Option::from(u64::from(v.last_insert_id)),
-                role_ids: payload.roles.clone(),
-            };
-            insert_batch(role_menu).await;
-            return HttpResponse::Ok().json(ResVO::ok_with_data(v.rows_affected))
-        }
-        Err(err) => {
-            return HttpResponse::Ok().json(ResVO::<String>::error_msg(err.to_string()));
-        }
+pub async fn add_menu(payload: MenuSaveRequest) -> Result<u64>  {
+    let menu_entity: SystemMenu = payload.clone().into();
+
+    let menus_num= menus_mapper::find_by_name_unique(pool!(), &menu_entity.menu_name, &None).await?;
+    
+    
+    // 启动一个事务
+    let mut tx = pool!().acquire_begin().await?;
+    
+    
+    let result_menu = SystemMenu::insert(pool!(), &menu_entity).await?;
+    return if result_menu.rows_affected > 0 {
+        let role_menu = UpdateRoleMenuRequest {
+            menu_id: Option::from(u64::from(result_menu.last_insert_id)),
+            role_ids: payload.roles.clone(),
+        };
+        insert_batch(&tx,&role_menu).await;
+        tx.commit().await?;
+        tx.rollback().await?;
+        Ok(result_menu.rows_affected)
+    } else {
+        Ok(0)
     }
 }
 
 
-pub async fn insert_batch(item: UpdateRoleMenuRequest) -> HttpResponse {
+pub async fn insert_batch( tx: &RBatisTxExecutor,item: &UpdateRoleMenuRequest) -> Result<u64> {
     let menu_id = item.menu_id.clone();
-    let role_menu_result = SystemRoleMenu::delete_by_column(pool!(), "menu_id", &menu_id).await;
+    SystemRoleMenu::delete_by_column(tx, "menu_id", &menu_id).await?;
 
-    return match role_menu_result {
-        Ok(_) => {
-            let mut menu_role: Vec<SystemRoleMenu> = Vec::new();
+    return if item.role_ids.len() > 0 {
+        let mut menu_role: Vec<SystemRoleMenu> = Vec::new();
 
-            for id in &item.role_ids {
-                let role_id = id.clone();
-                menu_role.push(SystemRoleMenu {
-                    id: Some(generate_snowflake_id()),
-                    menu_id: Option::from(menu_id.clone()),
-                    role_id: Option::from(role_id.clone()),
-                    create_time: Some(DateTime::now()),
-                    update_time: Some(DateTime::now()),
-                    status: Option::from(1),
-                })
-            }
-
-            let result = SystemRoleMenu::insert_batch(pool!(), &menu_role, item.role_ids.len() as u64).await;
-
-            HttpResponse::Ok().json(ResVO::<u64>::handle_result(Ok(result.unwrap_or_default().rows_affected)))
+        for id in &item.role_ids {
+            let role_id = id.clone();
+            menu_role.push(SystemRoleMenu {
+                id: Some(generate_snowflake_id()),
+                menu_id: Option::from(menu_id.clone()),
+                role_id: Option::from(role_id.clone()),
+                create_time: Some(DateTime::now()),
+                update_time: Some(DateTime::now()),
+                status: Option::from(1),
+            })
         }
-        Err(err) => {
-            HttpResponse::Ok().json(ResVO::<String>::error_msg(err.to_string()))
-        }
+
+        let result = SystemRoleMenu::insert_batch(tx, &menu_role, item.role_ids.len() as u64).await?;
+
+        Ok(result.rows_affected)
+    } else {
+        Ok(0)
     }
 }
 
@@ -88,21 +88,21 @@ pub async fn delete_in_column(ids: Vec<Option<String>>) -> HttpResponse {
     HttpResponse::Ok().json(ResVO::<u64>::handle_result(Ok(result.unwrap_or_default().rows_affected)))
 }
 
-pub async fn update_menu(payload: MenuUpdateRequest) -> HttpResponse {
+pub async fn update_menu(payload: MenuUpdateRequest) -> Result<u64> {
     let menu_entity: SystemMenu = payload.clone().into();
-    let role_menu_result = SystemMenu::update_by_column(pool!(), &menu_entity, "id").await;
-    match role_menu_result {
-        Ok(v) => {
-            let role_menu = UpdateRoleMenuRequest {
-                menu_id: payload.id.clone(),
-                role_ids: payload.roles.clone(),
-            };
-            insert_batch(role_menu).await;
-            return HttpResponse::Ok().json(ResVO::ok_with_data(v.rows_affected))
-        }
-        Err(err) => {
-            return HttpResponse::Ok().json(ResVO::<String>::error_msg(err.to_string()));
-        }
+    // 启动一个事务
+    let mut tx = pool!().acquire_begin().await?;
+    let result = SystemMenu::update_by_column(&tx, &menu_entity, "id").await?;
+    return if result.rows_affected > 0 {
+        let role_menu = UpdateRoleMenuRequest {
+            menu_id: payload.id.clone(),
+            role_ids: payload.roles.clone(),
+        };
+        insert_batch(&tx,&role_menu).await?;
+        tx.commit().await?;
+        Ok(result.rows_affected)
+    } else {
+        Ok(0)
     }
 }
 

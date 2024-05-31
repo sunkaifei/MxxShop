@@ -8,14 +8,14 @@
 //! 版权所有，侵权必究！
 //!
 
-use rbatis::{crud, impl_select, impl_select_page, sql};
+use rbatis::{crud, impl_select_page};
 use crate::modules::product::entity::product_entity::Product;
-use crate::modules::product::entity::product_model::{ProductPageDTO};
+use crate::modules::product::entity::product_model::{ProductPageBO};
 
 crud!(Product {}, "mxx_product");
 
 
-impl_select_page!(Product{select_by_page(dto: &ProductPageDTO) =>"
+impl_select_page!(Product{select_by_page(dto: &ProductPageBO) =>"
     trim end=' where ':
       ` where `
       trim ' and ':

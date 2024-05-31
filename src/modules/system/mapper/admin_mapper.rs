@@ -53,16 +53,6 @@ r#"
 
 rbatis::crud!(SystemAdminRole {}, "mxx_system_admin_role_merge");
 
-impl_select_page!(SystemAdminRole{select_page() =>"
-     if !sql.contains('count'):
-       order by create_time desc"},"mxx_system_admin_role_merge");
-
-impl_select_page!(SystemAdminRole{select_page_by_name(name:&str) =>"
-     if name != null && name != '':
-       where user_name != #{name}
-     if name == '':
-       where user_name != ''"},"mxx_system_admin_role_merge");
-
 
 /// 用户id查询出所有关联的角色
 #[py_sql("select sr.role_name from mxx_system_admin_role_merge arm left join mxx_system_role sr on arm.role_id = sr.id WHERE arm.admin_id = #{admin_id}")]

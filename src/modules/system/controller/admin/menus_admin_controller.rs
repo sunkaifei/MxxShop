@@ -16,19 +16,17 @@ use crate::core::web::base_controller::get_user;
 use crate::core::web::entity::common::{InfoId};
 use crate::core::web::response::{ResVO};
 use crate::modules::system::entity::admin_entity::SystemAdmin;
-use crate::modules::system::entity::menu_model::{MenuSaveRequest, MenuUpdateRequest, SystemMenuResponse, MenuAndRoleResponse, RoleMenuRoutes, RoleMenuResponse};
+use crate::modules::system::entity::menus_model::{MenuSaveRequest, MenuUpdateRequest, SystemMenuResponse, MenuAndRoleResponse, RoleMenuRoutes, RoleMenuResponse};
 use crate::modules::system::entity::role_entity::SystemRole;
-use crate::modules::system::service::{admin_service, menu_service, role_service};
+use crate::modules::system::service::{admin_service, menus_service, role_service};
 
 
 // 添加菜单
 #[post("/system/menu/save")]
 pub async fn menu_save(item: web::Json<MenuSaveRequest>) -> HttpResponse {
-    //log::info!("===========permission_value=============: {:?}", &permission_value);
-
     let sys_menu = item.0;
-    let result = menu_service::add_menu(sys_menu).await;
-    return  result;
+    let result = menus_service::add_menu(sys_menu).await;
+    return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result))
 }
 
 // 更新菜单
@@ -37,9 +35,9 @@ pub async fn menu_update(item: web::Json<MenuUpdateRequest>) -> HttpResponse {
     //log::info!("menu_update params: {:?}", &item);
     let menu = item.0;
 
-    let result = menu_service::update_menu(menu).await;
+    let result = menus_service::update_menu(menu).await;
 
-    return  result;
+    return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result))
 }
 
 // 删除菜单信息
@@ -50,7 +48,7 @@ pub async fn menu_delete(item: web::Json<BathIdRequest>) -> HttpResponse {
         if ids_vec.is_empty() {
             HttpResponse::Ok().json(ResVO::<String>::error_msg("删除的ID不能为空".to_string()))
         } else {
-            return menu_service::delete_in_column(ids_vec).await;
+            return menus_service::delete_in_column(ids_vec).await;
         }
     }else {
         HttpResponse::Ok().json(ResVO::<String>::error_msg("删除的ID不能为空".to_string()))
@@ -63,7 +61,7 @@ pub async fn menu_detail(path: web::Path<InfoId>) -> HttpResponse {
     if id.is_empty() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("ID不能为空".to_string()));
     }
-    let result = menu_service::find_by_id(id).await;
+    let result = menus_service::find_by_id(id).await;
     let menu: SystemMenuResponse = match result {
         Ok(Some(v)) => { v.clone().into()},
         Ok(None) => {
@@ -87,7 +85,7 @@ pub async fn menu_detail(path: web::Path<InfoId>) -> HttpResponse {
 #[get("/system/menu_list")]
 pub async fn menu_list() -> HttpResponse {
     // 菜单是树形结构不需要分页
-    let result = menu_service::all_menu_list_tree().await;
+    let result = menus_service::all_menu_list_tree().await;
     return match result {
         Ok(router_list) => {
             HttpResponse::Ok().json(ResVO::ok_with_data(router_list))
@@ -102,7 +100,7 @@ pub async fn menu_list() -> HttpResponse {
 #[get("/system/menu/getParams")]
 pub async fn get_menu_params() -> HttpResponse {
 
-    let menu_result = menu_service::select_all().await;
+    let menu_result = menus_service::select_all().await;
     let mut menus: Vec<SystemMenuResponse> = Vec::new();
     match menu_result {
         Ok(other_menu_list) => {
@@ -116,7 +114,7 @@ pub async fn get_menu_params() -> HttpResponse {
         }
     };
 
-    let role_result = role_service::get_role_all().await;
+    let role_result = role_service::select_all().await;
     let roles : Vec<SystemRole> = match role_result {
         Ok(v) => v.clone(),
         Err(err) => {
@@ -148,12 +146,12 @@ pub async fn get_user_menu(req: HttpRequest) -> HttpResponse {
     //判断是否是管理员
     let is_admin = admin_info.user_type == Option::from(1);
     //根据id查询路由
-    let result = menu_service::get_router_tree(&is_admin, &jwt_token.id).await;
+    let result = menus_service::get_router_tree(&is_admin, &jwt_token.id).await;
     return match result {
         Ok(v) => {
 
             //查询用户所在权限组
-            let user_role: Vec<String> = match menu_service::query_btn_menu(&is_admin, &jwt_token.id).await {
+            let user_role: Vec<String> = match menus_service::query_btn_menu(&is_admin, &jwt_token.id).await {
                 Ok(role_list) => role_list.clone(),
                 Err(err) => {
                     return HttpResponse::Ok().json(ResVO::<String>::error_msg(format!("权限组查询失败, {}", err)));

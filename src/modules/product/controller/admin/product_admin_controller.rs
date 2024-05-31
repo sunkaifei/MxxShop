@@ -11,12 +11,12 @@
 
 use actix_web::{get, HttpResponse, web};
 use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
-use crate::modules::product::entity::product_model::{ProductListVO, ProductPageDTO, ProductPageRequest};
+use crate::modules::product::entity::product_model::{ProductListVO, ProductPageBO, ProductPageRequest};
 use crate::modules::product::service::product_service;
 
 #[get("/System/product/list")]
 pub async fn get_product_list(item: web::Query<ProductPageRequest>) -> HttpResponse {
-    let page_req : ProductPageDTO = item.0.into();
+    let page_req : ProductPageBO = item.0.into();
     let page_result = product_service::select_by_page(page_req).await;
     return match page_result {
         Ok(page) => {

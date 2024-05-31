@@ -12,7 +12,6 @@ use actix_web::HttpResponse;
 use rbatis::rbdc::datetime::DateTime;
 use rbatis::plugin::{Page, PageRequest};
 use crate::core::errors::error::{Error, Result};
-use crate::core::web::entity::common::BathIdRequest;
 use crate::core::web::response::ResVO;
 use crate::modules::system::entity::admin_role_entity::SystemAdminRole;
 use crate::modules::system::entity::admin_role_model::UpdateUserRoleRequest;
@@ -202,7 +201,7 @@ pub async fn find_role_by_name_unique(role_name: Option<String>, id: Option<u64>
 }
 
 ///查询角色详情
-pub async fn get_role_detail(id: u64) -> rbatis::Result<Option<SystemRole>> {
+pub async fn get_by_detail(id: u64) -> rbatis::Result<Option<SystemRole>> {
     Ok(SystemRole::select_by_column(pool!(),"id", id).await?
         .into_iter()
         .next())
@@ -248,7 +247,7 @@ pub async fn query_menu_by_role(menu_id : Option<u64>) -> Vec<u64> {
 }
 
 ///查询所有角色列表
-pub async fn get_role_all() -> rbatis::Result<Vec<SystemRole>> {
+pub async fn select_all() -> rbatis::Result<Vec<SystemRole>> {
     let result = SystemRole::select_all(pool!()).await;
     return result;
 }

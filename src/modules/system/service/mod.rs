@@ -8,7 +8,7 @@
 //! 版权所有，侵权必究！
 //!
 
-pub mod menu_service;
+pub mod menus_service;
 pub mod dept_service;
 pub mod role_service;
 pub mod admin_service;
@@ -20,3 +20,4 @@ pub mod mem_service;
 pub mod redis_service;
 pub mod system_log_service;
 pub mod language_servive;
+pub mod post_service;

@@ -12,7 +12,9 @@ use rbatis::rbdc::DateTime;
 use serde::{Deserialize, Serialize};
 
 use crate::modules::system::entity::admin_entity::SystemAdmin;
-use crate::modules::system::entity::menu_model::Router;
+use crate::modules::system::entity::menus_model::Router;
+use crate::modules::system::entity::post_entity::SystemPost;
+use crate::modules::system::entity::role_entity::SystemRole;
 use crate::utils::string_utils::{serialize_option_u64_to_string,deserialize_string_to_u64};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -159,23 +161,11 @@ pub struct UserRoleList {
     pub update_time: String,
 }
 
-#[derive(Debug, Deserialize)]
-pub struct QueryUserMenuReq {
-    pub token: String,
-}
-
-#[derive(Debug, Serialize)]
-pub struct QueryUserMenuResp {
-    pub msg: String,
-    pub code: i32,
-    pub data: QueryUserMenuData,
-    pub success: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct QueryUserMenuData {
-    pub sys_menu: Vec<MenuUserList>,
-    pub permissions: Vec<String>,
+/// 角色和岗位列表
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct RoleAndPostVO {
+    pub role_list: Vec<SystemRole>,
+    pub post_list: Vec<SystemPost>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

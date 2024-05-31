@@ -122,7 +122,7 @@ pub async fn get_role_detail(item: web::Path<InfoId>) -> HttpResponse {
     }
     let string_id = item.into_inner().id.clone().unwrap_or_default();
     let u64_id: u64 = string_id.parse::<u64>().unwrap_or_else(|_| 0);
-    return match role_service::get_role_detail(u64_id).await {
+    return match role_service::get_by_detail(u64_id).await {
         Ok(role_op) => match role_op {
             None => {
                 HttpResponse::Ok().json(ResVO::<String>::error_msg("角色信息不存在".to_string()))

@@ -218,7 +218,7 @@ pub struct ProductPageRequest {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct ProductPageDTO {
+pub struct ProductPageBO {
     /// 商品名称
     pub product_name: Option<String>,
     /// 分类id
@@ -229,7 +229,7 @@ pub struct ProductPageDTO {
     pub page_size: u64,
 }
 
-impl From<ProductPageRequest> for ProductPageDTO {
+impl From<ProductPageRequest> for ProductPageBO {
     fn from(req: ProductPageRequest) -> Self {
         Self {
             product_name: req.product_name,

@@ -16,4 +16,5 @@ pub mod config_mapper;
 pub mod dict_mapper;
 pub mod ip_address_mapper;
 pub mod system_log_mapper;
-mod language_mapper;
+pub mod language_mapper;
+pub mod post_mapper;

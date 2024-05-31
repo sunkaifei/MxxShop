@@ -11,9 +11,9 @@
 use crate::pool;
 use rbatis::{Page, PageRequest};
 use crate::modules::product::entity::product_entity::Product;
-use crate::modules::product::entity::product_model::{ProductPageDTO};
+use crate::modules::product::entity::product_model::{ProductPageBO};
 
-pub async fn select_by_page(item: ProductPageDTO) -> rbatis::Result<Page<Product>>{
+pub async fn select_by_page(item: ProductPageBO) -> rbatis::Result<Page<Product>>{
     let page_req = &PageRequest::new(1, 10);
     let result = Product::select_by_page(pool!(), page_req, &item).await;
     return result;

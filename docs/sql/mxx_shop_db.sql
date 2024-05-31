@@ -27862,8 +27862,8 @@ INSERT INTO `mxx_system_dict_type` VALUES (110, 0, '经营状态', 'operation_st
 -- ----------------------------
 -- Table structure for mxx_system_job
 -- ----------------------------
-DROP TABLE IF EXISTS `mxx_system_job`;
-CREATE TABLE `mxx_system_job`  (
+DROP TABLE IF EXISTS `mxx_system_post`;
+CREATE TABLE `mxx_system_post`  (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '岗位名称',
   `enabled` bit(1) NOT NULL COMMENT '岗位状态',
@@ -27874,7 +27874,7 @@ CREATE TABLE `mxx_system_job`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FKmvhj0rogastlctflsxf1d6k3i`(`dept_id` ASC) USING BTREE,
-  CONSTRAINT `mxx_system_job_ibfk_1` FOREIGN KEY (`dept_id`) REFERENCES `sys_dept` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `mxx_system_post_ibfk_1` FOREIGN KEY (`dept_id`) REFERENCES `sys_dept` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '岗位' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
