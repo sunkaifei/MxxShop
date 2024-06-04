@@ -22,7 +22,7 @@ pub async fn save_config(item: ConfigSaveRequest) -> Result<u64> {
 }
 
 ///按id查询配置信息
-pub async fn get_config_by_id(id: Option<u64>) -> rbatis::Result<Option<SystemConfig>> {
+pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemConfig>> {
     let st = SystemConfig::select_by_column(pool!(), "id", id).await?
         .into_iter()
         .next();

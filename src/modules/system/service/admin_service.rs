@@ -46,7 +46,7 @@ pub async fn update_by_password(user: &SystemAdmin) -> Result<u64> {
     return Ok(result.unwrap_or_default().rows_affected);
 }
 
-pub async fn select_by_id(id: &Option<u64>) -> rbatis::Result<Option<SystemAdmin>> {
+pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemAdmin>> {
     let result = SystemAdmin::select_by_column(pool!(), "id", id).await?
         .into_iter()
         .next();

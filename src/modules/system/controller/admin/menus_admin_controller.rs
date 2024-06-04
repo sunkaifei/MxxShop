@@ -25,6 +25,18 @@ use crate::modules::system::service::{admin_service, menus_service, role_service
 #[post("/system/menu/save")]
 pub async fn menu_save(item: web::Json<MenuSaveRequest>) -> HttpResponse {
     let sys_menu = item.0;
+    if sys_menu.menu_name.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("菜单名称不能为空".to_string()))
+    }
+    if menus_service::find_by_name_unique(&sys_menu.menu_name, &sys_menu.parent_id, &None).await.unwrap_or_default() == true{
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("菜单名称不能重复".to_string()))
+    }
+    if menus_service::find_by_path_unique(&sys_menu.path, &None).await.unwrap_or_default() == true{
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("菜单的路由不能重复".to_string()))
+    }
+    if menus_service::find_by_perms_unique(&sys_menu.perms, &None).await.unwrap_or_default() == true{
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("菜单的权限标识不能重复".to_string()))
+    }
     let result = menus_service::add_menu(sys_menu).await;
     return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result))
 }
@@ -32,10 +44,20 @@ pub async fn menu_save(item: web::Json<MenuSaveRequest>) -> HttpResponse {
 // 更新菜单
 #[put("/system/menu/update")]
 pub async fn menu_update(item: web::Json<MenuUpdateRequest>) -> HttpResponse {
-    //log::info!("menu_update params: {:?}", &item);
-    let menu = item.0;
-
-    let result = menus_service::update_menu(menu).await;
+    let sys_menu = item.0;
+    if sys_menu.menu_name.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("菜单名称不能为空".to_string()))
+    }
+    if menus_service::find_by_name_unique(&sys_menu.menu_name, &sys_menu.parent_id, &sys_menu.id).await.unwrap_or_default() == true{
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("菜单名称不能重复".to_string()))
+    }
+    if menus_service::find_by_path_unique(&sys_menu.path, &sys_menu.id).await.unwrap_or_default() == true{
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("菜单的路由不能重复".to_string()))
+    }
+    if menus_service::find_by_perms_unique(&sys_menu.perms, &sys_menu.id).await.unwrap_or_default() == true{
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("菜单的权限标识不能重复".to_string()))
+    }
+    let result = menus_service::update_menu(sys_menu).await;
 
     return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result))
 }
@@ -57,11 +79,10 @@ pub async fn menu_delete(item: web::Json<BathIdRequest>) -> HttpResponse {
 
 #[get("/system/menu/detail/{id}")]
 pub async fn menu_detail(path: web::Path<InfoId>) -> HttpResponse {
-    let id = path.id.as_deref().unwrap_or_default();
-    if id.is_empty() {
+    if path.id.is_none() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("ID不能为空".to_string()));
     }
-    let result = menus_service::find_by_id(id).await;
+    let result = menus_service::get_by_detail(&path.id).await;
     let menu: SystemMenuResponse = match result {
         Ok(Some(v)) => { v.clone().into()},
         Ok(None) => {
@@ -134,7 +155,7 @@ pub async fn get_menu_params() -> HttpResponse {
 pub async fn get_user_menu(req: HttpRequest) -> HttpResponse {
     //获取用户信息
     let jwt_token:JWTToken = get_user(req).unwrap_or_default();
-    let admin_info = match admin_service::select_by_id(&jwt_token.id).await {
+    let admin_info = match admin_service::get_by_detail(&jwt_token.id).await {
         Ok(Some(admin_op)) => admin_op,
         _ => {
             SystemAdmin::default()

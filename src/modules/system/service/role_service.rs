@@ -201,14 +201,14 @@ pub async fn find_role_by_name_unique(role_name: Option<String>, id: Option<u64>
 }
 
 ///查询角色详情
-pub async fn get_by_detail(id: u64) -> rbatis::Result<Option<SystemRole>> {
+pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemRole>> {
     Ok(SystemRole::select_by_column(pool!(),"id", id).await?
         .into_iter()
         .next())
 }
 
 ///角色id查询所有关联的菜单id
-pub async fn get_merge_by_role_id(role_id: Option<u64>) -> Result<Vec<Option<String>>> {
+pub async fn get_merge_by_role_id(role_id: &Option<u64>) -> Result<Vec<Option<String>>> {
     let result = role_mapper::get_merge_by_role_id(pool!(), role_id).await?;
     let ids: Vec<Option<String>> = result.iter().map(|merge| merge.menu_id.map(|menu_id| menu_id.to_string())).collect();
     return Ok(ids);

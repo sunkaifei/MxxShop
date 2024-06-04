@@ -9,5 +9,4 @@
 //!
 
 
-pub mod admin;
-pub mod open;
+pub mod product_open_controller;

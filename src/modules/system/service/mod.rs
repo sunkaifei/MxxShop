@@ -21,3 +21,4 @@ pub mod redis_service;
 pub mod system_log_service;
 pub mod language_servive;
 pub mod post_service;
+mod navigation_service;

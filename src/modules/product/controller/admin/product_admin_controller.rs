@@ -9,10 +9,24 @@
 //!
 
 
-use actix_web::{get, HttpResponse, web};
+use actix_web::{get, HttpResponse, post, web};
 use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
-use crate::modules::product::entity::product_model::{ProductListVO, ProductPageBO, ProductPageRequest};
+use crate::modules::product::entity::product_model::{ProductListVO, ProductPageBO, ProductPageRequest, ProductSaveRequest};
 use crate::modules::product::service::product_service;
+
+#[post("/system/product/save")]
+pub async fn save_product(item: web::Json<ProductSaveRequest>) -> HttpResponse {
+    let result = product_service::save_product(item.0).await;
+    return match result {
+        Ok(id) => {
+            HttpResponse::Ok().json(ResVO::<u64>::ok_with_data(id))
+        }
+        Err(err) => {
+            HttpResponse::Ok().json(ResVO::<String>::error_msg(err.to_string()))
+        }
+    }
+}
+
 
 #[get("/System/product/list")]
 pub async fn get_product_list(item: web::Query<ProductPageRequest>) -> HttpResponse {

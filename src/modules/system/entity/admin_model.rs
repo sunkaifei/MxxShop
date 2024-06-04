@@ -15,7 +15,7 @@ use crate::modules::system::entity::admin_entity::SystemAdmin;
 use crate::modules::system::entity::menus_model::Router;
 use crate::modules::system::entity::post_entity::SystemPost;
 use crate::modules::system::entity::role_entity::SystemRole;
-use crate::utils::string_utils::{serialize_option_u64_to_string,deserialize_string_to_u64};
+use crate::utils::string_utils::{serialize_option_u64_to_string,deserialize_string_to_u64,deserialize_string_to_i8,deserialize_string_to_i32};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -25,22 +25,30 @@ pub struct AdminSaveRequest {
     ///用户昵称
     pub nick_name: Option<String>,
     ///用户类型：0普通用户，1超级管理员
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub user_type: Option<i8>,
     ///用户邮箱
     pub email: Option<String>,
     ///手机号码
     pub mobile: Option<String>,
     ///用户性别（0男 1女 2未知）
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub sex: Option<i8>,
     ///头像地址
     pub avatar: Option<String>,
     ///密码
     pub password: Option<String>,
     ///帐号状态（0正常 1停用）
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub status: Option<i8>,
     ///备注
     pub remark: Option<String>,
+    ///岗位
+    pub post_ids: Option<Vec<String>>,
+    ///角色
+    pub role_ids: Option<Vec<String>>,
     ///用户排序
+    #[serde(deserialize_with = "deserialize_string_to_i32")]
     pub sort: Option<i32>,
 }
 
@@ -163,6 +171,7 @@ pub struct UserRoleList {
 
 /// 角色和岗位列表
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct RoleAndPostVO {
     pub role_list: Vec<SystemRole>,
     pub post_list: Vec<SystemPost>,

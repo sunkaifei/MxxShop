@@ -11,12 +11,15 @@
 use rbatis::rbdc::{DateTime, Decimal};
 use serde::{Deserialize, Serialize};
 use crate::modules::product::entity::product_entity::Product;
+use crate::utils::string_utils::{serialize_option_u64_to_string,deserialize_string_to_u64,deserialize_string_to_i8,deserialize_string_to_i32};
+
 
 /// 商品保存请求
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ProductSaveRequest {
     /// 语言id
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
     pub lang_id: Option<u64>,
     /// 商品图片
     pub image: Option<String>,
@@ -33,6 +36,7 @@ pub struct ProductSaveRequest {
     /// 商品条码（一维码）
     pub bar_code: Option<String>,
     /// 分类id
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
     pub cate_id: Option<u64>,
     /// 商品价格
     pub price: Option<Decimal>,
@@ -45,29 +49,41 @@ pub struct ProductSaveRequest {
     /// 单位名
     pub unit_name: Option<String>,
     /// 排序
-    pub sort: Option<i16>,
+    #[serde(deserialize_with = "deserialize_string_to_i32")]
+    pub sort: Option<i32>,
     /// 销量
-    pub sales: Option<u32>,
+    #[serde(deserialize_with = "deserialize_string_to_i32")]
+    pub sales: Option<i32>,
     /// 库存
-    pub stock: Option<u32>,
+    #[serde(deserialize_with = "deserialize_string_to_i32")]
+    pub stock: Option<i32>,
     /// 状态（0：未上架，1：上架）
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub is_show: Option<i8>,
     /// 是否热卖
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub is_hot: Option<i8>,
     /// 是否优惠
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub is_benefit: Option<i8>,
     /// 是否精品
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub is_best: Option<i8>,
     /// 是否新品
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub is_new: Option<i8>,
     /// 商品是否是虚拟商品
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub is_virtual: Option<i8>,
     /// 虚拟商品类型
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub virtual_type: Option<i8>,
     /// 是否包邮
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub is_postage: Option<i8>,
     /// 积分
-    pub give_integral: Option<u64>,
+    #[serde(deserialize_with = "deserialize_string_to_i32")]
+    pub give_integral: Option<i32>,
 }
 
 impl From<ProductSaveRequest> for Product {
@@ -142,11 +158,11 @@ pub struct ProductUpdateRequest {
     /// 单位名
     pub unit_name: Option<String>,
     /// 排序
-    pub sort: Option<i16>,
+    pub sort: Option<i32>,
     /// 销量
-    pub sales: Option<u32>,
+    pub sales: Option<i32>,
     /// 库存
-    pub stock: Option<u32>,
+    pub stock: Option<i32>,
     /// 状态（0：未上架，1：上架）
     pub is_show: Option<i8>,
     /// 是否热卖
@@ -164,7 +180,7 @@ pub struct ProductUpdateRequest {
     /// 是否包邮
     pub is_postage: Option<i8>,
     /// 积分
-    pub give_integral: Option<u64>,
+    pub give_integral: Option<i32>,
 }
 
 impl From<ProductUpdateRequest> for Product {
@@ -261,11 +277,11 @@ pub struct ProductListVO {
     /// 单位名
     pub unit_name: Option<String>,
     /// 排序
-    pub sort: Option<i16>,
+    pub sort: Option<i32>,
     /// 销量
-    pub sales: Option<u32>,
+    pub sales: Option<i32>,
     /// 库存
-    pub stock: Option<u32>,
+    pub stock: Option<i32>,
     /// 状态（0：未上架，1：上架）
     pub is_show: Option<i8>,
     /// 添加时间

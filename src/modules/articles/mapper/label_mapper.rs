@@ -48,4 +48,4 @@ impl_select_page!(Label{select_comment_page(item: &LabelPageBO) =>"
           when item.status == 2:
             ` and status = 1 `
     if !sql.contains('count'):
-      order by create_time desc"},"mxx_article_label");
+      order by id desc"},"mxx_article_label");

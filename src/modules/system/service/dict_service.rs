@@ -58,7 +58,7 @@ pub async fn update_dict_data(item: DictDataSaveRequest) -> Result<ExecResult> {
 }
 
 ///按id查询系统字典类型内容
-pub async fn get_type_by_id(id: u64) -> rbatis::Result<Option<DictType>> {
+pub async fn get_type_by_id(id: &Option<u64>) -> rbatis::Result<Option<DictType>> {
     let st = DictType::select_by_column(pool!(), "id", id).await?
         .into_iter()
         .next();
@@ -66,7 +66,7 @@ pub async fn get_type_by_id(id: u64) -> rbatis::Result<Option<DictType>> {
 }
 
 ///按id系统字典数据内容
-pub async fn get_data_by_id(id: u64) -> rbatis::Result<Option<DictData>> {
+pub async fn get_data_by_id(id: &Option<u64>) -> rbatis::Result<Option<DictData>> {
     let st = DictData::select_by_column(pool!(), "id", id).await?
         .into_iter()
         .next();

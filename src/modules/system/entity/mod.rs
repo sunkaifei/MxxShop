@@ -37,4 +37,6 @@ pub mod language_entity;
 pub mod language_model;
 pub mod post_entity;
 pub mod post_model;
+pub mod navigation_entity;
+pub mod navigation_model;
 

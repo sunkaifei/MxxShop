@@ -118,7 +118,7 @@ pub fn dept_list_to_tree(re_list: &mut Vec<DeptTreeData>, ori_arr: Vec<SystemDep
 }
 
 // 查询部门详情
-pub async fn get_dept_detail(id: u64) -> rbatis::Result<Option<SystemDept>> {
+pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemDept>> {
     let st = SystemDept::select_by_column(pool!(),"id", id).await?
            .into_iter()
            .next();
@@ -128,7 +128,7 @@ pub async fn get_dept_detail(id: u64) -> rbatis::Result<Option<SystemDept>> {
 // 查询部门所有数据列表
 pub async fn select_all_list(item: DeptPageRequest) -> rbatis::Result<Vec<DeptTreeData>> {
     let dept_page:DeptPageDTO = item.into();
-    let list: Vec<SystemDept> = depts_mapper::select_dept_list(pool!(), &dept_page).await?;
+    let list: Vec<SystemDept> = depts_mapper::select_all_list(pool!(), &dept_page).await?;
     let mut dept_list = Vec::<DeptTreeData>::new();
     if dept_page.dept_name.is_some() || dept_page.status.is_some() {
         dept_list = list.into_iter().map(|dept| {

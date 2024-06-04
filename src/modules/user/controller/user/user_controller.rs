@@ -43,7 +43,7 @@ pub async fn post_login(request: HttpRequest, item: web::Json<UserLoginRequest>)
 
                     let logger_user = UserLoginResponse {
                         id: user_info.id.clone(),
-                        username: Some(user_info.user_name.clone()),
+                        username: user_info.user_name.clone(),
                     };
                     let logger_string = serde_json::to_string(&logger_user).unwrap_or_default();
                     let _ = Identity::login(&request.extensions(), logger_string.into());

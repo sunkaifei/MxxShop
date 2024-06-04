@@ -12,7 +12,7 @@
 
 use std::collections::HashMap;
 use serde_json::Value;
-use tera::Error;
+
 
 /// 模板国际化元素标签
 /// 模板调用示例：{{ lang(info="system_site_login",locale="zh-CN",name="admin") }}

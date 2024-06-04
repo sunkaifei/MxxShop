@@ -11,7 +11,8 @@
 use rbatis::{Page, PageRequest};
 use crate::core::errors::error::{Error, Result};
 use crate::modules::system::entity::post_entity::SystemPost;
-use crate::modules::system::entity::post_model::{PostPageBO, PostSaveRequest};
+use crate::modules::system::entity::post_model::{PostPageBO, PostSaveRequest, PostUpdateRequest};
+use crate::modules::system::mapper::post_mapper;
 use crate::pool;
 
 /// 新增职位
@@ -31,19 +32,26 @@ pub async fn delete_in_column(ids_vec: Vec<Option<String>>) -> Result<u64> {
     }
 }
 
-pub async fn update_post(item: PostSaveRequest) -> Result<u64> {
+/// 更新职位
+pub async fn update_post(item: PostUpdateRequest) -> Result<u64> {
     let role_entity: SystemPost = item.into();
 
     let rows = SystemPost::update_by_column(pool!(), &role_entity, "id").await?;
     Ok(rows.rows_affected)
 }
 
-//pub async fn find_by_name(name: Option<String>, id: Option<u64>) -> rbatis::Result<Option<bool>> {
-    
-//}
+/// 根据名称查询职位是否唯一
+pub async fn find_by_name(post_name: &Option<String>, id: &Option<u64>) -> Result<bool> {
+    let result = post_mapper::find_by_name_unique(pool!(), post_name, id).await?;
+    return if result > 0 {
+        Ok(true)
+    } else {
+        Ok(false)
+    }
+}
 
 /// 根据ID查询职位详情
-pub async fn get_by_detail(id: Option<u64>) -> rbatis::Result<Option<SystemPost>> {
+pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemPost>> {
     Ok(SystemPost::select_by_column(pool!(),"id", id).await?
         .into_iter()
         .next())
@@ -51,7 +59,7 @@ pub async fn get_by_detail(id: Option<u64>) -> rbatis::Result<Option<SystemPost>
 
 ///查询所有职位列表
 pub async fn select_all() -> rbatis::Result<Vec<SystemPost>> {
-    let result = SystemPost::select_all(pool!()).await;
+    let result = post_mapper::select_all_list(pool!()).await;
     return result;
 }
 

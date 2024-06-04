@@ -57,7 +57,7 @@ pub async fn find_merge_by_unique(rb: &RBatis, role_id: Option<u64>, menu_id: Op
 
 ///角色id查询所有关联的菜单id
 #[sql("select * from mxx_system_role_menus where role_id = ?")]
-pub async fn get_merge_by_role_id(rb: &RBatis,role_id: Option<u64>,) -> rbatis::Result<Vec<SystemRoleMenu>> {
+pub async fn get_merge_by_role_id(rb: &RBatis,role_id: &Option<u64>,) -> rbatis::Result<Vec<SystemRoleMenu>> {
     impled!()
 }
 

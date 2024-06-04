@@ -8,7 +8,7 @@
 //! 版权所有，侵权必究！
 //!
 
-use rbatis::{htmlsql, impl_select, impl_select_page, py_sql, RBatis};
+use rbatis::{htmlsql, impl_select, py_sql, RBatis};
 use rbatis::rbatis_codegen::IntoSql;
 
 use crate::modules::system::entity::menus_entity::SystemMenu;
@@ -20,10 +20,31 @@ rbatis::crud!(SystemMenu {}, "mxx_system_menus");
 //查询菜单名称是否唯一
 #[py_sql("
     `select count(*) from mxx_system_menus where menu_name = #{menu_name}`
+    ` and parent_id = #{parent_id}`
      if id != null:
         ` and id != #{id}`
     ")]
-pub async fn find_by_name_unique(rb: &RBatis, menu_name: &Option<String>, id: &Option<u64>) -> rbatis::Result<u64> {
+pub async fn find_by_name_unique(rb: &RBatis, menu_name: &Option<String>, parent_id: &Option<u64>, id: &Option<u64>) -> rbatis::Result<u64> {
+    impled!()
+}
+
+//查询菜单路由是否唯一
+#[py_sql("
+    `select count(*) from mxx_system_menus where path = #{path}`
+     if id != null:
+        ` and id != #{id}`
+    ")]
+pub async fn find_by_path_unique(rb: &RBatis, path: &Option<String>, id: &Option<u64>) -> rbatis::Result<u64> {
+    impled!()
+}
+
+//查询菜单权限标识是否唯一
+#[py_sql("
+    `select count(*) from mxx_system_menus where perms = #{perms}`
+     if id != null:
+        ` and id != #{id}`
+    ")]
+pub async fn find_by_perms_unique(rb: &RBatis, perms: &Option<String>, id: &Option<u64>) -> rbatis::Result<u64> {
     impled!()
 }
 

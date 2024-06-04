@@ -92,13 +92,11 @@ pub async fn query_dept_tree() -> HttpResponse {
 
 #[get("/system/dept/detail/{id}")]
 #[protect("dept:detail:show")]
-pub async fn get_dept_detail(item: web::Path<InfoId>) -> HttpResponse {
-    if item.id.clone().is_none() {
+pub async fn get_by_detail(item: web::Path<InfoId>) -> HttpResponse {
+    if item.id.is_none() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("部门id不能为空".to_string()));
     }
-    let string_id = item.into_inner().id.clone().unwrap_or_default();
-    let u64_id: u64 = string_id.parse::<u64>().unwrap_or_else(|_| 0);
-    return match dept_service::get_dept_detail(u64_id).await {
+    return match dept_service::get_by_detail(&item.id).await {
         Ok(dept_op) => match dept_op {
             None => {
                 HttpResponse::Ok().json(ResVO::<String>::error_msg("部门信息不存在".to_string()))

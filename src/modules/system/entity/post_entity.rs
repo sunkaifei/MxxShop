@@ -16,12 +16,16 @@ use serde::{Deserialize, Serialize};
 pub struct SystemPost {
     /// ID
     pub id: Option<u64>,
+    /// 岗位编码，权限控制的时候使用
+    pub post_code: Option<String>,
     /// 岗位名称
-    pub name: Option<String>,
+    pub post_name: Option<String>,
     /// 岗位状态
     pub enabled: Option<i8>,
     /// 岗位排序
     pub sort: Option<i32>,
+    /// 备注
+    pub remark: Option<String>,
     /// 创建日期
     pub create_time: Option<DateTime>,
     /// 更新时间

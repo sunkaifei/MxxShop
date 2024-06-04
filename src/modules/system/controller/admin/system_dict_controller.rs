@@ -123,17 +123,10 @@ pub async fn update_dict_data(item: web::Json<DictDataSaveRequest>) -> HttpRespo
 /// 获取字典类型详情
 #[get("/system/dict/type/{id}")]
 pub async fn get_dict_type_detail(item: web::Path<InfoId>) -> HttpResponse {
-    //log::info!("==========1========{:?}", item.id.clone());
-    if let Some(id) = item.id.clone() {
-        if id.is_empty() {
-            return HttpResponse::Ok().json(ResVO::<String>::error_msg("ID不能为空".to_string()));
-        }
-    } else {
+    if item.id.is_none() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("ID不能为空".to_string()));
     }
-    let id_string = item.into_inner().id.clone().unwrap_or_else(|| "0".to_string());
-    let id_request: u64 = id_string.parse::<u64>().unwrap_or_else(|_| 0);
-    return match dict_service::get_type_by_id(id_request).await {
+    return match dict_service::get_type_by_id(&item.id).await {
         Ok(dict_type_op) => match dict_type_op {
             None => {
                 HttpResponse::Ok().json(ResVO::<String>::error_msg("角色信息不存在".to_string()))
@@ -152,16 +145,10 @@ pub async fn get_dict_type_detail(item: web::Path<InfoId>) -> HttpResponse {
 /// 获取字典数据详情
 #[get("/system/dict/data/{id}")]
 pub async fn get_dict_data_detail(item: web::Path<InfoId>) -> HttpResponse {
-    if let Some(id) = item.id.clone() {
-        if id.is_empty() {
-            return HttpResponse::Ok().json(ResVO::<String>::error_msg("ID不能为空".to_string()));
-        }
-    } else {
+    if item.id.is_none() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("ID不能为空".to_string()));
     }
-    let id_string = item.into_inner().id.clone().unwrap_or_else(|| "0".to_string());
-    let id_request: u64 = id_string.parse::<u64>().unwrap_or_else(|_| 0);
-    return match dict_service::get_data_by_id(id_request).await {
+    return match dict_service::get_data_by_id(&item.id).await {
         Ok(v) => {
             HttpResponse::Ok().json(ResVO::ok_with_data(v))
         }
@@ -175,7 +162,6 @@ pub async fn get_dict_data_detail(item: web::Path<InfoId>) -> HttpResponse {
 #[get("/system/dict/type/list")]
 #[protect("dict:type:list:show")]
 pub async fn get_dict_type_page(item: web::Query<DictTypePageRequest>) -> HttpResponse {
-    //log::info!("=================={:?}", item.0.clone());
     let page_result = dict_service::get_dict_type_page(item.0).await;
     return match page_result {
         Ok(page) => {
@@ -206,7 +192,7 @@ pub async fn get_dict_type_page(item: web::Query<DictTypePageRequest>) -> HttpRe
 }
 
 #[get("/system/dict/data/list")]
-#[protect("dict:data:list:show")]
+//#[protect("dict:data:list:show")]
 pub async fn get_dict_data_list(path: web::Query<DataQueryRequest>) -> HttpResponse {
     let dict_type = &path.dict_type;
     let data_result = dict_service::get_dict_type_list(dict_type).await;

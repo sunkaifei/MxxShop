@@ -18,3 +18,4 @@ pub mod ip_address_mapper;
 pub mod system_log_mapper;
 pub mod language_mapper;
 pub mod post_mapper;
+pub mod navigation_mapper;

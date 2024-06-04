@@ -13,7 +13,7 @@ use rbatis::{py_sql, RBatis};
 use crate::modules::system::entity::dept_entity::SystemDept;
 use crate::modules::system::entity::dept_model::DeptPageDTO;
 
-//增删改查菜单
+//增删改查部门
 rbatis::crud!(SystemDept {}, "mxx_system_depts");
 
 /// 查询同目录级别下部门是否已存在
@@ -46,7 +46,7 @@ pub async fn find_by_dept_name_unique(rb: &RBatis, dept_name: Option<String>, pa
             ' and status >= 0 '
      `order by sort desc`
     ")]
-pub async fn select_dept_list(rb: &RBatis, item: &DeptPageDTO) -> rbatis::Result<Vec<SystemDept>> {
+pub async fn select_all_list(rb: &RBatis, item: &DeptPageDTO) -> rbatis::Result<Vec<SystemDept>> {
     impled!()
 }
 

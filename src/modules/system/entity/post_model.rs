@@ -12,26 +12,32 @@
 use rbatis::rbdc::DateTime;
 use serde::{Deserialize, Serialize};
 use crate::modules::system::entity::post_entity::SystemPost;
-use crate::utils::string_utils::{serialize_option_u64_to_string,deserialize_string_to_u64};
+use crate::utils::string_utils::{serialize_option_u64_to_string,deserialize_string_to_u64,deserialize_string_to_i8};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PostSaveRequest {
+    /// 岗位编码，权限控制的时候使用
+    pub post_code: Option<String>,
     /// 岗位名称
-    pub name: Option<String>,
+    pub post_name: Option<String>,
     /// 岗位状态
     pub enabled: Option<i8>,
     /// 岗位排序
     pub sort: Option<i32>,
+    /// 备注
+    pub remark: Option<String>,
 }
 
 impl From<PostSaveRequest> for SystemPost {
     fn from(item: PostSaveRequest) -> Self {
         SystemPost {
             id: None,
-            name: item.name,
+            post_code: item.post_code,
+            post_name: item.post_name,
             enabled: item.enabled,
             sort: item.sort,
+            remark: item.remark,
             create_time: Option::from(DateTime::now()),
             update_time: Option::from(DateTime::now()),
             is_del: Option::from(0),
@@ -44,21 +50,27 @@ impl From<PostSaveRequest> for SystemPost {
 pub struct PostUpdateRequest {
     #[serde(deserialize_with = "deserialize_string_to_u64")]
     pub id: Option<u64>,
+    /// 岗位编码，权限控制的时候使用
+    pub post_code: Option<String>,
     /// 岗位名称
-    pub name: Option<String>,
+    pub post_name: Option<String>,
     /// 岗位状态
     pub enabled: Option<i8>,
     /// 岗位排序
     pub sort: Option<i32>,
+    /// 备注
+    pub remark: Option<String>,
 }
 
 impl From<PostUpdateRequest> for SystemPost {
     fn from(item: PostUpdateRequest) -> Self {
         SystemPost {
             id: item.id,
-            name: item.name,
+            post_code: item.post_code,
+            post_name: item.post_name,
             enabled: item.enabled,
             sort: item.sort,
+            remark: item.remark,
             create_time: None,
             update_time: Option::from(DateTime::now()),
             is_del: None,
@@ -72,7 +84,8 @@ impl From<PostUpdateRequest> for SystemPost {
 pub struct PostPageRequest {
     pub page_num: Option<u64>,
     pub page_size: Option<u64>,
-    pub name: Option<String>,
+    pub post_name: Option<String>,
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub enabled: Option<i8>,
 }
 
@@ -80,7 +93,7 @@ pub struct PostPageRequest {
 pub struct PostPageBO {
     pub page_num: Option<u64>,
     pub page_size: Option<u64>,
-    pub name: Option<String>,
+    pub post_name: Option<String>,
     pub enabled: Option<i8>,
 }
 
@@ -89,7 +102,7 @@ impl From<PostPageRequest> for PostPageBO {
         PostPageBO {
             page_num: item.page_num,
             page_size: item.page_size,
-            name: item.name,
+            post_name: item.post_name,
             enabled: item.enabled,
         }
     }
@@ -100,10 +113,28 @@ impl From<PostPageRequest> for PostPageBO {
 pub struct PostListVO {
     #[serde(serialize_with = "serialize_option_u64_to_string")]
     pub id:  Option<u64>,
-    pub name: Option<String>,
+    /// 岗位编码，权限控制的时候使用
+    pub post_code: Option<String>,
+    pub post_name: Option<String>,
     /// 岗位状态
     pub enabled: Option<i8>,
     /// 岗位排序
     pub sort:  Option<i32>,
+    /// 备注
+    pub remark: Option<String>,
     pub create_time:String,
+}
+
+impl From<SystemPost> for PostListVO {
+    fn from(item: SystemPost) -> Self {
+        PostListVO {
+            id: item.id,
+            post_code: item.post_code,
+            post_name: item.post_name,
+            enabled: item.enabled,
+            sort: item.sort,
+            remark: item.remark,
+            create_time: item.create_time.unwrap().format("%Y-%m-%d %H:%M:%S").to_string(),
+        }
+    }
 }

@@ -9,6 +9,7 @@
 //!
 
 use serde::{Deserialize, Serialize};
+use crate::utils::string_utils::{deserialize_string_to_u64};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct BathIdRequest {
@@ -17,7 +18,8 @@ pub struct BathIdRequest {
 
 #[derive(Deserialize)]
 pub struct InfoId {
-    pub id: Option<String>,
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub id: Option<u64>,
 }
 
 #[derive(Deserialize)]

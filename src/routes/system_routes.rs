@@ -63,6 +63,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             .service(system_admin_controller::user_update)
             .service(system_admin_controller::update_admin_password)//更新其他管理员密码
             .service(system_admin_controller::update_my_password)
+            .service(system_admin_controller::get_user_params)
             .service(system_admin_controller::get_user_detail)
             .service(system_admin_controller::login)   // 管理员登录
             .service(system_admin_controller::admin_list)// 管理员列表
@@ -89,13 +90,16 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             .service(system_dict_controller::batch_delete_data)
             .service(system_dict_controller::update_dict_data)
             .service(system_dict_controller::get_dict_data_list)
-            //.service(web::resource("/system/dict/data/getDictData").route(web::get().to(system_dict_controller::get_dict_data_list)))
             .service(system_dict_controller::get_dict_data_detail)
             .service(dept_admin_controller::dept_save)// 部门保存
             .service(dept_admin_controller::dept_update)//更新部门
             .service(dept_admin_controller::query_dept_tree)// 查询部门树
-            .service(dept_admin_controller::get_dept_detail)
+            .service(dept_admin_controller::get_by_detail)
             .service(dept_admin_controller::dept_list)// 部门列表
+            .service(post_admin_controller::save_post)// 增加岗位
+            .service(post_admin_controller::bath_delete_post)// 删除岗位
+            .service(post_admin_controller::update_post)// 更新岗位
+            .service(post_admin_controller::get_post_detail)
             .service(post_admin_controller::get_post_page)// 岗位列表
             .service(dept_admin_controller::dept_batch_delete)// 批量部门删除
             .service(config_admin_controller::get_config_page)

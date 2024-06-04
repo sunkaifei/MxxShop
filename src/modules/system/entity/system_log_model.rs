@@ -49,3 +49,43 @@ impl From<SystemLogSaveRequest> for SystemLog {
         }
     }
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct LogPageRequest {
+    pub page_num: Option<u64>,
+    pub page_size: Option<u64>,
+    pub title: Option<String>,
+    pub business_type: Option<i32>,
+    pub operator_type: Option<i32>,
+    pub status: Option<i32>,
+    pub begin_time: Option<String>,
+    pub end_time: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct LogPageBO {
+    pub page_num: Option<u64>,
+    pub page_size: Option<u64>,
+    pub title: Option<String>,
+    pub business_type: Option<i32>,
+    pub operator_type: Option<i32>,
+    pub status: Option<i32>,
+    pub begin_time: Option<String>,
+    pub end_time: Option<String>,
+}
+
+impl From<LogPageRequest> for LogPageBO {
+    fn from(item: LogPageRequest) -> Self {
+        Self {
+            page_num: item.page_num,
+            page_size: item.page_size,
+            title: item.title,
+            business_type: item.business_type,
+            operator_type: item.operator_type,
+            status: item.status,
+            begin_time: item.begin_time,
+            end_time: item.end_time,
+        }
+    }
+}

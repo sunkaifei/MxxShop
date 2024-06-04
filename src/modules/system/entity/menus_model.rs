@@ -23,7 +23,6 @@ use crate::utils::string_utils::{deserialize_string_to_i8,
 #[serde(rename_all = "camelCase")]
 pub struct MenuSaveRequest {
     /// 菜单名称
-    #[serde(rename = "menuName")]
     pub menu_name: Option<String>,
     /// 父菜单ID
     #[serde(deserialize_with = "deserialize_string_to_u64")]

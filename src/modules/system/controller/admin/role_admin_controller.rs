@@ -30,7 +30,7 @@ pub async fn role_save(req: HttpRequest, item: web::Json<RoleSaveRequest>) -> Ht
     }
     //获取用户信息
     let jwt_token:JWTToken = get_user(req).unwrap_or_default();
-    let admin = match admin_service::select_by_id(&jwt_token.id).await {
+    let admin = match admin_service::get_by_detail(&jwt_token.id).await {
         Ok(op_admin) => {
             match op_admin {
                 Some(admin) => admin,
@@ -88,7 +88,7 @@ pub async fn update_role(req: HttpRequest, item: web::Json<RoleUpdateRequest>) -
     let mut sys_role:RoleDTO = item.0.into();
     //获取用户信息
     let jwt_token:JWTToken = get_user(req).unwrap_or_default();
-    let admin = match admin_service::select_by_id(&jwt_token.id).await {
+    let admin = match admin_service::get_by_detail(&jwt_token.id).await {
         Ok(op_admin) => {
             match op_admin {
                 Some(admin) => admin,
@@ -120,16 +120,14 @@ pub async fn get_role_detail(item: web::Path<InfoId>) -> HttpResponse {
     if item.id.clone().is_none() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("角色id不能为空".to_string()));
     }
-    let string_id = item.into_inner().id.clone().unwrap_or_default();
-    let u64_id: u64 = string_id.parse::<u64>().unwrap_or_else(|_| 0);
-    return match role_service::get_by_detail(u64_id).await {
+    return match role_service::get_by_detail(&item.id).await {
         Ok(role_op) => match role_op {
             None => {
                 HttpResponse::Ok().json(ResVO::<String>::error_msg("角色信息不存在".to_string()))
             }
             Some(role) => {
                 //查询角色关联的菜单ID
-                let role_menu_ids = role_service::get_merge_by_role_id(Option::from(u64_id.clone())).await.unwrap_or_default();
+                let role_menu_ids = role_service::get_merge_by_role_id(&item.id).await.unwrap_or_default();
                 let role_detail: RoleDetail = role.into();
                 let role_vo = RoleDetailVO{
                     menu_ids: role_menu_ids,

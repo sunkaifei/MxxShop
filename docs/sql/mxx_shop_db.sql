@@ -11,7 +11,7 @@
  Target Server Version : 80034
  File Encoding         : 65001
 
- Date: 27/05/2024 22:46:45
+ Date: 04/06/2024 16:31:55
 */
 
 SET NAMES utf8mb4;
@@ -27236,6 +27236,58 @@ INSERT INTO `mxx_lang_type` VALUES (9, 'ภาษาไทย', 'th-TH', 1, 0, 0
 INSERT INTO `mxx_lang_type` VALUES (10, 'ViệtName', 'vi-VN', 1, 0, 0);
 
 -- ----------------------------
+-- Table structure for mxx_navigation
+-- ----------------------------
+DROP TABLE IF EXISTS `mxx_navigation`;
+CREATE TABLE `mxx_navigation`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `parent_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '父id',
+  `title_name` varbinary(30) NOT NULL DEFAULT '' COMMENT '导航名称',
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '自定义url地址',
+  `value` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '数据 id',
+  `data_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '数据类型（custom:自定义导航, article_class:文章分类, customview:自定义页面）',
+  `nav_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '导航类型（header:顶部导航, footer:底部导航）',
+  `sort` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
+  `is_show` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否显示（0否，1是）',
+  `is_new_window_open` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否新窗口打开（0否，1是）',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '添加时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '最后更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `is_show`(`is_show` ASC) USING BTREE,
+  INDEX `sort`(`sort` ASC) USING BTREE,
+  INDEX `nav_type`(`nav_type` ASC) USING BTREE,
+  INDEX `pid`(`parent_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '导航' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mxx_navigation
+-- ----------------------------
+INSERT INTO `mxx_navigation` VALUES (24, 54, 0xE69C8DE9A5B0E99E8BE58C85, '', 2, 'goods_category', 'header', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (34, 0, 0xE4BFA1E681AFE592A8E8AFA2, 'http://shopxo.net/', 0, 'custom', 'footer', 0, 1, 1, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (35, 0, 0xE5AEA2E688B7E69C8DE58AA1, 'http://shopxo.net/', 0, 'custom', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (36, 0, 0xE694AFE4BB98E696B9E5BC8F, 'http://shopxo.net/', 0, 'custom', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (37, 0, 0xE4BC9AE59198E4B8ADE5BF83, 'http://shopxo.net/', 0, 'custom', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (38, 34, 0xE585B3E4BA8E53686F70584F, '', 29, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (39, 34, 0xE88194E7B3BBE68891E4BBAC, '', 28, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (40, 34, 0xE68B9BE88198E88BB1E6898D, '', 27, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (41, 34, 0xE59088E4BD9CE58F8AE6B4BDE8B088, '', 26, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (42, 35, 0xE5A682E4BD95E6B3A8E5868CE68890E4B8BAE4BC9AE59198, '', 1, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (43, 35, 0xE7A7AFE58886E7BB86E58899, '', 3, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (44, 35, 0xE5A682E4BD95E6909CE7B4A2, '', 5, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (45, 36, 0xE58886E69C9FE4BB98E6ACBE, '', 12, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (46, 36, 0xE982AEE5B180E6B187E6ACBE, '', 13, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (47, 36, 0xE59CA8E7BABFE694AFE4BB98, '', 16, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (48, 36, 0xE585ACE58FB8E8BDACE8B4A6, '', 14, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (49, 36, 0xE5A682E4BD95E6B3A8E5868CE694AFE4BB98E5AE9D, '', 15, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (50, 37, 0xE4BC9AE59198E4BFAEE694B9E5AF86E7A081, '', 22, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (51, 37, 0xE4BC9AE59198E4BFAEE694B9E4B8AAE4BABAE8B584E69699, '', 23, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (52, 37, 0xE4BFAEE694B9E694B6E8B4A7E59CB0E59D80, '', 25, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (53, 37, 0xE5A682E4BD95E7AEA1E79086E5BA97E993BA, '', 7, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (54, 0, 0xE59586E59381E58886E7B1BB, 'http://shopxo.net/', 0, 'custom', 'header', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (55, 0, 0xE5A682E4BD95E6B3A8E5868CE68890E4B8BAE4BC9AE59198, '', 1, 'article', 'footer', 0, 1, 0, NULL, NULL);
+INSERT INTO `mxx_navigation` VALUES (59, 0, 0x53686F70584F, 'https://shopxo.net/', 0, 'custom', 'header', 0, 1, 1, NULL, NULL);
+
+-- ----------------------------
 -- Table structure for mxx_product
 -- ----------------------------
 DROP TABLE IF EXISTS `mxx_product`;
@@ -27315,6 +27367,805 @@ INSERT INTO `mxx_product` VALUES (1, 0, 'http://demo.crmeb.com/uploads/attach/20
 INSERT INTO `mxx_product` VALUES (2, 0, 'http://demo.crmeb.com/uploads/attach/2023/02/20230213/cf5414089d598d064b0a4d7154a4f491.png', '', '[\"http:\\/\\/demo.crmeb.com\\/uploads\\/attach\\/2023\\/02\\/20230213\\/cf5414089d598d064b0a4d7154a4f491.png\",\"http:\\/\\/demo.crmeb.com\\/uploads\\/attach\\/2023\\/02\\/20230213\\/cf5414089d598d064b0a4d7154a4f491.png\"]', 'BINNIFA客厅音响无线立体环绕K歌观影一体家庭影院Live3D', '', '', '', '12,27,29', 1999.00, 1988.00, 2199.00, 1.00, '套', 0, 0, 100, 1, 0, 0, 1, 0, 0, 0, 0, 1500, 1699.00, 0, 1, 1, 11, 0, '', '', 0, 1, '0,1,2,3', '5152534940292', '', '', '1', 0, 1, 1676131200, 1703952000, 10, '1,2', 2, '[]', 1, 1, 1, 1, '2024-05-24 12:13:28');
 INSERT INTO `mxx_product` VALUES (3, 0, 'http://demo.crmeb.com/uploads/attach/2023/02/20230213/5ae4f6a3f8bf153beb849e02e14b5c40.png', '', '[\"http:\\/\\/demo.crmeb.com\\/uploads\\/attach\\/2023\\/02\\/20230213\\/5ae4f6a3f8bf153beb849e02e14b5c40.png\"]', '蓝牙音乐手表 | Jeep智能表蓝牙通话健康管理 P07', '', '', '', '13,15,12,17,10', 269.00, 0.00, 359.00, 0.00, '件', 0, 0, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 219.00, 0, 0, 0, 30, 0, '', '', 0, 1, '0,1,2,3', '5254981082521', '', '', '1,2', 0, 0, 0, 0, 1, '1,2', 2, '[]', 0, 0, 0, 1, '2024-05-24 12:13:31');
 INSERT INTO `mxx_product` VALUES (4, 0, 'http://demo.crmeb.com/uploads/attach/2023/02/20230213/5b64e6584c06020347a5fa58af79d42a.png', '', '[\"http:\\/\\/demo.crmeb.com\\/uploads\\/attach\\/2023\\/02\\/20230213\\/5b64e6584c06020347a5fa58af79d42a.png\",\"http:\\/\\/demo.crmeb.com\\/uploads\\/attach\\/2023\\/02\\/20230213\\/5b64e6584c06020347a5fa58af79d42a.png\"]', 'Apple/苹果iPad mini6 8.3英寸平板电脑 64G-WLAN版 深空灰色', '', '', '', '16,15,12,10,13,17', 3999.00, 3599.00, 4799.00, 0.00, '个', 0, 0, 1600, 1, 0, 0, 1, 0, 0, 0, 0, 1000, 3299.00, 0, 1, 1, 10, 0, '', '', 0, 1, '0,1,2,3', '9748975626070', '', '', '1,2,3', 0, 0, 0, 0, 1, '1,2', 2, '[]', 1, 2, 2, 1, '2024-05-24 12:13:34');
+
+-- ----------------------------
+-- Table structure for mxx_product_category
+-- ----------------------------
+DROP TABLE IF EXISTS `mxx_product_category`;
+CREATE TABLE `mxx_product_category`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `parent_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '父id',
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'icon图标',
+  `icon_active` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '选中图标',
+  `realistic_images` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '实景图',
+  `title_name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `vice_name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '副标题',
+  `describe` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `bg_color` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'css背景色值',
+  `big_images` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '大图片',
+  `is_home_recommended` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否首页推荐（0否, 1是）',
+  `sort` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
+  `is_enable` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否启用（0否，1是）',
+  `seo_title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'SEO标题',
+  `seo_keywords` varchar(130) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'SEO关键字',
+  `seo_desc` varchar(230) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'SEO描述',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '添加时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '最后更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `pid`(`parent_id` ASC) USING BTREE,
+  INDEX `is_enable`(`is_enable` ASC) USING BTREE,
+  INDEX `sort`(`sort` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 911 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mxx_product_category
+-- ----------------------------
+INSERT INTO `mxx_product_category` VALUES (1, 0, '/static/upload/images/goods_category/2023/08/15/1692083230862352.png', '/static/upload/images/goods_category/2023/08/15/1692083246780484.png', '/static/upload/images/goods_category/2023/11/08/1699457036808561.png', '数码办公', '天天新品，科技带来快乐！', 'iphoneX新品发布了', '', '/static/upload/images/goods_category/2023/08/12/1691819575986269.png', 1, 0, 1, '数码办公标题', '数码办公,笔记本,手机', '数码办公周边产品', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (2, 0, '/static/upload/images/goods_category/2023/08/15/1692085007595445.png', '/static/upload/images/goods_category/2023/08/15/1692085019787788.png', '/static/upload/images/goods_category/2023/11/08/1699457036977194.png', '时尚服饰', '因为美丽、所以神秘！', '追求美、你值得拥有', '', '/static/upload/images/goods_category/2023/08/15/1692078936329508.png', 1, 0, 1, '', '连衣裙,裙子', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (3, 0, '/static/upload/images/goods_category/2023/08/15/1692083365962236.png', '/static/upload/images/goods_category/2023/08/15/1692083374446120.png', '/static/upload/images/goods_category/2023/11/08/1699457036877667.png', '名品潮包', '时尚，是一种生活态度！', '美食天下之美', '#ff9229', '/static/upload/images/goods_category/2023/08/15/1692070178969916.png', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (7, 0, '/static/upload/images/goods_category/2023/08/15/1692083394485796.png', '/static/upload/images/goods_category/2023/08/15/1692083405644267.png', '/static/upload/images/goods_category/2023/11/08/1699457036179125.png', '个护化妆', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (52, 0, '/static/upload/images/goods_category/2023/08/15/1692083430922728.png', '/static/upload/images/goods_category/2023/08/15/1692083442155794.png', '/static/upload/images/goods_category/2023/11/08/1699457036435422.png', '珠宝手表', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (53, 0, '/static/upload/images/goods_category/2023/08/15/1692083465166195.png', '/static/upload/images/goods_category/2023/08/15/1692083473937545.png', '/static/upload/images/goods_category/2023/11/08/1699457036206296.png', '运动健康', '', '户外装备，应有尽有', '#53c0f3', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (54, 0, '/static/upload/images/goods_category/2023/08/15/1692083492952738.png', '/static/upload/images/goods_category/2023/08/15/1692083505296275.png', '/static/upload/images/goods_category/2023/11/08/1699457036100017.png', '汽车用品', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (55, 0, '/static/upload/images/goods_category/2023/08/15/1692083524902686.png', '/static/upload/images/goods_category/2023/08/15/1692083536757100.png', '/static/upload/images/goods_category/2023/11/08/1699457036304450.png', '玩具乐器', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (56, 0, '/static/upload/images/goods_category/2023/08/15/1692083555223187.png', '/static/upload/images/goods_category/2023/08/15/1692083563885614.png', '/static/upload/images/goods_category/2023/11/08/1699457036853449.png', '母婴用品', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (57, 0, '/static/upload/images/goods_category/2023/08/15/1692083590253616.png', '/static/upload/images/goods_category/2023/08/15/1692083600747987.png', '/static/upload/images/goods_category/2023/11/08/1699457036375930.png', '生活服务', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (58, 1, '/static/upload/images/goods_category/2018/11/20/2018112015245128143.jpeg', '', '', '手机通讯', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (59, 1, '/static/upload/images/goods_category/2018/11/20/2018112015273175122.jpeg', '', '', '手机配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (60, 1, '/static/upload/images/goods_category/2018/11/20/2018112015252193663.jpeg', '', '', '摄影摄像', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (61, 1, '/static/upload/images/goods_category/2018/11/20/2018112015441996472.jpeg', '', '', '时尚影音', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (62, 1, '/static/upload/images/goods_category/2018/11/20/2018112015255390903.jpeg', '', '', '电脑整机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (63, 1, '', '', '', '电脑配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (64, 1, '', '', '', '外设产品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (65, 1, '', '', '', '网络产品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (66, 1, '', '', '', '办公打印', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (67, 1, '', '', '', '办公文仪', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (68, 58, '/static/upload/images/goods_category/2018/11/20/2018112015245128143.jpeg', '', '', '手机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (69, 58, '/static/upload/images/goods_category/2018/11/20/2018112015252193663.jpeg', '', '', '合约机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (70, 58, '/static/upload/images/goods_category/2018/11/20/2018112015273175122.jpeg', '', '', '对讲机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (71, 59, '', '', '', '手机电池', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (72, 59, '', '', '', '蓝牙耳机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (73, 59, '', '', '', '充电器/数据线', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (74, 59, '', '', '', '手机耳机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (75, 59, '', '', '', '手机贴膜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (76, 59, '', '', '', '手机存储卡', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (77, 59, '', '', '', '手机保护套', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (78, 59, '', '', '', '车载配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (79, 59, '', '', '', 'iPhone', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (80, 59, '', '', '', '配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (81, 59, '', '', '', '创意配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (82, 59, '', '', '', '便携/无线音响', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (83, 59, '', '', '', '手机饰品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (84, 60, '', '', '', '数码相机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (85, 60, '', '', '', '单电/微单相机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (86, 60, '', '', '', '单反相机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (87, 60, '', '', '', '摄像机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (88, 60, '', '', '', '拍立得', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (89, 60, '', '', '', '镜头', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (90, 102, '', '', '', '存储卡', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (91, 102, '', '', '', '读卡器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (92, 102, '', '', '', '滤镜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (93, 102, '', '', '', '闪光灯/手柄', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (94, 102, '', '', '', '相机包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (95, 102, '', '', '', '三脚架/云台', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (96, 102, '', '', '', '相机清洁', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (97, 102, '', '', '', '相机贴膜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (98, 102, '', '', '', '机身附件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (99, 102, '', '', '', '镜头附件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (100, 102, '', '', '', '电池/充电器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (101, 102, '', '', '', '移动电源', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (102, 1, '', '', '', '数码配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (103, 61, '', '', '', 'MP3/MP4', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (104, 61, '', '', '', '智能设备', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (105, 61, '', '', '', '耳机/耳麦', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (106, 61, '', '', '', '音箱', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (107, 61, '', '', '', '高清播放器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (108, 61, '', '', '', '电子书', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (109, 61, '', '', '', '电子词典', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (110, 61, '', '', '', 'MP3/MP4配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (111, 61, '', '', '', '录音笔', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (112, 61, '', '', '', '麦克风', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (113, 61, '', '', '', '专业音频', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (114, 61, '', '', '', '电子教育', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (115, 61, '', '', '', '数码相框', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (116, 62, '', '', '', '笔记本', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (117, 62, '', '', '', '超极本', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (118, 62, '', '', '', '游戏本', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (119, 62, '', '', '', '平板电脑', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (120, 62, '', '', '', '平板电脑配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (121, 62, '', '', '', '台式机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (122, 62, '', '', '', '服务器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (123, 62, '', '', '', '笔记本配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (124, 63, '', '', '', 'CPU', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (125, 63, '', '', '', '主板', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (126, 63, '', '', '', '显卡', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (127, 63, '', '', '', '硬盘', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (128, 63, '', '', '', 'SSD固态硬盘', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (129, 63, '', '', '', '内存', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (130, 63, '', '', '', '机箱', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (131, 63, '', '', '', '电源', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (132, 63, '', '', '', '显示器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (133, 63, '', '', '', '刻录机/光驱', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (134, 63, '', '', '', '散热器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (135, 63, '', '', '', '声卡/扩展卡', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (136, 63, '', '', '', '装机配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (137, 64, '', '', '', '鼠标', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (138, 64, '', '', '', '键盘', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (139, 64, '', '', '', '移动硬盘', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (140, 64, '', '', '', 'U盘', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (141, 64, '', '', '', '摄像头', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (142, 64, '', '', '', '外置盒', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (143, 64, '', '', '', '游戏设备', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (144, 64, '', '', '', '电视盒', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (145, 64, '', '', '', '手写板', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (146, 64, '', '', '', '鼠标垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (147, 64, '', '', '', '插座', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (148, 64, '', '', '', 'UPS电源', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (149, 64, '', '', '', '线缆', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (150, 64, '', '', '', '电脑工具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (151, 64, '', '', '', '电脑清洁', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (152, 65, '', '', '', '路由器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (153, 65, '', '', '', '网卡', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (154, 65, '', '', '', '交换机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (155, 65, '', '', '', '网络存储', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (156, 65, '', '', '', '3G上网', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (157, 65, '', '', '', '网络盒子', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (158, 66, '', '', '', '打印机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (159, 66, '', '', '', '一体机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (160, 66, '', '', '', '投影机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (161, 66, '', '', '', '投影配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (162, 66, '', '', '', '传真机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (163, 66, '', '', '', '复合机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (164, 66, '', '', '', '碎纸机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (165, 66, '', '', '', '扫描仪', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (166, 66, '', '', '', '墨盒', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (167, 66, '', '', '', '硒鼓', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (168, 66, '', '', '', '墨粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (169, 66, '', '', '', '色带', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (170, 67, '', '', '', '办公文具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (171, 67, '', '', '', '文件管理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (172, 67, '', '', '', '笔类', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (173, 67, '', '', '', '纸类', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (174, 67, '', '', '', '本册/便签', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (175, 67, '', '', '', '学生文具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (176, 67, '', '', '', '财务用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (177, 67, '', '', '', '计算器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (178, 67, '', '', '', '激光笔', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (179, 67, '', '', '', '白板/封装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (180, 67, '', '', '', '考勤机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (181, 67, '', '', '', '刻录碟片/附件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (182, 67, '', '', '', '点钞机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (183, 67, '', '', '', '支付设备', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (184, 67, '', '', '', '安防监控', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (185, 67, '', '', '', '呼叫/会议设备', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (186, 67, '', '', '', '保险柜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (187, 67, '', '', '', '办公家具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (188, 3, '', '', '', '潮流女包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (189, 3, '', '', '', '时尚男包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (190, 3, '', '', '', '功能箱包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (193, 188, '', '', '', '钱包/卡包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (194, 188, '', '', '', '手拿包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (195, 188, '', '', '', '单肩包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (196, 188, '', '', '', '双肩包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (197, 188, '', '', '', '手提包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (198, 188, '', '', '', '斜挎包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (199, 189, '', '', '', '钱包/卡包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (200, 189, '', '', '', '男士手包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (201, 189, '', '', '', '腰带／礼盒', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (202, 189, '', '', '', '商务公文包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (203, 190, '', '', '', '电脑数码包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (204, 190, '', '', '', '拉杆箱', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (205, 190, '', '', '', '旅行包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (206, 190, '', '', '', '旅行配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (207, 190, '', '', '', '休闲运动包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (208, 190, '', '', '', '登山包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (209, 190, '', '', '', '妈咪包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (210, 190, '', '', '', '书包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (304, 2, '', '', '', '女装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (305, 2, '', '', '', '男装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (306, 2, '', '', '', '内衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (307, 2, '', '', '', '运动', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (308, 2, '', '', '', '女鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (309, 2, '', '', '', '男鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (310, 2, '', '', '', '配饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (311, 2, '', '', '', '童装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (312, 304, '', '', '', 'T恤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (313, 304, '', '', '', '衬衫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (314, 304, '', '', '', '针织衫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (315, 304, '', '', '', '雪纺衫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (316, 304, '', '', '', '卫衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (317, 304, '', '', '', '马甲', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (318, 304, '', '', '', '连衣裙', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (319, 304, '', '', '', '半身裙', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (320, 304, '', '', '', '牛仔裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (321, 304, '', '', '', '休闲裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (322, 304, '', '', '', '打底裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (323, 304, '', '', '', '正装裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (324, 304, '', '', '', '西服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (325, 304, '', '', '', '短外套', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (326, 304, '', '', '', '风衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (327, 304, '', '', '', '大衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (328, 304, '', '', '', '皮衣皮草', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (329, 304, '', '', '', '棉服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (330, 304, '', '', '', '羽绒服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (331, 304, '', '', '', '孕妇装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (332, 304, '', '', '', '大码装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (333, 304, '', '', '', '中老年装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (334, 304, '', '', '', '婚纱礼服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (335, 304, '', '', '', '其它', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (336, 305, '', '', '', '衬衫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (337, 305, '', '', '', 'T恤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (338, 305, '', '', '', 'POLO衫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (339, 305, '', '', '', '针织衫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (340, 305, '', '', '', '羊绒衫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (341, 305, '', '', '', '卫衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (342, 305, '', '', '', '马甲／背心', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (343, 305, '', '', '', '夹克', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (344, 305, '', '', '', '风衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (345, 305, '', '', '', '大衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (346, 305, '', '', '', '皮衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (347, 305, '', '', '', '外套', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (348, 305, '', '', '', '西服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (349, 305, '', '', '', '棉服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (350, 305, '', '', '', '羽绒服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (351, 305, '', '', '', '牛仔裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (352, 305, '', '', '', '休闲裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (353, 305, '', '', '', '西裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (354, 305, '', '', '', '西服套装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (355, 305, '', '', '', '大码装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (356, 305, '', '', '', '中老年装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (357, 305, '', '', '', '唐装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (358, 305, '', '', '', '工装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (359, 306, '', '', '', '文胸', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (360, 306, '', '', '', '女式内裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (361, 306, '', '', '', '男式内裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (362, 306, '', '', '', '家居', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (363, 306, '', '', '', '睡衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (364, 306, '', '', '', '塑身衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (365, 306, '', '', '', '睡袍／浴袍', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (366, 306, '', '', '', '泳衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (367, 306, '', '', '', '背心', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (368, 306, '', '', '', '抹胸', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (369, 306, '', '', '', '连裤袜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (370, 306, '', '', '', '美腿袜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (371, 306, '', '', '', '男袜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (372, 306, '', '', '', '女袜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (373, 306, '', '', '', '情趣内衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (374, 306, '', '', '', '保暖内衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (375, 307, '', '', '', '休闲鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (376, 307, '', '', '', '帆布鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (377, 307, '', '', '', '跑步鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (378, 307, '', '', '', '篮球鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (379, 307, '', '', '', '足球鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (380, 307, '', '', '', '训练鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (381, 307, '', '', '', '乒羽鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (382, 307, '', '', '', '拖鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (383, 307, '', '', '', '卫衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (384, 307, '', '', '', '夹克', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (385, 307, '', '', '', 'T恤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (386, 307, '', '', '', '棉服／羽绒服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (387, 307, '', '', '', '运动裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (388, 307, '', '', '', '套装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (389, 307, '', '', '', '运动包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (390, 307, '', '', '', '运动配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (391, 308, '', '', '', '平底鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (392, 308, '', '', '', '高跟鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (393, 308, '', '', '', '单鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (394, 308, '', '', '', '休闲鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (395, 308, '', '', '', '凉鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (396, 308, '', '', '', '女靴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (397, 308, '', '', '', '雪地靴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (398, 308, '', '', '', '拖鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (399, 308, '', '', '', '裸靴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (400, 308, '', '', '', '筒靴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (401, 308, '', '', '', '帆布鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (402, 308, '', '', '', '雨鞋／雨靴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (403, 308, '', '', '', '妈妈鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (404, 308, '', '', '', '鞋配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (405, 308, '', '', '', '特色鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (406, 308, '', '', '', '鱼嘴鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (407, 308, '', '', '', '布鞋／绣花鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (408, 309, '', '', '', '商务休闲鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (409, 309, '', '', '', '正装鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (410, 309, '', '', '', '休闲鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (411, 309, '', '', '', '凉鞋／沙滩鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (412, 309, '', '', '', '男靴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (413, 309, '', '', '', '功能鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (414, 309, '', '', '', '拖鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (415, 309, '', '', '', '传统布鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (416, 309, '', '', '', '鞋配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (417, 309, '', '', '', '帆布鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (418, 309, '', '', '', '豆豆鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (419, 309, '', '', '', '驾车鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (420, 310, '', '', '', '太阳镜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (421, 310, '', '', '', '框镜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (422, 310, '', '', '', '皮带', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (423, 310, '', '', '', '围巾', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (424, 310, '', '', '', '手套', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (425, 310, '', '', '', '帽子', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (426, 310, '', '', '', '领带', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (427, 310, '', '', '', '袖扣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (428, 310, '', '', '', '其他配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (429, 310, '', '', '', '丝巾', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (430, 310, '', '', '', '披肩', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (431, 310, '', '', '', '腰带', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (432, 310, '', '', '', '腰链／腰封', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (433, 310, '', '', '', '棒球帽', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (434, 310, '', '', '', '毛线', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (435, 310, '', '', '', '遮阳帽', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (436, 310, '', '', '', '防紫外线手套', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (437, 310, '', '', '', '草帽', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (438, 311, '', '', '', '套装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (439, 311, '', '', '', '上衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (440, 311, '', '', '', '裤子', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (441, 311, '', '', '', '裙子', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (442, 311, '', '', '', '内衣／家居服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (443, 311, '', '', '', '羽绒服／棉服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (444, 311, '', '', '', '亲子装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (445, 311, '', '', '', '儿童配饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (446, 311, '', '', '', '礼服／演出服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (447, 311, '', '', '', '运动鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (448, 311, '', '', '', '单鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (449, 311, '', '', '', '靴子', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (450, 311, '', '', '', '凉鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (451, 311, '', '', '', '功能鞋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (452, 7, '', '', '', '面部护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (453, 7, '', '', '', '身体护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (454, 7, '', '', '', '口腔护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (455, 7, '', '', '', '女性护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (456, 7, '', '', '', '男士护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (457, 7, '', '', '', '魅力彩妆', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (458, 7, '', '', '', '香水SPA', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (459, 452, '', '', '', '洁面乳', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (460, 452, '', '', '', '爽肤水', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (461, 452, '', '', '', '精华露', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (462, 452, '', '', '', '乳液面霜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (463, 452, '', '', '', '面膜面贴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (464, 452, '', '', '', '眼部护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (465, 452, '', '', '', '颈部护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (466, 452, '', '', '', 'T区护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (467, 452, '', '', '', '护肤套装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (468, 452, '', '', '', '防晒隔离', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (469, 453, '', '', '', '洗发护发', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (470, 453, '', '', '', '染发/造型', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (471, 453, '', '', '', '沐浴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (472, 453, '', '', '', '磨砂/浴盐', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (473, 453, '', '', '', '身体乳', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (474, 453, '', '', '', '手工/香皂', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (475, 453, '', '', '', '香薰精油', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (476, 453, '', '', '', '纤体瘦身', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (477, 453, '', '', '', '脱毛膏', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (478, 453, '', '', '', '手足护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (479, 453, '', '', '', '洗护套装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (480, 454, '', '', '', '牙膏/牙粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (481, 454, '', '', '', '牙刷/牙线', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (482, 454, '', '', '', '漱口水', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (483, 455, '', '', '', '卫生巾', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (484, 455, '', '', '', '卫生护垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (485, 455, '', '', '', '洗液', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (486, 455, '', '', '', '美容食品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (487, 455, '', '', '', '其他', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (488, 456, '', '', '', '脸部护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (489, 456, '', '', '', '眼部护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (490, 456, '', '', '', '身体护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (491, 456, '', '', '', '男士香水', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (492, 456, '', '', '', '剃须护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (493, 456, '', '', '', '防脱洗护', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (494, 456, '', '', '', '男士唇膏', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (495, 457, '', '', '', '粉底/遮瑕', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (496, 457, '', '', '', '腮红', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (497, 457, '', '', '', '眼影/眼线', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (498, 457, '', '', '', '眉笔', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (499, 457, '', '', '', '睫毛膏', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (500, 457, '', '', '', '唇膏唇彩', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (501, 457, '', '', '', '彩妆组合', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (502, 457, '', '', '', '卸妆', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (503, 457, '', '', '', '美甲', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (504, 457, '', '', '', '彩妆工具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (505, 457, '', '', '', '假发', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (506, 458, '', '', '', '女士香水', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (507, 458, '', '', '', '男士香水', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (508, 458, '', '', '', '组合套装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (509, 458, '', '', '', '迷你香水', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (510, 458, '', '', '', '香体走珠', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (511, 52, '', '', '', '时尚饰品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (512, 52, '', '', '', '纯金K金饰品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (513, 52, '', '', '', '金银投资', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (514, 52, '', '', '', '银饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (515, 52, '', '', '', '钻石饰品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (516, 52, '', '', '', '翡翠玉石', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (517, 52, '', '', '', '水晶玛瑙', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (518, 52, '', '', '', '宝石珍珠', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (519, 52, '', '', '', '婚庆', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (520, 52, '', '', '', '钟表手表', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (521, 511, '', '', '', '项链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (522, 511, '', '', '', '手链/脚链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (523, 511, '', '', '', '戒指', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (524, 511, '', '', '', '耳饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (525, 511, '', '', '', '头饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (526, 511, '', '', '', '胸针', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (527, 511, '', '', '', '婚庆饰品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (528, 511, '', '', '', '饰品配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (529, 512, '', '', '', '吊坠/项链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (530, 512, '', '', '', '手镯/手链/脚链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (531, 512, '', '', '', '戒指', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (532, 512, '', '', '', '耳饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (533, 513, '', '', '', '工艺金', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (534, 513, '', '', '', '工艺银', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (535, 514, '', '', '', '吊坠/项链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (536, 514, '', '', '', '手镯/手链/脚链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (537, 514, '', '', '', '戒指/耳饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (538, 514, '', '', '', '宝宝金银', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (539, 514, '', '', '', '千足银', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (540, 515, '', '', '', '裸钻', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (541, 515, '', '', '', '戒指', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (542, 515, '', '', '', '项链/吊坠', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (543, 515, '', '', '', '耳饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (544, 515, '', '', '', '手镯/手链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (545, 516, '', '', '', '项链/吊坠', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (546, 516, '', '', '', '手镯/手串', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (547, 516, '', '', '', '戒指', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (548, 516, '', '', '', '耳饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (549, 516, '', '', '', '挂件/摆件/把件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (550, 516, '', '', '', '高值收藏', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (551, 517, '', '', '', '耳饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (552, 517, '', '', '', '手镯/手链/脚链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (553, 517, '', '', '', '戒指', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (554, 517, '', '', '', '头饰/胸针', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (555, 517, '', '', '', '摆件/挂件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (556, 518, '', '', '', '项链/吊坠', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (557, 518, '', '', '', '耳饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (558, 518, '', '', '', '手镯/手链', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (559, 518, '', '', '', '戒指', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (560, 519, '', '', '', '婚嫁首饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (561, 519, '', '', '', '婚纱摄影', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (562, 519, '', '', '', '婚纱礼服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (563, 519, '', '', '', '婚庆服务', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (564, 519, '', '', '', '婚庆礼品/用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (565, 519, '', '', '', '婚宴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (566, 520, '', '', '', '瑞士品牌', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (567, 520, '', '', '', '国产品牌', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (568, 520, '', '', '', '日本品牌', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (569, 520, '', '', '', '时尚品牌', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (570, 520, '', '', '', '闹钟挂钟', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (571, 520, '', '', '', '儿童手表', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (572, 53, '', '', '', '户外鞋服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (573, 53, '', '', '', '户外装备', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (574, 53, '', '', '', '运动器械', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (575, 53, '', '', '', '纤体瑜伽', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (576, 53, '', '', '', '体育娱乐', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (577, 53, '', '', '', '成人用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (578, 53, '', '', '', '保健器械', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (579, 53, '', '', '', '急救卫生', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (580, 572, '', '', '', '户外服装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (581, 572, '', '', '', '户外鞋袜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (582, 572, '', '', '', '户外配饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (583, 573, '', '', '', '帐篷', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (584, 573, '', '', '', '睡袋', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (585, 573, '', '', '', '登山攀岩', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (586, 573, '', '', '', '户外背包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (587, 573, '', '', '', '户外照明', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (588, 573, '', '', '', '户外垫子', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (589, 573, '', '', '', '户外仪表', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (590, 573, '', '', '', '户外工具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (591, 573, '', '', '', '望远镜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (592, 573, '', '', '', '垂钓用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (593, 573, '', '', '', '旅游用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (594, 573, '', '', '', '便携桌椅床', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (595, 573, '', '', '', '烧烤用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (596, 573, '', '', '', '野餐炊具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (597, 573, '', '', '', '军迷用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (598, 573, '', '', '', '游泳用具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (599, 573, '', '', '', '泳衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (600, 574, '', '', '', '健身器械', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (601, 574, '', '', '', '运动器材', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (602, 574, '', '', '', '极限轮滑', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (603, 574, '', '', '', '骑行运动', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (604, 574, '', '', '', '运动护具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (605, 574, '', '', '', '武术搏击', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (606, 575, '', '', '', '瑜伽垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (607, 575, '', '', '', '瑜伽服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (608, 575, '', '', '', '瑜伽配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (609, 575, '', '', '', '瑜伽套装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (610, 575, '', '', '', '舞蹈鞋服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (611, 576, '', '', '', '羽毛球', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (612, 576, '', '', '', '乒乓球', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (613, 576, '', '', '', '篮球', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (614, 576, '', '', '', '足球', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (615, 576, '', '', '', '网球', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (616, 576, '', '', '', '排球', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (617, 576, '', '', '', '高尔夫球', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (618, 576, '', '', '', '棋牌麻将', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (619, 576, '', '', '', '其他', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (620, 577, '', '', '', '安全避孕', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (621, 577, '', '', '', '验孕测孕', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (622, 577, '', '', '', '人体润滑', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (623, 577, '', '', '', '情爱玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (624, 577, '', '', '', '情趣内衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (625, 577, '', '', '', '组合套装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (626, 578, '', '', '', '养生器械', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (627, 578, '', '', '', '保健用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (628, 578, '', '', '', '康复辅助', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (629, 578, '', '', '', '家庭护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (630, 579, '', '', '', '跌打损伤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (631, 579, '', '', '', '烫伤止痒', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (632, 579, '', '', '', '防裂抗冻', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (633, 579, '', '', '', '口腔咽部', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (634, 579, '', '', '', '眼部保健', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (635, 579, '', '', '', '鼻炎健康', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (636, 579, '', '', '', '风湿骨痛', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (637, 579, '', '', '', '生殖泌尿', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (638, 579, '', '', '', '美体塑身', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (639, 54, '', '', '', '电子电器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (640, 54, '', '', '', '系统养护', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (641, 54, '', '', '', '改装配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (642, 54, '', '', '', '汽车美容', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (643, 54, '', '', '', '座垫脚垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (644, 54, '', '', '', '内饰精品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (645, 54, '', '', '', '安全自驾', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (646, 54, '', '', '', '整车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (647, 639, '', '', '', '便携GPS导航', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (648, 639, '', '', '', '嵌入式导航', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (649, 639, '', '', '', '安全预警仪', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (650, 639, '', '', '', '行车记录仪', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (651, 639, '', '', '', '跟踪防盗器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (652, 639, '', '', '', '倒车雷达', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (653, 639, '', '', '', '车载电源', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (654, 639, '', '', '', '车载蓝牙', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (655, 639, '', '', '', '车载影音', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (656, 639, '', '', '', '车载净化器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (657, 639, '', '', '', '车载冰箱', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (658, 639, '', '', '', '车载吸尘器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (659, 639, '', '', '', '充气泵', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (660, 639, '', '', '', '胎压监测', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (661, 639, '', '', '', '车载生活电器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (662, 640, '', '', '', '机油', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (663, 640, '', '', '', '添加剂', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (664, 640, '', '', '', '防冻冷却液', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (665, 640, '', '', '', '附属油', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (666, 640, '', '', '', '底盘装甲', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (667, 640, '', '', '', '空调清洗剂', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (668, 640, '', '', '', '金属养护', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (669, 641, '', '', '', '雨刷', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (670, 641, '', '', '', '车灯', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (671, 641, '', '', '', '轮胎', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (672, 641, '', '', '', '贴膜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (673, 641, '', '', '', '装饰贴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (674, 641, '', '', '', '后视镜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (675, 641, '', '', '', '机油滤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (676, 641, '', '', '', '空气滤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (677, 641, '', '', '', '空调滤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (678, 641, '', '', '', '燃油滤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (679, 641, '', '', '', '火花塞', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (680, 641, '', '', '', '喇叭', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (681, 641, '', '', '', '刹车片', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (682, 641, '', '', '', '刹车盘', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (683, 641, '', '', '', '减震器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (684, 641, '', '', '', '车身装饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (685, 641, '', '', '', '尾喉/排气管', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (686, 641, '', '', '', '踏板', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (687, 641, '', '', '', '蓄电池', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (688, 641, '', '', '', '其他配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (689, 642, '', '', '', '漆面美容', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (690, 642, '', '', '', '漆面修复', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (691, 642, '', '', '', '内饰清洁', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (692, 642, '', '', '', '玻璃美容', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (693, 642, '', '', '', '补漆笔', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (694, 642, '', '', '', '轮胎轮毂清洗', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (695, 642, '', '', '', '洗车器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (696, 642, '', '', '', '洗车水枪', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (697, 642, '', '', '', '洗车配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (698, 642, '', '', '', '洗车液', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (699, 642, '', '', '', '车掸', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (700, 642, '', '', '', '擦车巾/海绵', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (701, 643, '', '', '', '凉垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (702, 643, '', '', '', '四季垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (703, 643, '', '', '', '毛垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (704, 643, '', '', '', '专车专用座垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (705, 643, '', '', '', '专车专用座套', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (706, 643, '', '', '', '通用座套', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (707, 643, '', '', '', '多功能垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (708, 643, '', '', '', '专车专用脚垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (709, 643, '', '', '', '通用脚垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (710, 643, '', '', '', '后备箱垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (711, 644, '', '', '', '车用香水', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (712, 644, '', '', '', '车用炭包', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (713, 644, '', '', '', '空气净化', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (714, 644, '', '', '', '颈枕/头枕', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (715, 644, '', '', '', '抱枕/腰靠', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (716, 644, '', '', '', '方向盘套', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (717, 644, '', '', '', '挂件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (718, 644, '', '', '', '摆件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (719, 644, '', '', '', '布艺软饰', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (720, 644, '', '', '', '功能用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (721, 644, '', '', '', '整理收纳', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (722, 644, '', '', '', 'CD夹', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (723, 645, '', '', '', '儿童安全座椅', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (724, 645, '', '', '', '应急救援', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (725, 645, '', '', '', '汽修工具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (726, 645, '', '', '', '自驾野营', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (727, 645, '', '', '', '自驾照明', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (728, 645, '', '', '', '保温箱', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (729, 645, '', '', '', '置物箱', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (730, 645, '', '', '', '车衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (731, 645, '', '', '', '遮阳挡雪挡', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (732, 645, '', '', '', '车锁地锁', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (733, 645, '', '', '', '摩托车装备', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (734, 646, '', '', '', '新车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (735, 646, '', '', '', '二手车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (736, 55, '', '', '', '适用年龄', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (737, 55, '', '', '', '遥控/电动', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (738, 55, '', '', '', '毛绒布艺', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (739, 55, '', '', '', '娃娃玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (740, 55, '', '', '', '模型玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (741, 55, '', '', '', '健身玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (742, 55, '', '', '', '动漫玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (743, 55, '', '', '', '益智玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (744, 55, '', '', '', '积木拼插', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (745, 55, '', '', '', 'DIY玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (746, 55, '', '', '', '创意减压', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (747, 55, '', '', '', '乐器相关', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (748, 736, '', '', '', '0-6个月', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (749, 736, '', '', '', '6-12个月', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (750, 736, '', '', '', '1-3岁', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (751, 736, '', '', '', '3-6岁', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (752, 736, '', '', '', '6-14岁', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (753, 736, '', '', '', '14岁以上', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (754, 737, '', '', '', '遥控车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (755, 737, '', '', '', '遥控飞机', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (756, 737, '', '', '', '遥控船', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (757, 737, '', '', '', '机器人/电动', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (758, 737, '', '', '', '轨道/助力', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (759, 738, '', '', '', '毛绒/布艺', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (760, 738, '', '', '', '靠垫/抱枕', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (761, 739, '', '', '', '芭比娃娃', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (762, 739, '', '', '', '卡通娃娃', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (763, 739, '', '', '', '智能娃娃', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (764, 740, '', '', '', '仿真模型', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (765, 740, '', '', '', '拼插模型', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (766, 740, '', '', '', '收藏爱好', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (767, 741, '', '', '', '炫舞毯', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (768, 741, '', '', '', '爬行垫/毯', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (769, 741, '', '', '', '户外玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (770, 741, '', '', '', '戏水玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (771, 742, '', '', '', '电影周边', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (772, 742, '', '', '', '卡通周边', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (773, 742, '', '', '', '网游周边', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (774, 743, '', '', '', '摇铃/床铃', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (775, 743, '', '', '', '健身架', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (776, 743, '', '', '', '早教启智', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (777, 743, '', '', '', '拖拉玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (778, 744, '', '', '', '积木', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (779, 744, '', '', '', '拼图', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (780, 744, '', '', '', '磁力棒', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (781, 744, '', '', '', '立体拼插', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (782, 745, '', '', '', '手工彩泥', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (783, 745, '', '', '', '绘画工具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (784, 745, '', '', '', '情景玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (785, 746, '', '', '', '减压玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (786, 746, '', '', '', '创意玩具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (787, 747, '', '', '', '钢琴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (788, 747, '', '', '', '电子琴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (789, 747, '', '', '', '手风琴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (790, 747, '', '', '', '吉他/贝斯', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (791, 747, '', '', '', '民族管弦乐器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (792, 747, '', '', '', '西洋管弦乐', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (793, 747, '', '', '', '口琴/口风琴/竖笛', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (794, 747, '', '', '', '西洋打击乐器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (795, 747, '', '', '', '各式乐器配件', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (796, 747, '', '', '', '电脑音乐', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (797, 747, '', '', '', '工艺礼品乐器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (798, 56, '', '', '', '奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (799, 56, '', '', '', '营养辅食', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (800, 56, '', '', '', '尿裤湿巾', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (801, 56, '', '', '', '喂养用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (802, 56, '', '', '', '洗护用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (803, 56, '', '', '', '童车童床', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (804, 56, '', '', '', '服饰寝居', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (805, 56, '', '', '', '妈妈专区', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (806, 798, '', '', '', '品牌奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (807, 798, '', '', '', '妈妈奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (808, 798, '', '', '', '1段奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (809, 798, '', '', '', '2段奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (810, 798, '', '', '', '3段奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (811, 798, '', '', '', '4段奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (812, 798, '', '', '', '羊奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (813, 798, '', '', '', '特殊配方', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (814, 798, '', '', '', '成人奶粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (815, 799, '', '', '', '婴幼营养', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (816, 799, '', '', '', '初乳', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (817, 799, '', '', '', '米粉/菜粉', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (818, 799, '', '', '', '果泥/果汁', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (819, 799, '', '', '', '肉松/饼干', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (820, 799, '', '', '', '辅食', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (821, 799, '', '', '', '孕期营养', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (822, 799, '', '', '', '清火/开胃', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (823, 799, '', '', '', '面条/粥', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (824, 800, '', '', '', '品牌尿裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (825, 800, '', '', '', '新生儿', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (826, 800, '', '', '', 'S号', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (827, 800, '', '', '', 'M号', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (828, 800, '', '', '', 'L号', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (829, 800, '', '', '', 'XL/XXL号', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (830, 800, '', '', '', '裤型尿裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (831, 800, '', '', '', '湿巾', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (832, 800, '', '', '', '尿布/尿垫', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (833, 800, '', '', '', '成人尿裤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (834, 801, '', '', '', '奶瓶', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (835, 801, '', '', '', '奶嘴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (836, 801, '', '', '', '吸奶器', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (837, 801, '', '', '', '暖奶/消毒', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (838, 801, '', '', '', '餐具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (839, 801, '', '', '', '水具', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (840, 801, '', '', '', '牙胶/安抚', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (841, 801, '', '', '', '辅助用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (842, 802, '', '', '', '宝宝护肤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (843, 802, '', '', '', '洗浴用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (844, 802, '', '', '', '洗发沐浴', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (845, 802, '', '', '', '清洁用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (846, 802, '', '', '', '护理用品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (847, 802, '', '', '', '妈妈护肤', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (848, 803, '', '', '', '婴儿推车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (849, 803, '', '', '', '餐椅摇椅', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (850, 803, '', '', '', '婴儿床', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (851, 803, '', '', '', '学步车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (852, 803, '', '', '', '三轮车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (853, 803, '', '', '', '自行车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (854, 803, '', '', '', '电动车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (855, 803, '', '', '', '健身车', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (856, 803, '', '', '', '安全座椅', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (857, 804, '', '', '', '婴儿外出服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (858, 804, '', '', '', '婴儿内衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (859, 804, '', '', '', '婴儿礼盒', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (860, 804, '', '', '', '婴儿鞋帽袜', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (861, 804, '', '', '', '安全防护', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (862, 804, '', '', '', '家居床品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (863, 804, '', '', '', '其他', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (864, 805, '', '', '', '包/背婴带', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (865, 805, '', '', '', '妈妈护理', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (866, 805, '', '', '', '产后塑身', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (867, 805, '', '', '', '孕妇内衣', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (868, 805, '', '', '', '防辐射服', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (869, 805, '', '', '', '孕妇装', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (870, 805, '', '', '', '孕妇食品', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (871, 805, '', '', '', '妈妈美容', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (872, 57, '', '', '', '餐饮娱乐', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (873, 57, '', '', '', '婚纱旅游', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (874, 57, '', '', '', '便民充值', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (875, 57, '', '', '', '游戏充值', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (876, 57, '', '', '', '票务服务', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (877, 872, '', '', '', '美食', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (878, 872, '', '', '', '电影票', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (879, 872, '', '', '', '自助餐', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (880, 872, '', '', '', '火锅', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (881, 873, '', '', '', '浪漫婚纱', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (882, 873, '', '', '', '旅游踏青', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (883, 874, '', '', '', '礼品卡', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (884, 874, '', '', '', '手机充值', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (885, 875, '', '', '', '游戏点卡', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (886, 875, '', '', '', 'QQ充值', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (887, 876, '', '', '', '代金券', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (888, 876, '', '', '', '演唱会', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (889, 876, '', '', '', '话剧/歌剧/音乐剧', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (890, 876, '', '', '', '体育赛事', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (891, 876, '', '', '', '舞蹈芭蕾', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (892, 876, '', '', '', '戏曲综艺', '', '', '', '', 1, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (895, 57, '', '', '', '其他', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (896, 3, '', '', '', '旅行包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (897, 3, '', '', '', '运动包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (898, 3, '', '', '', '电脑包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (899, 3, '', '', '', '商务公文', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (900, 896, '', '', '', '书包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (901, 896, '', '', '', '旅行配件', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (902, 897, '', '', '', '运动斜挎', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (903, 897, '', '', '', '手臂包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (904, 897, '', '', '', '手机包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (905, 898, '', '', '', '13寸包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (906, 898, '', '', '', '15寸包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (907, 898, '', '', '', '16寸包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (908, 899, '', '', '', '手拿包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (909, 899, '', '', '', '商务背包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
+INSERT INTO `mxx_product_category` VALUES (910, 899, '', '', '', '商务挎包', '', '', '', '', 0, 0, 1, '', '', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for mxx_score_detail
@@ -27519,7 +28370,7 @@ CREATE TABLE `mxx_system_admin`  (
 -- ----------------------------
 -- Records of mxx_system_admin
 -- ----------------------------
-INSERT INTO `mxx_system_admin` VALUES (1, 103, 'admin', '飞舞九天', 1, '79678111@qq.com', '15888888888', 0, '/uploads/avatar/2020/12/18/0df4d61431b603bb0d52f152c813c968.jpeg', '$2b$12$z6HNb1GaoW5PlZbXjy8fdOUqldmlCx1WEqK/vENe4QBS8NKGgGopu', 0, 0, '127.0.0.1', '2024-05-26 19:48:03', 'admin', '2018-03-16 11:33:00', 'admin', '2022-06-11 17:39:07', '管理员', 0);
+INSERT INTO `mxx_system_admin` VALUES (1, 103, 'admin', '飞舞九天', 1, '79678111@qq.com', '15888888888', 0, '/uploads/avatar/2020/12/18/0df4d61431b603bb0d52f152c813c968.jpeg', '$2b$12$z6HNb1GaoW5PlZbXjy8fdOUqldmlCx1WEqK/vENe4QBS8NKGgGopu', 0, 0, '127.0.0.1', '2024-05-26 19:48:03', 'admin', '2018-03-16 11:33:00', 'admin', '2024-06-03 10:23:14', '管理员', 0);
 INSERT INTO `mxx_system_admin` VALUES (2, 103, 'admin1', '飞舞九天1', 0, '79678111@qq.com', '15888888888', 0, '/uploads/avatar/2020/12/18/0df4d61431b603bb0d52f152c813c968.jpeg', '$2b$12$/BUBqR.mVZFuLZ7mb3zuVuOL5/NFevymcjAQDvx9AcUBY6DtVUMMu', 0, 0, '192.168.0.200', '2022-05-27 15:36:25', 'admin', '2018-03-16 11:33:00', 'admin', '2022-06-11 17:39:07', '管理员', 0);
 
 -- ----------------------------
@@ -27860,32 +28711,6 @@ INSERT INTO `mxx_system_dict_type` VALUES (108, 0, '钱币类型', 'money_type',
 INSERT INTO `mxx_system_dict_type` VALUES (110, 0, '经营状态', 'operation_status', 0, 1, 'admin', '2022-07-11 16:15:25', 'admin', '2022-07-13 16:17:07', NULL);
 
 -- ----------------------------
--- Table structure for mxx_system_job
--- ----------------------------
-DROP TABLE IF EXISTS `mxx_system_post`;
-CREATE TABLE `mxx_system_post`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '岗位名称',
-  `enabled` bit(1) NOT NULL COMMENT '岗位状态',
-  `sort` bigint NOT NULL COMMENT '岗位排序',
-  `dept_id` bigint NULL DEFAULT NULL COMMENT '部门ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建日期',
-  `update_time` datetime NULL DEFAULT NULL,
-  `is_del` tinyint(1) NULL DEFAULT 0,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `FKmvhj0rogastlctflsxf1d6k3i`(`dept_id` ASC) USING BTREE,
-  CONSTRAINT `mxx_system_post_ibfk_1` FOREIGN KEY (`dept_id`) REFERENCES `sys_dept` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '岗位' ROW_FORMAT = COMPACT;
-
--- ----------------------------
--- Records of mxx_system_job
--- ----------------------------
-INSERT INTO `mxx_system_job` VALUES (8, '人事专员', b'1', 3, 11, '2019-03-29 14:52:28', NULL, 0);
-INSERT INTO `mxx_system_job` VALUES (10, '产品经理', b'1', 4, 2, '2019-03-29 14:55:51', NULL, 0);
-INSERT INTO `mxx_system_job` VALUES (11, '全栈开发2', b'1', 2, 2, '2019-03-31 13:39:30', NULL, 0);
-INSERT INTO `mxx_system_job` VALUES (12, '软件测试', b'1', 5, 2, '2019-03-31 13:39:43', NULL, 0);
-
--- ----------------------------
 -- Table structure for mxx_system_log
 -- ----------------------------
 DROP TABLE IF EXISTS `mxx_system_log`;
@@ -27907,7 +28732,7 @@ CREATE TABLE `mxx_system_log`  (
   `error_msg` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '错误消息',
   `create_time` datetime NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 141125411852533766 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 141814652306735110 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of mxx_system_log
@@ -27939,6 +28764,10 @@ INSERT INTO `mxx_system_log` VALUES (140569831625736197, '用户登录', 0, 'sys
 INSERT INTO `mxx_system_log` VALUES (140570403629187077, '用户登录', 0, 'system_admin_controller::login', 'POST', 1, '', '', '/api/system/login', '127.0.0.1', '', '', '', 0, '', '2024-05-20 16:46:26');
 INSERT INTO `mxx_system_log` VALUES (140906469668175877, '用户登录', 0, 'system_admin_controller::login', 'POST', 1, '', '', '/api/system/login', '127.0.0.1', '', '', '', 0, '', '2024-05-24 09:48:03');
 INSERT INTO `mxx_system_log` VALUES (141125411852533765, '用户登录', 0, 'system_admin_controller::login', 'POST', 1, '', '', '/api/system/login', '127.0.0.1', '', '', '', 0, '', '2024-05-26 19:48:03');
+INSERT INTO `mxx_system_log` VALUES (141663778518351877, '用户登录', 0, 'system_admin_controller::login', 'POST', 1, '', '', '/api/system/login', '127.0.0.1', '', '', '', 0, '', '2024-06-01 18:25:09');
+INSERT INTO `mxx_system_log` VALUES (141665010153701381, '用户登录', 0, 'system_admin_controller::login', 'POST', 1, '', '', '/api/system/login', '127.0.0.1', '', '', '', 0, '', '2024-06-01 18:44:44');
+INSERT INTO `mxx_system_log` VALUES (141665124528177157, '用户登录', 0, 'system_admin_controller::login', 'POST', 1, '', '', '/api/system/login', '127.0.0.1', '', '', '', 0, '', '2024-06-01 18:46:33');
+INSERT INTO `mxx_system_log` VALUES (141814652306735109, '用户登录', 0, 'system_admin_controller::login', 'POST', 1, '', '', '/api/system/login', '127.0.0.1', '', '', '', 0, '', '2024-06-03 10:23:14');
 
 -- ----------------------------
 -- Table structure for mxx_system_menus
@@ -27971,66 +28800,67 @@ CREATE TABLE `mxx_system_menus`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '备注',
   `status` tinyint(1) NULL DEFAULT 0 COMMENT '菜单状态（1正常 0停用）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 121 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 145 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of mxx_system_menus
 -- ----------------------------
-INSERT INTO `mxx_system_menus` VALUES (1, 0, '统计', 1, 'Statistics', '/statistics', 'statistics', NULL, NULL, 'M', 0, 0, NULL, 1, 'statistics:module', 'fa fa-pie-chart', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (2, 0, '商品', 2, 'Product', '/product', 'product', NULL, NULL, 'M', 0, 0, NULL, 1, 'product:module', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (3, 0, '订单', 3, 'Order', '/order', 'order', NULL, NULL, 'M', 0, 0, NULL, 1, 'order:module', 'ele-List', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (4, 0, '用户', 4, 'User', '/user/index', 'user', NULL, NULL, 'M', 0, 0, NULL, 1, 'user:module', 'fa fa-user', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (1, 0, '设置', 10, 'Setting', '/setting', 'setting', '', NULL, 'M', 0, 0, NULL, 1, 'system:setting', 'iconfont icon-xitongshezhi', 0, NULL, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统设置', 1);
+INSERT INTO `mxx_system_menus` VALUES (2, 0, '店铺', 10, 'Shop', '/shop', 'shop', '', NULL, 'M', 0, 0, NULL, 1, 'shop:setting', 'iconfont icon-xitongshezhi', 0, NULL, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '店铺基本设置', 1);
+INSERT INTO `mxx_system_menus` VALUES (3, 0, '用户', 4, 'User', '/user/index', 'user', NULL, NULL, 'M', 0, 0, NULL, 1, 'user:module', 'fa fa-user', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (4, 0, '商品', 2, 'Product', '/product', 'product', NULL, NULL, 'M', 0, 0, NULL, 1, 'product:module', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (5, 0, '内容', 5, 'Content', '/content', 'content', NULL, NULL, 'M', 0, 0, NULL, 1, 'content:module', 'fa fa-file-word-o', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (6, 0, '营销', 6, 'Market', '/market', 'market', NULL, NULL, 'M', 0, 0, NULL, 1, 'market:module', 'fa fa-bullhorn', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (7, 0, '客服', 9, 'Service', '/service', 'service', NULL, NULL, 'M', 0, 0, NULL, 1, 'service:module', 'fa fa-heartbeat', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (8, 0, '财务', 7, 'Finance', '/finance', 'finance', NULL, NULL, 'M', 0, 0, NULL, 1, 'finance:module', 'fa fa-credit-card', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (9, 0, '仓储', 8, 'Storage', '/storage', 'storage', NULL, NULL, 'M', 0, 0, NULL, 1, 'storage:module', 'fa fa-cubes', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (10, 0, '物流', 9, 'Shipping', '/shipping', 'shipping', NULL, NULL, 'M', 0, 0, NULL, 1, 'shipping:module', 'fa fa-truck', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (11, 0, '设置', 10, 'Setting', '/setting', 'setting', '', NULL, 'M', 0, 0, NULL, 1, 'system:setting', 'iconfont icon-xitongshezhi', 0, NULL, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统设置', 1);
-INSERT INTO `mxx_system_menus` VALUES (19, 1, '产品统计', 5, 'ProductReport', '/product-report/index', 'product/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (20, 1, '用户统计', 5, 'UserReport', '/user-report/index', 'product/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (21, 1, '交易统计', 5, 'TradetReport', '/trade/index', 'report/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'Trade:report', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (22, 2, '产品管理', 0, 'ProductList', '/product/list', 'product/product/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (23, 2, '产品分类', 1, 'ClassifyList', '/product-classify/list', 'product/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:list', 'fa fa-list-ol', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (24, 2, '商品规格', 2, 'SpecificationsList', '/specifications/list', 'product/specifications/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:specifications:list', 'fa fa-th', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (25, 2, '商品评论', 4, 'ProductCommentList', '/product/comment/list', 'product/comment/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:comment:list', 'fa fa-comments-o', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (40, 3, '订单管理', 1, 'OrderList', '/order/list', 'order/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'order:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (41, 4, '用户管理', 1, 'UserList', '/user/list', '/user/user/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'user:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (42, 4, '用户标签', 4, 'TagList', '/user-tag/list', '/user/tag/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'user:tag:list', 'fa fa-tags', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (43, 4, '用户等级', 3, 'GradeList', '/user/grade/list', '/user/grade/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'user:grade:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (44, 4, '用户分组', 2, 'GroupingList', '/usergrouping/list', '/user/grouping/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'user:grouping:list', 'fa fa-th', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (6, 0, '订单', 3, 'Order', '/order', 'order', NULL, NULL, 'M', 0, 0, NULL, 1, 'order:module', 'ele-List', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (7, 0, '营销', 6, 'Market', '/market', 'market', NULL, NULL, 'M', 0, 0, NULL, 1, 'market:module', 'fa fa-bullhorn', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (8, 0, '客服', 9, 'Service', '/service', 'service', NULL, NULL, 'M', 0, 0, NULL, 1, 'service:module', 'fa fa-heartbeat', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (9, 0, '财务', 7, 'Finance', '/finance', 'finance', NULL, NULL, 'M', 0, 0, NULL, 1, 'finance:module', 'fa fa-credit-card', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (10, 0, '仓储', 8, 'Storage', '/storage', 'storage', NULL, NULL, 'M', 0, 0, NULL, 1, 'storage:module', 'fa fa-cubes', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (11, 0, '物流', 9, 'Shipping', '/shipping', 'shipping', NULL, NULL, 'M', 0, 0, NULL, 1, 'shipping:module', 'fa fa-truck', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (13, 0, '统计', 1, 'Statistics', '/statistics', 'statistics', NULL, NULL, 'M', 0, 0, NULL, 1, 'statistics:module', 'fa fa-pie-chart', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (14, 1, '计划任务', 7, 'SettingTask', '/setting/task', 'setting/task', NULL, NULL, 'C', 0, 0, NULL, 1, 'task:fff', 'iconfont icon-diannao1', 0, '#E41111', 0, 'admin', '2022-06-28 09:39:50', 'admin', '2022-06-28 09:42:08', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (15, 1, '系统日志', 8, 'Logs', '/setting/log', 'setting/log', NULL, NULL, 'C', 0, 1, NULL, 1, 'log:list', 'fa fa-list-ol', 0, NULL, 0, 'admin', '2022-08-12 22:29:24', 'admin', '2022-08-12 22:31:54', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (16, 1, '字典管理', 6, 'SettingDic', '/setting/dict', 'system/dict/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'dict:type:list:show', 'iconfont icon-juxingkaobei', 0, NULL, 0, 'admin', '2022-06-26 01:42:26', 'admin', '2022-06-26 23:57:29', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (17, 1, '角色管理', 4, 'SettingRole', '/setting/role', 'system/role/index', NULL, NULL, 'C', 0, 0, NULL, 1, NULL, 'ele-UserFilled', 0, NULL, 0, 'admin', '2022-06-23 00:46:05', 'admin', '2022-06-27 11:52:31', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (18, 1, '管理员列表', 3, 'SettingUser', '/system/user', 'system/user/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'admin:list:show', 'iconfont icon-icon-', 0, NULL, 0, 'admin', '2022-06-27 11:50:18', 'admin', '2022-06-27 11:52:02', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (19, 1, '菜单管理', 2, 'SysteMenuList', '/setting/menu', 'system/menu/index', '', NULL, 'C', 0, 0, NULL, 1, 'system:admin:list', 'iconfont icon-neiqianshujuchucun', 0, NULL, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2022-06-27 11:52:40', '用户管理菜单', 1);
+INSERT INTO `mxx_system_menus` VALUES (20, 1, '系统设置', 1, 'SystemSetting', '/system/setting', 'system/setting/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'system:setting', 'iconfont icon-zujian', 0, NULL, 0, 'admin', '2022-06-26 01:28:57', 'admin', '2022-06-26 01:35:13', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (21, 1, '扩展配置', 9, 'Config', '/setting/config', 'system/config/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'config:list:show', 'iconfont icon-neiqianshujuchucun', 0, NULL, 0, 'admin', '2023-05-22 10:42:33', 'admin', '2023-07-03 19:00:29', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (22, 1, '语言设置', 5, 'LanguageList', '/language/list', 'system/language/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'language:list', 'fa fa-language', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (23, 1, '模板管理', 5, 'TemplateList', '/template/list', 'template/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'template:list', 'fa fa-puzzle-piece', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (24, 1, '消息设置', 5, 'MessageIndex', '/message/list', 'system/message/index', NULL, NULL, 'M', 0, 0, NULL, 1, 'message:index', 'fa fa-comments', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (25, 1, '组织管理', 0, 'DeptList', '/system/dept', 'system/dept/index', NULL, NULL, 'C', 0, 1, '', 1, 'dept:list:show', 'fa fa-male', 0, '', 0, 'admin', '2024-06-01 18:29:17', 'admin', '2024-06-01 18:29:17', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (26, 1, '岗位管理', 0, 'PostList', '/system/post', 'system/post/index', NULL, NULL, 'C', 0, 1, '', 1, 'post:list:show', 'fa fa-male', 0, '', 0, 'admin', '2024-06-01 18:29:17', 'admin', '2024-06-01 18:29:17', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (27, 2, '导航管理', 0, 'Navbar', '/system/navbar', 'system/navbar', NULL, NULL, 'C', 0, 1, '', 1, 'navbar:list:show', 'fa fa-male', 0, '', 0, 'admin', '2024-06-01 18:29:17', 'admin', '2024-06-01 18:29:17', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (28, 23, '店铺消息', 5, 'ShopTemplateList', '/system/message/list', 'system/message/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'system:message:list', 'fa fa-bell', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (29, 23, '会员消息', 5, 'UserTemplateList', '/user-vip/list', 'user-vip/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'userVIP:list', 'fa fa-bell', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (36, 4, '产品管理', 0, 'ProductList', '/product/list', 'product/product/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (37, 4, '产品分类', 1, 'ClassifyList', '/product-classify/list', 'product/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:list', 'fa fa-list-ol', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (38, 4, '商品规格', 2, 'SpecificationsList', '/specifications/list', 'product/specifications/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:specifications:list', 'fa fa-th', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (39, 4, '商品评论', 4, 'ProductCommentList', '/product/comment/list', 'product/comment/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:comment:list', 'fa fa-comments-o', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (40, 6, '订单管理', 1, 'OrderList', '/order/list', 'order/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'order:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (41, 3, '用户管理', 1, 'UserList', '/user/list', '/user/user/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'user:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (42, 3, '用户标签', 4, 'TagList', '/user-tag/list', '/user/tag/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'user:tag:list', 'fa fa-tags', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (43, 3, '用户等级', 3, 'GradeList', '/user/grade/list', '/user/grade/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'user:grade:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (44, 3, '用户分组', 2, 'GroupingList', '/usergrouping/list', '/user/grouping/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'user:grouping:list', 'fa fa-th', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (45, 5, '文章列表', 1, 'ArticleIndex', '/article/list', 'content/article/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'article:list', 'iconfont icon-juxingkaobei', 0, NULL, 0, 'admin', '2022-09-02 03:29:11', 'admin', '2022-09-02 03:46:11', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (46, 5, '文章分类', 1, 'ArticleColumn', '/article/column', 'content/category/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'category:list:show', 'fa fa-file-word-o', 0, NULL, 0, 'admin', '2022-09-02 03:28:57', 'admin', '2022-09-03 23:50:12', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (47, 6, '积分记录', 5, 'IntegralList', '/Integral/list', 'Integral/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'Integral:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (48, 8, '提现申请', 5, 'CashList', '/cash/list', 'finance/cash/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'finance:cash:list', 'fa fa-money', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (49, 8, '充值记录', 5, 'RechargeList', '/recharge/list', 'finance/recharge/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'finance:recharge:list', 'fa fa-database', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (50, 8, '资金监控', 5, 'MonitorList', '/monitor/list', 'finance/monitor/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'finance:monitor:list', 'fa fa-shield', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (51, 9, '仓库管理', 5, 'StoreList', '/store/list', 'storage/store/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:store:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (52, 9, '产品库存', 5, 'ProductStoreList', '/productStore/list', 'storage/productStore/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:cash:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (53, 9, '产品入库', 5, 'EnterStoreList', '/enterStore/list', 'storage/enterStore/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:enterStore:list', 'fa fa-sign-in', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (54, 9, '库存出库', 5, 'OutStoreList', '/outStore/list', 'storage/outStore/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:outStore:list', 'fa fa-sign-out', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (55, 9, '仓库盘点', 5, 'StocktakingList', '/stocktaking/list', 'storage/stocktaking/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:stocktaking:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (56, 9, '库存调拨', 5, 'AllotStoreList', '/allotStore/list', 'storage/allotStore/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:allotstore:list', 'fa fa-truck', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (57, 9, '出入库明细', 5, 'DetailList', '/storage/detail/list', 'storage/detail/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:detail:list', 'fa fa-list-alt', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (58, 10, '运费模板', 5, 'FreightList', '/freight/list', 'shipping/freight/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'shipping:freight:list', 'fa fa-puzzle-piece', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (59, 10, '物流公司', 5, 'ShippingCorpList', '/shipping/corp/list', 'shipping/corp/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'shipping:corp:list', 'fa fa-truck', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (62, 11, '计划任务', 7, 'SettingTask', '/setting/task', 'setting/task', NULL, NULL, 'C', 0, 0, NULL, 1, 'task:fff', 'iconfont icon-diannao1', 0, '#E41111', 0, 'admin', '2022-06-28 09:39:50', 'admin', '2022-06-28 09:42:08', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (63, 11, '系统日志', 8, 'Logs', '/setting/log', 'setting/log', NULL, NULL, 'C', 0, 1, NULL, 0, 'log:list', 'fa fa-list-ol', 0, NULL, 0, 'admin', '2022-08-12 22:29:24', 'admin', '2022-08-12 22:31:54', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (64, 11, '字典管理', 6, 'SettingDic', '/setting/dict', 'system/dict/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'dict:type:list:show', 'iconfont icon-juxingkaobei', 0, NULL, 0, 'admin', '2022-06-26 01:42:26', 'admin', '2022-06-26 23:57:29', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (65, 11, '角色管理', 4, 'SettingRole', '/setting/role', 'system/role/index', NULL, NULL, 'C', 0, 0, NULL, 1, NULL, 'ele-UserFilled', 0, NULL, 0, 'admin', '2022-06-23 00:46:05', 'admin', '2022-06-27 11:52:31', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (66, 11, '管理员列表', 3, 'SettingUser', '/system/user', 'system/user/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'admin:list:show', 'iconfont icon-icon-', 0, NULL, 0, 'admin', '2022-06-27 11:50:18', 'admin', '2022-06-27 11:52:02', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (67, 11, '菜单管理', 2, 'SysteMenuList', '/setting/menu', 'system/menu/index', '', NULL, 'C', 0, 0, NULL, 1, 'system:admin:list', 'iconfont icon-neiqianshujuchucun', 0, NULL, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2022-06-27 11:52:40', '用户管理菜单', 1);
-INSERT INTO `mxx_system_menus` VALUES (68, 11, '系统设置', 1, 'SystemSetting', '/system/setting', 'system/setting/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'system:setting', 'iconfont icon-zujian', 0, NULL, 0, 'admin', '2022-06-26 01:28:57', 'admin', '2022-06-26 01:35:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (69, 11, '扩展配置', 9, 'Config', '/setting/config', 'system/config/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'config:list:show', 'iconfont icon-neiqianshujuchucun', 0, NULL, 0, 'admin', '2023-05-22 10:42:33', 'admin', '2023-07-03 19:00:29', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (71, 11, '语言设置', 5, 'LanguageList', '/language/list', 'system/language/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'language:list', 'fa fa-language', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (72, 11, '模板管理', 5, 'TemplateList', '/template/list', 'template/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'template:list', 'fa fa-puzzle-piece', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (73, 11, '消息设置', 5, 'MessageIndex', '/message/list', 'system/message/index', NULL, NULL, 'M', 0, 0, NULL, 1, 'message:index', 'fa fa-comments', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (74, 73, '店铺消息', 5, 'ShopTemplateList', '/system/message/list', 'system/message/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'system:message:list', 'fa fa-bell', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (81, 73, '会员消息', 5, 'UserTemplateList', '/user-vip/list', 'user-vip/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'userVIP:list', 'fa fa-bell', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (95, 7, '站内消息', 5, 'InsideMSGList', '/insideMSG/list', 'service/insideMSG/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'insideMSG:list', 'fa fa-comments', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (96, 7, '咨询列表', 5, 'ConsultList', '/consult/list', 'service/cash/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'consult:list', 'fa fa-volume-control-phone', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (97, 7, '投诉列表', 5, 'ComplaintList', '/complaint/list', 'complaint/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'template:list', 'fa fa-drupal', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (98, 7, '店铺列表', 5, 'StoreList', '/store/list', 'store/shop/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'template:list', 'fa fa-drupal', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (48, 9, '提现申请', 5, 'CashList', '/cash/list', 'finance/cash/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'finance:cash:list', 'fa fa-money', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (49, 9, '充值记录', 5, 'RechargeList', '/recharge/list', 'finance/recharge/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'finance:recharge:list', 'fa fa-database', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (50, 9, '资金监控', 5, 'MonitorList', '/monitor/list', 'finance/monitor/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'finance:monitor:list', 'fa fa-shield', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (51, 10, '仓库管理', 5, 'StoreList', '/store/list', 'storage/store/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:store:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (52, 10, '产品库存', 5, 'ProductStoreList', '/productStore/list', 'storage/productStore/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:cash:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (53, 10, '产品入库', 5, 'EnterStoreList', '/enterStore/list', 'storage/enterStore/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:enterStore:list', 'fa fa-sign-in', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (54, 10, '库存出库', 5, 'OutStoreList', '/outStore/list', 'storage/outStore/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:outStore:list', 'fa fa-sign-out', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (55, 10, '仓库盘点', 5, 'StocktakingList', '/stocktaking/list', 'storage/stocktaking/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:stocktaking:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (56, 10, '库存调拨', 5, 'AllotStoreList', '/allotStore/list', 'storage/allotStore/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:allotstore:list', 'fa fa-truck', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (57, 10, '出入库明细', 5, 'DetailList', '/storage/detail/list', 'storage/detail/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'storage:detail:list', 'fa fa-list-alt', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (58, 11, '运费模板', 5, 'FreightList', '/freight/list', 'shipping/freight/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'shipping:freight:list', 'fa fa-puzzle-piece', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (59, 11, '物流公司', 5, 'ShippingCorpList', '/shipping/corp/list', 'shipping/corp/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'shipping:corp:list', 'fa fa-truck', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (95, 8, '站内消息', 5, 'InsideMSGList', '/insideMSG/list', 'service/insideMSG/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'insideMSG:list', 'fa fa-comments', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (96, 8, '咨询列表', 5, 'ConsultList', '/consult/list', 'service/cash/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'consult:list', 'fa fa-volume-control-phone', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (97, 8, '投诉列表', 5, 'ComplaintList', '/complaint/list', 'complaint/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'template:list', 'fa fa-drupal', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (98, 8, '店铺列表', 5, 'StoreList', '/store/list', 'store/shop/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'template:list', 'fa fa-drupal', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (111, 68, '修改设置', 0, 'SettingUpdate', '', '', NULL, NULL, 'F', 0, 1, '', 1, 'role:save', '', 0, '', 0, 'admin', '2024-04-09 15:41:26', 'admin', '2024-04-09 15:41:26', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (112, 67, '查看菜单', 3, 'MenuShow', '', '', NULL, NULL, 'F', 0, 1, '', 1, 'menu:show', '', 0, '', 0, 'admin', '2024-05-05 16:46:17', 'admin', '2024-05-05 16:46:17', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (113, 67, '修改菜单', 2, 'MenuUpdate', '', '', NULL, NULL, 'F', 0, 1, '', 1, 'menu:update', '', 0, '', 0, 'admin', '2024-05-05 16:47:38', 'admin', '2024-05-05 16:47:38', '', 1);
@@ -28040,6 +28870,36 @@ INSERT INTO `mxx_system_menus` VALUES (116, 65, '添加角色', 0, 'RoleSave', '
 INSERT INTO `mxx_system_menus` VALUES (117, 65, '删除角色', 0, 'RoleDelete', '', '', NULL, NULL, 'F', 0, 1, '', 1, 'role:delete', '', 0, '', 0, 'admin', '2024-04-09 21:01:24', 'admin', '2024-04-09 21:01:24', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (118, 65, '更新角色', 0, 'RoleUpdate', '', '', NULL, NULL, 'F', 0, 1, '', 1, 'role:update', '', 0, '', 0, 'admin', '2024-04-08 16:56:41', 'admin', '2024-04-08 16:56:41', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (119, 65, '查看角色', 3, 'RoleShow', '', '', NULL, NULL, 'F', 0, 1, '', 1, 'menu:show', '', 0, '', 0, 'admin', '2024-05-05 16:46:17', 'admin', '2024-05-05 16:46:17', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (131, 13, '产品统计', 5, 'ProductReport', '/product-report/index', 'product/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (132, 13, '用户统计', 5, 'UserReport', '/user-report/index', 'product/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'product:list', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (133, 13, '交易统计', 5, 'TradetReport', '/trade/index', 'report/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'Trade:report', 'fa fa-shopping-bag', 0, NULL, 0, 'admin', '2022-08-17 00:05:31', 'admin', '2022-08-17 09:20:19', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (134, 2, '添加导航', 0, 'AddNavbar', '/system/navbar/add', 'system/navbar/add', NULL, NULL, 'M', 0, 1, '', 1, 'navbar:add', 'fa fa-plus-circle', 0, '', 0, '', '2024-06-03 15:54:45', '', '2024-06-03 15:54:45', '', 0);
+INSERT INTO `mxx_system_menus` VALUES (144, 2, 'werwer1', 0, 'ertert', 'ertert', 'ertertert', NULL, NULL, 'M', 0, 1, '', 1, 'ertert', '', 0, '', 0, '', '2024-06-03 16:40:58', '', '2024-06-03 16:40:58', '', 0);
+
+-- ----------------------------
+-- Table structure for mxx_system_post
+-- ----------------------------
+DROP TABLE IF EXISTS `mxx_system_post`;
+CREATE TABLE `mxx_system_post`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `post_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '岗位名称',
+  `post_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '岗位编码，权限控制的时候使用',
+  `enabled` bit(1) NOT NULL COMMENT '岗位状态',
+  `sort` bigint NOT NULL COMMENT '岗位排序',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建日期',
+  `update_time` datetime NULL DEFAULT NULL,
+  `is_del` tinyint(1) NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '岗位' ROW_FORMAT = COMPACT;
+
+-- ----------------------------
+-- Records of mxx_system_post
+-- ----------------------------
+INSERT INTO `mxx_system_post` VALUES (8, '人事专员', NULL, b'1', 3, NULL, '2019-03-29 14:52:28', NULL, 0);
+INSERT INTO `mxx_system_post` VALUES (10, '产品经理', NULL, b'1', 4, NULL, '2019-03-29 14:55:51', NULL, 0);
+INSERT INTO `mxx_system_post` VALUES (11, '全栈开发2', NULL, b'1', 2, NULL, '2019-03-31 13:39:30', NULL, 0);
+INSERT INTO `mxx_system_post` VALUES (12, '软件测试', NULL, b'1', 5, NULL, '2019-03-31 13:39:43', NULL, 0);
 
 -- ----------------------------
 -- Table structure for mxx_system_role
@@ -28100,11 +28960,6 @@ INSERT INTO `mxx_system_role_menus` VALUES (138007896209244165, 2, 2466, '2024-0
 INSERT INTO `mxx_system_role_menus` VALUES (138007896733532165, 2, 2467, '2024-04-22 09:56:29', '2024-04-22 09:56:29', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (138007897257820165, 2, 2468, '2024-04-22 09:56:29', '2024-04-22 09:56:29', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (138007897783156741, 2, 2469, '2024-04-22 09:56:30', '2024-04-22 09:56:30', 0);
-INSERT INTO `mxx_system_role_menus` VALUES (138007898307444741, 2, 137252614315196421, '2024-04-22 09:56:30', '2024-04-22 09:56:30', 0);
-INSERT INTO `mxx_system_role_menus` VALUES (138007898832781317, 2, 137252841538469893, '2024-04-22 09:56:31', '2024-04-22 09:56:31', 0);
-INSERT INTO `mxx_system_role_menus` VALUES (138007899357069317, 2, 137252898565275653, '2024-04-22 09:56:31', '2024-04-22 09:56:31', 0);
-INSERT INTO `mxx_system_role_menus` VALUES (138007899882405893, 2, 126823531615895557, '2024-04-22 09:56:32', '2024-04-22 09:56:32', 0);
-INSERT INTO `mxx_system_role_menus` VALUES (138007900406693893, 2, 129001790501830661, '2024-04-22 09:56:32', '2024-04-22 09:56:32', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (140467852182306821, 1, 1, '2024-05-19 13:36:25', '2024-05-19 13:36:25', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (140467852706594821, 1, 20, '2024-05-19 13:36:25', '2024-05-19 13:36:25', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (140467853231931397, 1, 19, '2024-05-19 13:36:26', '2024-05-19 13:36:26', 0);
@@ -28176,7 +29031,6 @@ INSERT INTO `mxx_system_role_menus` VALUES (140471256337104901, 3, 74, '2024-05-
 INSERT INTO `mxx_system_role_menus` VALUES (140471256862441477, 3, 81, '2024-05-19 14:30:32', '2024-05-19 14:30:32', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (140471257386729477, 3, 64, '2024-05-19 14:30:32', '2024-05-19 14:30:32', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (140471257911017477, 3, 62, '2024-05-19 14:30:33', '2024-05-19 14:30:33', 0);
-INSERT INTO `mxx_system_role_menus` VALUES (140471258436354053, 3, 63, '2024-05-19 14:30:33', '2024-05-19 14:30:33', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (140471258960642053, 3, 69, '2024-05-19 14:30:34', '2024-05-19 14:30:34', 0);
 INSERT INTO `mxx_system_role_menus` VALUES (140908465650417669, 1, 22, '2024-05-24 10:19:47', '2024-05-24 10:19:47', 1);
 INSERT INTO `mxx_system_role_menus` VALUES (140908466174705669, 3, 22, '2024-05-24 10:19:47', '2024-05-24 10:19:47', 1);
@@ -28184,8 +29038,6 @@ INSERT INTO `mxx_system_role_menus` VALUES (140908478050877445, 1, 23, '2024-05-
 INSERT INTO `mxx_system_role_menus` VALUES (140908478575165445, 3, 23, '2024-05-24 10:19:59', '2024-05-24 10:19:59', 1);
 INSERT INTO `mxx_system_role_menus` VALUES (140908488938242053, 1, 24, '2024-05-24 10:20:09', '2024-05-24 10:20:09', 1);
 INSERT INTO `mxx_system_role_menus` VALUES (140908489462530053, 3, 24, '2024-05-24 10:20:09', '2024-05-24 10:20:09', 1);
-INSERT INTO `mxx_system_role_menus` VALUES (140908497377181701, 1, 25, '2024-05-24 10:20:17', '2024-05-24 10:20:17', 1);
-INSERT INTO `mxx_system_role_menus` VALUES (140908497901469701, 3, 25, '2024-05-24 10:20:17', '2024-05-24 10:20:17', 1);
 INSERT INTO `mxx_system_role_menus` VALUES (140908525865943045, 3, 40, '2024-05-24 10:20:44', '2024-05-24 10:20:44', 1);
 INSERT INTO `mxx_system_role_menus` VALUES (140908539988164613, 1, 41, '2024-05-24 10:20:58', '2024-05-24 10:20:58', 1);
 INSERT INTO `mxx_system_role_menus` VALUES (140908540513501189, 3, 41, '2024-05-24 10:20:58', '2024-05-24 10:20:58', 1);
@@ -28195,6 +29047,9 @@ INSERT INTO `mxx_system_role_menus` VALUES (140908561990434821, 1, 43, '2024-05-
 INSERT INTO `mxx_system_role_menus` VALUES (140908562514722821, 3, 43, '2024-05-24 10:21:19', '2024-05-24 10:21:19', 1);
 INSERT INTO `mxx_system_role_menus` VALUES (140908568027086853, 1, 42, '2024-05-24 10:21:24', '2024-05-24 10:21:24', 1);
 INSERT INTO `mxx_system_role_menus` VALUES (140908568551374853, 3, 42, '2024-05-24 10:21:25', '2024-05-24 10:21:25', 1);
+INSERT INTO `mxx_system_role_menus` VALUES (141665559483793413, 3, 63, '2024-06-01 18:53:28', '2024-06-01 18:53:28', 1);
+INSERT INTO `mxx_system_role_menus` VALUES (141815747353526277, 1, 25, '2024-06-03 10:40:38', '2024-06-03 10:40:38', 1);
+INSERT INTO `mxx_system_role_menus` VALUES (141815747877814277, 3, 25, '2024-06-03 10:40:38', '2024-06-03 10:40:38', 1);
 
 -- ----------------------------
 -- Table structure for mxx_user_account

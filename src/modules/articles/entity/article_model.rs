@@ -52,7 +52,7 @@ impl From<ArticlesSaveRequest> for Articles {
             category_id: arg.category_id,
             category_ids: arg.category_ids,
             user_id: arg.user_id,
-            user_type: 0,
+            user_type: None,
             title: arg.title,
             short_title: arg.short_title,
             title_image: arg.title_image,
@@ -67,15 +67,15 @@ impl From<ArticlesSaveRequest> for Articles {
             count_burys: 0.into(),
             count_follow: 0.into(),
             weight: Option::from(Decimal::from_str("0").unwrap_or_default()),
-            istop: 0,
-            isclose: 0,
-            iscomment: 0,
-            iscommentshow: 0,
-            isposts: 0,
-            isaudit: 0,
-            deleted: 0,
-            isrecommend: 0,
-            status: 0,
+            istop: None,
+            isclose: None,
+            iscomment: None,
+            iscommentshow: None,
+            isposts: None,
+            isaudit: None,
+            deleted: None,
+            isrecommend: None,
+            status: None,
             create_time: Option::from(DateTime::now()),
             update_time: Option::from(DateTime::now()),
         }
@@ -111,7 +111,7 @@ pub struct ArticlesUpdateRequest {
     //文章内容
     pub content: Option<String>,
     //0未审核，1审核，2未通过
-    pub status: i8,
+    pub status: Option<i8>,
 }
 
 impl From<ArticlesUpdateRequest> for Articles {
@@ -122,7 +122,7 @@ impl From<ArticlesUpdateRequest> for Articles {
             category_id: arg.category_id,
             category_ids: arg.category_ids,
             user_id: arg.user_id,
-            user_type: 0,
+            user_type: None,
             title: arg.title,
             short_title: arg.short_title,
             title_image: arg.title_image,
@@ -137,15 +137,15 @@ impl From<ArticlesUpdateRequest> for Articles {
             count_burys: 0.into(),
             count_follow: 0.into(),
             weight: Option::from(Decimal::from_str("0").unwrap_or_default()),
-            istop: 0,
-            isclose: 0,
-            iscomment: 0,
-            iscommentshow: 0,
-            isposts: 0,
-            isaudit: 0,
-            deleted: 0,
-            isrecommend: 0,
-            status: 0,
+            istop: None,
+            isclose: None,
+            iscomment: None,
+            iscommentshow: None,
+            isposts: None,
+            isaudit: None,
+            deleted: None,
+            isrecommend: None,
+            status: None,
             create_time: Option::from(DateTime::now()),
             update_time: Option::from(DateTime::now()),
         }
@@ -191,15 +191,15 @@ pub struct ArticlesDetailData {
     //关注话题统计数
     pub count_follow: Option<u64>,
     ///是否关闭帖子
-    pub isclose: i8,
+    pub isclose: Option<i8>,
     //是否允许评论
-    pub iscomment: i8,
+    pub iscomment: Option<i8>,
     //是否评论后显示内容
-    pub iscommentshow: i8,
+    pub iscommentshow: Option<i8>,
     //是否精华帖子
-    pub isposts: i8,
+    pub isposts: Option<i8>,
     //1为推荐
-    pub isrecommend: i8,
+    pub isrecommend: Option<i8>,
     //更新时间
     pub update_time: Option<DateTime>,
 }
@@ -236,13 +236,13 @@ pub struct ArticlesPageData {
     //文章展示数
     pub count_view: Option<u64>,
     //是否精华帖子
-    pub isposts: i8,
+    pub isposts: Option<i8>,
     //1为推荐
-    pub isrecommend: i8,
+    pub isrecommend: Option<i8>,
     //创建时间
     pub create_time: String,
     //0未审核，1审核，2未通过
-    pub status: i8,
+    pub status: Option<i8>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -296,15 +296,15 @@ pub struct ArticlesListData {
     //关注话题统计数
     pub count_follow: Option<u64>,
     ///是否关闭帖子
-    pub isclose: i8,
+    pub isclose: Option<i8>,
     //是否允许评论
-    pub iscomment: i8,
+    pub iscomment: Option<i8>,
     //是否评论后显示内容
-    pub iscommentshow: i8,
+    pub iscommentshow: Option<i8>,
     //是否精华帖子
-    pub isposts: i8,
+    pub isposts: Option<i8>,
     //1为推荐
-    pub isrecommend: i8,
+    pub isrecommend: Option<i8>,
     //更新时间
     pub update_time: Option<String>,
     //创建时间
@@ -358,7 +358,7 @@ pub struct ArticleUser {
     ///短网址
     pub short_url: Option<String>,
     ///用户名
-    pub user_name: String,
+    pub user_name: Option<String>,
     ///昵称
     pub nick_name: Option<String>,
     ///EMAIL

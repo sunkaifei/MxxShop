@@ -74,6 +74,19 @@ pub fn deserialize_string_to_i8<'de, D>(deserializer: D) -> Result<Option<i8>, D
     Ok(opt_i8)
 }
 
+///字符串转为<Option<i8>
+pub fn deserialize_string_to_i32<'de, D>(deserializer: D) -> Result<Option<i32>, D::Error>
+    where
+        D: Deserializer<'de>,
+{
+    let opt_string: Option<String> = Option::deserialize(deserializer)?;
+    let opt_i32: Option<i32> = match opt_string {
+        Some(s) => Some(s.parse().unwrap_or_default()),
+        None => None,
+    };
+    Ok(opt_i32)
+}
+
 pub fn serialize_option_i8_to_string<S>(
     value: &Option<i8>,
     serializer: S,

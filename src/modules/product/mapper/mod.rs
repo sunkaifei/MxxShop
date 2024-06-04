@@ -10,3 +10,4 @@
 
 
 pub mod product_mapper;
+pub mod category_mapper;

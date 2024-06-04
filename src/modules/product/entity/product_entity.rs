@@ -44,11 +44,11 @@ pub struct Product {
     /// 单位名
     pub unit_name: Option<String>,
     /// 排序
-    pub sort: Option<i16>,
+    pub sort: Option<i32>,
     /// 销量
-    pub sales: Option<u32>,
+    pub sales: Option<i32>,
     /// 库存
-    pub stock: Option<u32>,
+    pub stock: Option<i32>,
     /// 状态（0：未上架，1：上架）
     pub is_show: Option<i8>,
     /// 是否热卖
@@ -68,7 +68,7 @@ pub struct Product {
     /// 是否删除
     pub is_del: Option<i8>,
     /// 积分
-    pub give_integral: Option<u64>,
+    pub give_integral: Option<i32>,
     /// 添加时间
     pub create_time: Option<DateTime>,
 }

@@ -18,7 +18,7 @@ pub struct User {
     ///短网址
     pub short_url: Option<String>,
     ///用户名
-    pub user_name: String,
+    pub user_name: Option<String>,
     ///EMAIL
     pub email: Option<String>,
     ///用户手机

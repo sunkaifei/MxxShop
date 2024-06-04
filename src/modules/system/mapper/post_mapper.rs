@@ -17,11 +17,17 @@ crud!(SystemPost {},"mxx_system_post");
 
 /// 查询职位名称是否已存在
 #[py_sql("
-    `select count(*) from mxx_system_post  where name = #{name}`
+    `select count(*) from mxx_system_post  where post_name = #{post_name}`
      if id != null:
         ` and id != #{id}`
     ")]
-pub async fn find_by_name_unique(rb: &RBatis, name: Option<String>, id: Option<u64>) -> rbatis::Result<u64> {
+pub async fn find_by_name_unique(rb: &RBatis, post_name: &Option<String>, id: &Option<u64>) -> rbatis::Result<u64> {
+    impled!()
+}
+
+///查询所有职位列表
+#[py_sql("`select * from mxx_system_post order by sort desc`")]
+pub async fn select_all_list(rb: &RBatis) -> rbatis::Result<Vec<SystemPost>> {
     impled!()
 }
 
@@ -29,8 +35,8 @@ impl_select_page!(SystemPost{select_by_page(item: &PostPageBO) =>"
     trim end=' where ':
       ` where `
       trim ' and ':
-        if item.name != null && item.name != '':
-          ` and name = #{item.name} `
+        if item.post_name != null && item.post_name != '':
+          ` and post_name = #{item.post_name} `
         choose:
           when item.enabled == 0:
             ` and enabled >= 0 `
@@ -39,4 +45,4 @@ impl_select_page!(SystemPost{select_by_page(item: &PostPageBO) =>"
           when item.enabled == 2:
             ` and enabled = 1 `
      if !sql.contains('count'):
-       order by create_time desc"},"mxx_system_post");
+       order by sort desc"},"mxx_system_post");

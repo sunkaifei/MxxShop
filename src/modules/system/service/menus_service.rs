@@ -8,6 +8,7 @@
 //! 版权所有，侵权必究！
 //!
 
+use crate::core::errors::error::Error;
 use actix_web::{HttpResponse};
 use rbatis::executor::RBatisTxExecutor;
 use rbatis::rbdc::{DateTime};
@@ -23,23 +24,20 @@ use crate::utils::snowflake_id::generate_snowflake_id;
 
 pub async fn add_menu(payload: MenuSaveRequest) -> Result<u64>  {
     let menu_entity: SystemMenu = payload.clone().into();
-
-    let menus_num= menus_mapper::find_by_name_unique(pool!(), &menu_entity.menu_name, &None).await?;
-    
-    
     // 启动一个事务
     let mut tx = pool!().acquire_begin().await?;
+    let result_menu = SystemMenu::insert(&tx, &menu_entity).await?;
     
-    
-    let result_menu = SystemMenu::insert(pool!(), &menu_entity).await?;
     return if result_menu.rows_affected > 0 {
         let role_menu = UpdateRoleMenuRequest {
             menu_id: Option::from(u64::from(result_menu.last_insert_id)),
             role_ids: payload.roles.clone(),
         };
-        insert_batch(&tx,&role_menu).await;
+        insert_batch(&tx,&role_menu).await?;
+        
         tx.commit().await?;
         tx.rollback().await?;
+
         Ok(result_menu.rows_affected)
     } else {
         Ok(0)
@@ -50,7 +48,6 @@ pub async fn add_menu(payload: MenuSaveRequest) -> Result<u64>  {
 pub async fn insert_batch( tx: &RBatisTxExecutor,item: &UpdateRoleMenuRequest) -> Result<u64> {
     let menu_id = item.menu_id.clone();
     SystemRoleMenu::delete_by_column(tx, "menu_id", &menu_id).await?;
-
     return if item.role_ids.len() > 0 {
         let mut menu_role: Vec<SystemRoleMenu> = Vec::new();
 
@@ -65,9 +62,8 @@ pub async fn insert_batch( tx: &RBatisTxExecutor,item: &UpdateRoleMenuRequest) -
                 status: Option::from(1),
             })
         }
-
+        
         let result = SystemRoleMenu::insert_batch(tx, &menu_role, item.role_ids.len() as u64).await?;
-
         Ok(result.rows_affected)
     } else {
         Ok(0)
@@ -103,6 +99,36 @@ pub async fn update_menu(payload: MenuUpdateRequest) -> Result<u64> {
         Ok(result.rows_affected)
     } else {
         Ok(0)
+    }
+}
+
+/// 查询同一个父级下菜单名称是否唯一
+pub async fn find_by_name_unique(menu_name: &Option<String>, parent_id: &Option<u64>, id: &Option<u64>) -> Result<bool>{
+    let menus_num= menus_mapper::find_by_name_unique(pool!(), menu_name, parent_id, id).await?;
+    return if menus_num > 0 {
+        Ok(true)
+    } else {
+        Ok(false)
+    }
+}
+
+/// 查询菜单路由是否唯一
+pub async fn find_by_path_unique(path: &Option<String>, id: &Option<u64>) -> Result<bool>{
+    let menus_num= menus_mapper::find_by_path_unique(pool!(), path, id).await?;
+    return if menus_num > 0 {
+        Ok(true)
+    } else {
+        Ok(false)
+    }
+}
+
+/// 查询菜单权限标识是否唯一
+pub async fn find_by_perms_unique(perms: &Option<String>, id: &Option<u64>) -> Result<bool>{
+    let menus_num= menus_mapper::find_by_perms_unique(pool!(), perms, id).await?;
+    return if menus_num > 0 {
+        Ok(true)
+    } else {
+        Ok(false)
     }
 }
 
@@ -260,7 +286,7 @@ pub async fn select_by_column(ids: Vec<String>) -> rbatis::Result<Vec<SystemMenu
 }
 
 ///按id查询
-pub async fn find_by_id(id: &str) -> rbatis::Result<Option<SystemMenu>> {
+pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemMenu>> {
     let result = SystemMenu::select_by_column(pool!(), "id", &id)
         .await?
         .into_iter()

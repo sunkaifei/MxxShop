@@ -25,7 +25,7 @@ pub struct Articles {
     //用户ID
     pub user_id: Option<u64>,
     //发布用户类型，1管理员，0前台用户
-    pub user_type: i8,
+    pub user_type: Option<i8>,
     //文章标题
     pub title: Option<String>,
     //简短标题
@@ -55,23 +55,23 @@ pub struct Articles {
     //排序权重
     pub weight: Option<Decimal>,
     //是否置顶
-    pub istop: i8,
+    pub istop: Option<i8>,
     //是否关闭帖子
-    pub isclose: i8,
+    pub isclose: Option<i8>,
     //是否允许评论
-    pub iscomment: i8,
+    pub iscomment: Option<i8>,
     //是否评论后显示内容
-    pub iscommentshow: i8,
+    pub iscommentshow: Option<i8>,
     //是否精华帖子
-    pub isposts: i8,
+    pub isposts: Option<i8>,
     //0不审核，1审核，2未通过
-    pub isaudit: i8,
+    pub isaudit: Option<i8>,
     //0不删除1删除
-    pub deleted: i8,
+    pub deleted: Option<i8>,
     //1为推荐
-    pub isrecommend: i8,
+    pub isrecommend: Option<i8>,
     //0未审核，1审核，2未通过
-    pub status: i8,
+    pub status: Option<i8>,
     //创建时间
     pub create_time: Option<DateTime>,
     //更新时间

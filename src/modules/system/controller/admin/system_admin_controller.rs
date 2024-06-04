@@ -209,7 +209,7 @@ pub async fn user_update(item: web::Json<UserUpdateRequest>) -> HttpResponse {
     //log::info!("user_update params: {:?}", &item);
 
     let user = item.0;
-    let result = admin_service::select_by_id(&user.id).await;
+    let result = admin_service::get_by_detail(&user.id).await;
     match result {
         Ok(data_op) => {
             match data_op {
@@ -247,7 +247,7 @@ pub async fn update_admin_password(req: HttpRequest, item: web::Json<UpdateAdmin
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("不可通过列表页面修改当前用户密码".to_string()));
     }
     
-    let sys_admin_result = admin_service::select_by_id(&admin_pwd.id).await;
+    let sys_admin_result = admin_service::get_by_detail(&admin_pwd.id).await;
     return match sys_admin_result {
         Ok(admin_result) => {
             match admin_result {
@@ -277,7 +277,7 @@ pub async fn update_my_password(req: HttpRequest, item: web::Json<UpdateAdminPas
     }
     //获取当前用户id
     let admin_token:JWTToken = get_user(req).unwrap_or_default();
-    let sys_user_result = admin_service::select_by_id(&admin_token.id).await;
+    let sys_user_result = admin_service::get_by_detail(&admin_token.id).await;
     return match sys_user_result {
         Ok(user_result) => {
             match user_result {
@@ -309,12 +309,10 @@ pub async fn logout() -> HttpResponse {
 
 #[get("/system/admin/detail/{id}")]
 pub async fn get_user_detail(item: web::Path<InfoId>) -> HttpResponse {
-    if item.id.clone().is_none() {
+    if item.id.is_none() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("角色id不能为空".to_string()));
     }
-    let string_id = item.into_inner().id.clone().unwrap_or_default();
-    let u64_id: Option<u64> = string_id.parse::<u64>().ok();
-    return match admin_service::select_by_id(&u64_id).await {
+    return match admin_service::get_by_detail(&item.id).await {
         Ok(user_op) => match user_op {
             None => {
                 HttpResponse::Ok().json(ResVO::<String>::error_msg("角色信息不存在".to_string()))
