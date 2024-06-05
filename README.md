@@ -48,6 +48,9 @@ MxxShop Rust版，是基于actix-web和rbatis的商城管理系统，一款面�
 3.  xxxx
 
 ##### 部分UI演示
+
+登录后台地址 http://127.0.0.1:8098/  用户名：admin 密码：123456
+
 1. 首页
 ![](/docs/img/index.jpg)
 2. 后台菜单管理
