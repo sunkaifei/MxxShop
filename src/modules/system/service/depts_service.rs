@@ -11,8 +11,9 @@
 use crate::core::web::entity::common::BathIdRequest;
 
 use crate::core::errors::error::{Error, Result};
-use crate::modules::system::entity::dept_entity::SystemDept;
-use crate::modules::system::entity::dept_model::{DeptPageDTO, DeptPageRequest, DeptSaveRequest, DeptTree, DeptTreeData, DeptUpdateRequest};
+use crate::modules::system::entity::admin_entity::AdminDeptsMerge;
+use crate::modules::system::entity::depts_entity::SystemDept;
+use crate::modules::system::entity::depts_model::{DeptPageDTO, DeptPageRequest, DeptSaveRequest, DeptTree, DeptTreeData, DeptUpdateRequest};
 use crate::modules::system::mapper::depts_mapper;
 use crate::pool;
 use crate::utils::snowflake_id::generate_snowflake_id;
@@ -123,6 +124,13 @@ pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemDept
            .into_iter()
            .next();
     Ok(st)
+}
+
+/// 根据管理员ID查询关联的查询部门列表
+pub async fn select_by_ids(ids: &Vec<Option<u64>>) -> rbatis::Result<Vec<SystemDept>> {
+    let result_merge = AdminDeptsMerge::select_in_column(pool!(), "admin_id", ids).await?;
+    let id_list: Vec<Option<u64>> = result_merge.iter().map(|data| data.depts_id).collect();
+    Ok(SystemDept::select_in_column(pool!(), "id", &id_list).await?)
 }
 
 // 查询部门所有数据列表

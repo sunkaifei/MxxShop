@@ -18,10 +18,9 @@ use rbatis::rbdc::DateTime;
 use crate::core::permission::jwt_util::JWTToken;
 use crate::core::web::entity::common::{BathIdRequest, InfoId};
 use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
-use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateAdminPasswordRequest, AdminListVO, UserListRequest, UserLoginRequest, UserLoginResponse, UserUpdateRequest, RoleAndPostVO};
-use crate::modules::system::entity::admin_role_model::UpdateUserRoleRequest;
+use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateAdminPasswordRequest, AdminListVO, UserListRequest, UserLoginRequest, UserLoginResponse, AdminUpdateRequest, RoleAndPostVO, UpdateAdminStatusRequest, RoleNameDTO, DeptsNameDTO, UpdateAdminRoleRequest};
 use crate::modules::system::entity::menus_model::{Router};
-use crate::modules::system::service::{admin_service, dept_service, menus_service, post_service, role_service, system_log_service};
+use crate::modules::system::service::{admin_service, depts_service, menus_service, post_service, role_service, system_log_service};
 use crate::core::errors::error::WhoUnfollowedError;
 use crate::core::service::CONTEXT;
 use crate::core::web::base_controller::get_user;
@@ -134,7 +133,7 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
                             let method = request.method().to_string();
                             let _ = system_log_service::save_system_log(&request, Some("用户登录".to_string()), Some(0),Some("system_admin_controller::login".to_string()), Some(method.to_string()),Some(1)).await;
 
-                            let update_user = UserUpdateRequest{
+                            let update_user = AdminUpdateRequest{
                                 id: user_info.id.clone(),
                                 mobile: None,
                                 user_name: None,
@@ -195,7 +194,7 @@ pub async fn user_delete(item: web::Json<BathIdRequest>) -> HttpResponse {
 }
 
 #[put("/system/update_user_role")]
-pub async fn update_user_role(item: web::Json<UpdateUserRoleRequest>) -> HttpResponse {
+pub async fn update_user_role(item: web::Json<UpdateAdminRoleRequest>) -> HttpResponse {
     //log::info!("update_user_role params: {:?}", item);
     let user_role = item.0;
     let role = role_service::update_user_role(user_role).await;
@@ -204,8 +203,8 @@ pub async fn update_user_role(item: web::Json<UpdateUserRoleRequest>) -> HttpRes
 
 
 // 更新用户信息
-#[put("/system/user/edit")]
-pub async fn user_update(item: web::Json<UserUpdateRequest>) -> HttpResponse {
+#[put("/system/admin/edit")]
+pub async fn user_update(item: web::Json<AdminUpdateRequest>) -> HttpResponse {
     //log::info!("user_update params: {:?}", &item);
 
     let user = item.0;
@@ -301,6 +300,20 @@ pub async fn update_my_password(req: HttpRequest, item: web::Json<UpdateAdminPas
     }
 }
 
+#[put("/system/admin/update-status")]
+pub async fn update_admin_status(item: web::Json<UpdateAdminStatusRequest>) -> HttpResponse {
+    let admin_status = item.0;
+    if admin_status.id.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("用户id不能为空".to_string()));
+    }
+    if admin_status.id == Option::from(1) {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("超级管理员不能禁用".to_string()));
+    }
+    let result = admin_service::update_by_status(admin_status).await;
+    return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result))
+}
+
+
 // 退出登录
 #[get("/system/logout")]
 pub async fn logout() -> HttpResponse {
@@ -314,12 +327,13 @@ pub async fn get_user_detail(item: web::Path<InfoId>) -> HttpResponse {
     }
     return match admin_service::get_by_detail(&item.id).await {
         Ok(user_op) => match user_op {
+            Some(admin) => {
+                
+                let admin_detail: SystemAdminVO = admin.into();
+                HttpResponse::Ok().json(ResVO::ok_with_data(admin_detail))
+            }
             None => {
                 HttpResponse::Ok().json(ResVO::<String>::error_msg("角色信息不存在".to_string()))
-            }
-            Some(role) => {
-                let admin_detail: SystemAdminVO = role.into();
-                HttpResponse::Ok().json(ResVO::ok_with_data(admin_detail))
             }
         }
         Err(err) => {
@@ -340,14 +354,35 @@ pub async fn get_user_params() -> HttpResponse {
 #[get("/system/admin/list")]
 #[protect("admin:list:show")]
 pub async fn admin_list(item: web::Query<UserListRequest>) -> HttpResponse {
-    //log::info!("query user_list params: {:?}", &item);
     let admin_request = item.0;
     let result = admin_service::select_by_page(admin_request).await;
-
     return match result {
         Ok(page) => {
+            //获取名字id列表
+            let id_list: Vec<Option<u64>> = page.records.iter().map(|data| data.id).collect();
+            let result_role_name = role_service::select_by_ids(&id_list).await.unwrap_or_default();
+            let result_dept_name = depts_service::select_by_ids(&id_list).await.unwrap_or_default();
             let mut list_data: Vec<AdminListVO> = Vec::new();
             for user in page.records {
+                let mut role_data: Vec<RoleNameDTO> = Vec::new();
+                match result_role_name.iter().find(|data| data.id == user.id) {
+                    Some(role) => {
+                        role_data.push(RoleNameDTO {
+                            role_name: role.role_name.clone(),
+                        });
+                    }
+                    None => {}
+                }
+                let mut depts_data: Vec<DeptsNameDTO> = Vec::new();
+                match result_dept_name.iter().find(|data| data.id == user.id) {
+                    Some(dept) => {
+                        depts_data.push(DeptsNameDTO {
+                            dept_name: dept.dept_name.clone(),
+                        });
+                    }
+                    None => {}
+                }
+                
                 list_data.push(AdminListVO {
                     id: user.id,
                     sort: user.sort,
@@ -355,8 +390,8 @@ pub async fn admin_list(item: web::Query<UserListRequest>) -> HttpResponse {
                     mobile: user.mobile,
                     user_name: user.user_name,
                     nick_name: user.nick_name,
-                    role_name: None,
-                    depts_name: None,
+                    roles: Option::from(role_data),
+                    depts: Option::from(depts_data),
                     remark: user.remark,
                     create_time: user.create_time.clone().map(|t| t.format("YYYY-MM-DD hh:mm:ss")).unwrap_or_default(),
                 })

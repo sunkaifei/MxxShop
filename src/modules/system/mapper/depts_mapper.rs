@@ -10,8 +10,8 @@
 
 use rbatis::{py_sql, RBatis};
 
-use crate::modules::system::entity::dept_entity::SystemDept;
-use crate::modules::system::entity::dept_model::DeptPageDTO;
+use crate::modules::system::entity::depts_entity::SystemDept;
+use crate::modules::system::entity::depts_model::DeptPageDTO;
 
 //增删改查部门
 rbatis::crud!(SystemDept {}, "mxx_system_depts");

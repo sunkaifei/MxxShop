@@ -116,7 +116,7 @@ pub async fn update_role(req: HttpRequest, item: web::Json<RoleUpdateRequest>) -
 // }
 
 #[get("/system/role/detail/{id}")]
-pub async fn get_role_detail(item: web::Path<InfoId>) -> HttpResponse {
+pub async fn get_by_detail(item: web::Path<InfoId>) -> HttpResponse {
     if item.id.clone().is_none() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("角色id不能为空".to_string()));
     }

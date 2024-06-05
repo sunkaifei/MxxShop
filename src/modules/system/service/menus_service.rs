@@ -17,7 +17,7 @@ use crate::core::errors::error::Result;
 use crate::core::web::response::ResVO;
 use crate::modules::system::entity::menus_entity::SystemMenu;
 use crate::modules::system::entity::menus_model::{MenuListData, MenuSaveRequest, MenuUpdateRequest, Meta, Router, UpdateRoleMenuRequest};
-use crate::modules::system::entity::role_menu_entity::SystemRoleMenu;
+use crate::modules::system::entity::role_entity::RoleMenuMerge;
 use crate::modules::system::mapper::menus_mapper;
 use crate::pool;
 use crate::utils::snowflake_id::generate_snowflake_id;
@@ -47,13 +47,13 @@ pub async fn add_menu(payload: MenuSaveRequest) -> Result<u64>  {
 
 pub async fn insert_batch( tx: &RBatisTxExecutor,item: &UpdateRoleMenuRequest) -> Result<u64> {
     let menu_id = item.menu_id.clone();
-    SystemRoleMenu::delete_by_column(tx, "menu_id", &menu_id).await?;
+    RoleMenuMerge::delete_by_column(tx, "menu_id", &menu_id).await?;
     return if item.role_ids.len() > 0 {
-        let mut menu_role: Vec<SystemRoleMenu> = Vec::new();
+        let mut menu_role: Vec<RoleMenuMerge> = Vec::new();
 
         for id in &item.role_ids {
             let role_id = id.clone();
-            menu_role.push(SystemRoleMenu {
+            menu_role.push(RoleMenuMerge {
                 id: Some(generate_snowflake_id()),
                 menu_id: Option::from(menu_id.clone()),
                 role_id: Option::from(role_id.clone()),
@@ -63,7 +63,7 @@ pub async fn insert_batch( tx: &RBatisTxExecutor,item: &UpdateRoleMenuRequest) -
             })
         }
         
-        let result = SystemRoleMenu::insert_batch(tx, &menu_role, item.role_ids.len() as u64).await?;
+        let result = RoleMenuMerge::insert_batch(tx, &menu_role, 20).await?;
         Ok(result.rows_affected)
     } else {
         Ok(0)

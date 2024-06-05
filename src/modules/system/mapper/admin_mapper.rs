@@ -10,12 +10,10 @@
 
 use rbatis::{impl_select_page, py_sql, RBatis};
 
-use crate::modules::system::entity::admin_entity::SystemAdmin;
+use crate::modules::system::entity::admin_entity::{SystemAdmin, AdminDeptsMerge, AdminRolesMerge};
 use crate::modules::system::entity::admin_model::{UserListDTO};
-use crate::modules::system::entity::admin_role_entity::SystemAdminRole;
 
 rbatis::crud!(SystemAdmin {}, "mxx_system_admin");
-
 
 rbatis::pysql_select_page!(select_by_page(item: &UserListDTO) -> SystemAdmin =>
 r#"
@@ -51,7 +49,7 @@ r#"
     "#);
 
 
-rbatis::crud!(SystemAdminRole {}, "mxx_system_admin_role_merge");
+rbatis::crud!(AdminRolesMerge {}, "mxx_system_admin_role_merge");
 
 
 /// 用户id查询出所有关联的角色
@@ -59,3 +57,5 @@ rbatis::crud!(SystemAdminRole {}, "mxx_system_admin_role_merge");
 pub async fn select_by_hanzi_pinyin(rb: &RBatis, admin_id: Option<u64>) -> rbatis::Result<Vec<String>> {
     impled!()
 }
+
+rbatis::crud!(AdminDeptsMerge {}, "mxx_system_admin_depts_merge");

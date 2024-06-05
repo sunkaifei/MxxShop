@@ -13,8 +13,8 @@ use actix_web_grants::protect;
 use crate::core::web::entity::common::{BathIdRequest, InfoId};
 
 use crate::core::web::response::{ResVO};
-use crate::modules::system::entity::dept_model::{DeptPageRequest, DeptSaveRequest, DeptUpdateRequest, SystemDeptVO};
-use crate::modules::system::service::{dept_service};
+use crate::modules::system::entity::depts_model::{DeptPageRequest, DeptSaveRequest, DeptUpdateRequest, SystemDeptVO};
+use crate::modules::system::service::{depts_service};
 
 #[post("/system/dept/save")]
 #[protect("dept:save")]
@@ -31,7 +31,7 @@ pub async fn dept_save(item: web::Json<DeptSaveRequest>) -> HttpResponse {
     } else {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("部门名称不能为空".to_string()));
     }
-    let result = dept_service::add_dept(sys_dept).await;
+    let result = depts_service::add_dept(sys_dept).await;
 
     return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result));
 }
@@ -41,7 +41,7 @@ pub async fn dept_save(item: web::Json<DeptSaveRequest>) -> HttpResponse {
 pub async fn dept_batch_delete(item: web::Json<BathIdRequest>) -> HttpResponse {
     //log::info!("dept_delete params: {:?}", &item);
     let ids = item.0;
-    let result = dept_service::delete_in_column(ids).await;
+    let result = depts_service::delete_in_column(ids).await;
     return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result));
 }
 
@@ -60,7 +60,7 @@ pub async fn dept_update(item: web::Json<DeptUpdateRequest>) ->  HttpResponse {
     } else {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("部门名称不能为空".to_string()));
     }
-    let result = dept_service::update_dept(sys_dept).await;
+    let result = depts_service::update_dept(sys_dept).await;
     return match result {
         Ok(v) => {
             if v == 0 {
@@ -77,7 +77,7 @@ pub async fn dept_update(item: web::Json<DeptUpdateRequest>) ->  HttpResponse {
 #[get("/system/dept/tree")]
 pub async fn query_dept_tree() -> HttpResponse {
     //log::info!("query_user_menu params: {:?}", auth);
-    let result = dept_service::all_dept_list_tree().await;
+    let result = depts_service::all_dept_list_tree().await;
     return match result {
         Ok(v) => {
             HttpResponse::Ok().json(ResVO::ok_with_data(v))
@@ -96,7 +96,7 @@ pub async fn get_by_detail(item: web::Path<InfoId>) -> HttpResponse {
     if item.id.is_none() {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("部门id不能为空".to_string()));
     }
-    return match dept_service::get_by_detail(&item.id).await {
+    return match depts_service::get_by_detail(&item.id).await {
         Ok(dept_op) => match dept_op {
             None => {
                 HttpResponse::Ok().json(ResVO::<String>::error_msg("部门信息不存在".to_string()))
@@ -117,7 +117,7 @@ pub async fn get_by_detail(item: web::Path<InfoId>) -> HttpResponse {
 #[protect("dept:list:show")]
 pub async fn dept_list(item: web::Query<DeptPageRequest>) -> HttpResponse {
     let dept_request = item.0;
-    let result = dept_service::select_all_list(dept_request).await;
+    let result = depts_service::select_all_list(dept_request).await;
     return match result {
         Ok(system_dept_vec) => {
             // 将 Vec<SystemDept> 转换为 Vec<DeptListData>

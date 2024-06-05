@@ -39,3 +39,12 @@ pub struct SystemRole {
     pub remark: Option<String>,
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct RoleMenuMerge {
+    pub id: Option<u64>,
+    pub menu_id: Option<u64>,
+    pub role_id: Option<u64>,
+    pub status: Option<i32>,
+    pub create_time: Option<DateTime>,
+    pub update_time: Option<DateTime>,
+}

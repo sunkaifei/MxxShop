@@ -12,7 +12,6 @@ use rbatis::{htmlsql, impl_select, py_sql, RBatis};
 use rbatis::rbatis_codegen::IntoSql;
 
 use crate::modules::system::entity::menus_entity::SystemMenu;
-use crate::modules::system::entity::role_menu_entity::RoleMenu;
 
 //增删改查菜单
 rbatis::crud!(SystemMenu {}, "mxx_system_menus");
@@ -48,8 +47,6 @@ pub async fn find_by_perms_unique(rb: &RBatis, perms: &Option<String>, id: &Opti
     impled!()
 }
 
-impl_select!(RoleMenu{select_by_id(id:i32) -> Option => "`where id = #{id} limit 1`"},"mxx_system_menus");
-
 /// 查询所有的菜单数据
 #[py_sql("
     `select * from mxx_system_menus order by sort asc`
@@ -68,7 +65,7 @@ r#"<mapper>
         `select distinct m.id, m.parent_id, m.menu_name, m.name, m.path, m.component, m.active, m.menu_type, m.is_hide, ifnull(m.perms,'') as perms, m.icon, m.is_link, m.is_keep_alive, m.is_affix, m.color, m.is_iframe, m.sort, m.create_by, m.create_time, m.update_by, m.update_time, m.remark, m.status
         from mxx_system_menus m `
         `<if test="is_admin != true">
-            left join mxx_system_role_menus rm on m.id = rm.menu_id
+            left join mxx_system_role_menus_merge rm on m.id = rm.menu_id
             left join mxx_system_admin_role ur on rm.role_id = ur.role_id
             left join mxx_system_role ro on ur.role_id = ro.id
             where ur.admin_id = #{admin_id}

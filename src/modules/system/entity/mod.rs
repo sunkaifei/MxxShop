@@ -10,16 +10,12 @@
 
 pub mod admin_entity;
 pub mod admin_model;
-pub mod dept_entity;
-pub mod dept_model;
+pub mod depts_entity;
+pub mod depts_model;
 pub mod menus_entity;
 pub mod menus_model;
 pub mod role_entity;
-pub mod role_menu_entity;
-pub mod role_menu_model;
 pub mod role_model;
-pub mod admin_role_entity;
-pub mod admin_role_model;
 pub mod config_entity;
 pub mod config_model;
 pub mod score_rule_entity;

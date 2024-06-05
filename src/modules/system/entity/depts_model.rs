@@ -11,7 +11,7 @@
 use rbatis::rbdc::datetime::DateTime;
 use serde::{Deserialize, Serialize};
 
-use crate::modules::system::entity::dept_entity::SystemDept;
+use crate::modules::system::entity::depts_entity::SystemDept;
 use crate::utils::string_utils::{deserialize_string_to_u64,serialize_option_u64_to_string};
 
 

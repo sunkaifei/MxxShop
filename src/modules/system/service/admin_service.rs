@@ -13,7 +13,7 @@ use crate::core::errors::error::Result;
 use rbatis::plugin::{Page, PageRequest};
 
 use crate::modules::system::entity::admin_entity::SystemAdmin;
-use crate::modules::system::entity::admin_model::{AdminSaveRequest, UserListDTO, UserListRequest, UserUpdateRequest};
+use crate::modules::system::entity::admin_model::{AdminSaveRequest, UpdateAdminStatusRequest, UserListDTO, UserListRequest, AdminUpdateRequest};
 use crate::modules::system::mapper::admin_mapper;
 use crate::pool;
 
@@ -35,7 +35,7 @@ pub async fn delete_in_column(ids: &Vec<Option<String>>) -> Result<u64> {
 }
 
 ///更新管理员信息
-pub async fn update_by_user(user: UserUpdateRequest) -> Result<u64> {
+pub async fn update_by_user(user: AdminUpdateRequest) -> Result<u64> {
     let admin:SystemAdmin = user.into();
     let result = SystemAdmin::update_by_column(pool!(), &admin, "id").await;
     return Ok(result.unwrap_or_default().rows_affected);
@@ -44,6 +44,13 @@ pub async fn update_by_user(user: UserUpdateRequest) -> Result<u64> {
 pub async fn update_by_password(user: &SystemAdmin) -> Result<u64> {
     let result = SystemAdmin::update_by_column(pool!(), &user, "id").await;
     return Ok(result.unwrap_or_default().rows_affected);
+}
+
+/// 更新用户状态
+pub async fn update_by_status(user: UpdateAdminStatusRequest) -> Result<u64> {
+    let admin:SystemAdmin = user.into();
+    let result = SystemAdmin::update_by_column(pool!(), &admin, "id").await?;
+    return Ok(result.rows_affected);
 }
 
 pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemAdmin>> {

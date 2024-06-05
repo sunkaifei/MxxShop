@@ -52,3 +52,29 @@ pub struct SystemAdmin {
     ///用户排序
     pub sort: Option<i32>,
 }
+
+/// 角色和部门关联表
+#[derive(PartialEq, Default, Clone, Debug, Serialize, Deserialize)]
+pub struct AdminDeptsMerge {
+    ///角色ID
+    pub id: Option<u64>,
+    ///角色名称
+    pub admin_id: Option<u64>,
+    ///角色权限字符串
+    pub depts_id: Option<u64>,
+    ///创建时间
+    pub create_time: Option<DateTime>,
+}
+
+/// 用户与角色关联表
+#[derive(PartialEq, Default, Clone, Debug, Serialize, Deserialize)]
+pub struct AdminRolesMerge {
+    ///角色ID
+    pub id: Option<u64>,
+    ///角色名称
+    pub admin_id: Option<u64>,
+    ///角色权限字符串
+    pub role_id: Option<u64>,
+    ///创建时间
+    pub create_time: Option<DateTime>,
+}

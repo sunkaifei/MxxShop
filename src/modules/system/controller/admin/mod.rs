@@ -11,7 +11,7 @@
 pub mod system_admin_controller;
 pub mod menus_admin_controller;
 pub mod role_admin_controller;
-pub mod dept_admin_controller;
+pub mod depts_admin_controller;
 pub mod system_dict_controller;
 pub mod config_admin_controller;
 pub mod ip_admin_controller;

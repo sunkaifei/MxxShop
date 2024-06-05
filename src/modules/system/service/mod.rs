@@ -9,7 +9,7 @@
 //!
 
 pub mod menus_service;
-pub mod dept_service;
+pub mod depts_service;
 pub mod role_service;
 pub mod admin_service;
 pub mod config_service;

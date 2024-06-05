@@ -80,7 +80,7 @@ impl From<AdminSaveRequest> for SystemAdmin {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct UserUpdateRequest {
+pub struct AdminUpdateRequest {
     #[serde(deserialize_with = "deserialize_string_to_u64")]
     pub id: Option<u64>,
     pub mobile: Option<String>,
@@ -98,8 +98,8 @@ pub struct UserUpdateRequest {
     pub remark: Option<String>,
 }
 
-impl From<UserUpdateRequest> for SystemAdmin {
-    fn from(req: UserUpdateRequest) -> Self {
+impl From<AdminUpdateRequest> for SystemAdmin {
+    fn from(req: AdminUpdateRequest) -> Self {
         Self {
             id: req.id,
             user_name: req.user_name,
@@ -229,6 +229,23 @@ impl From<UserListRequest>  for UserListDTO {
     
 }
 
+/// 用户角色名称DTO
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct RoleNameDTO {
+    ///拼音音节
+    pub role_name: Option<String>,
+}
+
+/// 用户组织名称DTO
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct DeptsNameDTO {
+    ///拼音音节
+    pub dept_name: Option<String>,
+}
+
+/// 管理员列表展示数据
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AdminListVO {
@@ -239,9 +256,9 @@ pub struct AdminListVO {
     ///用户昵称
     pub nick_name: Option<String>,
     ///所有拥有的权限组名称
-    pub role_name: Option<Vec<Option<String>>>,
+    pub roles: Option<Vec<RoleNameDTO>>,
     ///所有的所在部门名称
-    pub depts_name: Option<Vec<Option<String>>>,
+    pub depts: Option<Vec<DeptsNameDTO>>,
     pub remark: Option<String>,
     pub sort:  Option<i32>,
     pub status:  Option<i8>,
@@ -285,10 +302,44 @@ impl From<UpdateAdminPasswordRequest> for SystemAdmin {
             sort: None,
         }
     }
+}
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateAdminStatusRequest {
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub id: Option<u64>,
+    pub status: Option<i8>,
+}
 
+impl From<UpdateAdminStatusRequest> for SystemAdmin{
+    fn from(req: UpdateAdminStatusRequest) -> Self {
+        Self{
+            id: req.id,
+            user_name: None,
+            nick_name: None,
+            user_type: None,
+            email: None,
+            mobile: None,
+            sex: None,
+            avatar: None,
+            password: None,
+            status: req.status,
+            del_flag: None,
+            login_ip: None,
+            login_date: None,
+            create_by: None,
+            create_time: None,
+            update_by: None,
+            update_time: Option::from(DateTime::now()),
+            remark: None,
+            sort: None,
+        }
+    }
+    
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SystemAdminVO {
     ///用户ID
     pub id: Option<u64>,
@@ -298,6 +349,12 @@ pub struct SystemAdminVO {
     pub nick_name: Option<String>,
     ///用户类型：0普通用户，1超级管理员
     pub user_type: Option<i8>,
+    ///部门ID
+    pub dept_ids: Option<Vec<Option<u64>>>,
+    ///岗位ID
+    pub post_ids: Option<Vec<Option<u64>>>,
+    ///角色ID
+    pub role_ids: Option<Vec<Option<u64>>>,
     ///用户邮箱
     pub email: Option<String>,
     ///手机号码
@@ -306,28 +363,10 @@ pub struct SystemAdminVO {
     pub sex: Option<i8>,
     ///头像地址
     pub avatar: Option<String>,
-    ///密码
-    pub password: Option<String>,
     ///帐号状态（0正常 1停用）
     pub status: Option<i8>,
-    ///删除标志（0代表存在 2代表删除）
-    pub del_flag: Option<i8>,
-    ///最后登陆IP
-    pub login_ip: Option<String>,
-    ///最后登陆时间
-    pub login_date: Option<DateTime>,
-    ///创建者
-    pub create_by: Option<String>,
-    ///创建时间
-    pub create_time: Option<DateTime>,
-    ///更新者
-    pub update_by: Option<String>,
-    ///更新时间
-    pub update_time: Option<DateTime>,
     ///备注
     pub remark: Option<String>,
-    ///用户排序
-    pub sort: Option<i32>,
 }
 
 impl From<SystemAdmin> for SystemAdminVO {
@@ -337,21 +376,22 @@ impl From<SystemAdmin> for SystemAdminVO {
             user_name: arg.user_name,
             nick_name: arg.nick_name,
             user_type: arg.user_type,
+            dept_ids: None,
+            post_ids: None,
+            role_ids: None,
             email: arg.email,
             mobile: arg.mobile,
             sex: arg.sex,
             avatar: arg.avatar,
-            password: arg.password,
             status: arg.status,
-            del_flag: Option::from(0),
-            login_ip: None,
-            login_date: None,
-            create_by: None,
-            create_time: None,
-            update_by: None,
-            update_time: None,
-            remark: None,
-            sort: Option::from(0),
+            remark: arg.remark,
         }
     }
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateAdminRoleRequest {
+    pub admin_id: Option<u64>,
+    pub role_ids: Vec<Option<u64>>,
+    pub create_time: Option<DateTime>,
 }
