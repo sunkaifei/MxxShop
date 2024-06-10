@@ -11,7 +11,7 @@
  Target Server Version : 80034
  File Encoding         : 65001
 
- Date: 05/06/2024 16:45:14
+ Date: 10/06/2024 23:04:43
 */
 
 SET NAMES utf8mb4;
@@ -28344,8 +28344,7 @@ CREATE TABLE `mxx_statistics_source`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `mxx_system_admin`;
 CREATE TABLE `mxx_system_admin`  (
-  `id` bigint NOT NULL COMMENT '用户ID',
-  `shop_id` bigint NULL DEFAULT 0 COMMENT '店铺ID',
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `user_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户账号',
   `nick_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户昵称',
   `user_type` tinyint NULL DEFAULT 0 COMMENT '用户类型：:0普通用户，1超级管理员',
@@ -28365,13 +28364,15 @@ CREATE TABLE `mxx_system_admin`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   `sort` int NULL DEFAULT 0 COMMENT '用户排序',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of mxx_system_admin
 -- ----------------------------
-INSERT INTO `mxx_system_admin` VALUES (1, 103, 'admin', '飞舞九天', 1, '79678111@qq.com', '15888888888', 0, '/uploads/avatar/2020/12/18/0df4d61431b603bb0d52f152c813c968.jpeg', '$2b$12$z6HNb1GaoW5PlZbXjy8fdOUqldmlCx1WEqK/vENe4QBS8NKGgGopu', 1, 0, '127.0.0.1', '2024-05-26 19:48:03', 'admin', '2018-03-16 11:33:00', 'admin', '2024-06-04 22:38:12', '管理员', 0);
-INSERT INTO `mxx_system_admin` VALUES (2, 103, 'admin1', '飞舞九天1', 0, '79678111@qq.com', '15888888888', 0, '/uploads/avatar/2020/12/18/0df4d61431b603bb0d52f152c813c968.jpeg', '$2b$12$/BUBqR.mVZFuLZ7mb3zuVuOL5/NFevymcjAQDvx9AcUBY6DtVUMMu', 1, 0, '192.168.0.200', '2022-05-27 15:36:25', 'admin', '2018-03-16 11:33:00', 'admin', '2024-06-04 22:36:40', '管理员', 0);
+INSERT INTO `mxx_system_admin` VALUES (1, 'admin', '飞舞九天', 1, '79678111@qq.com', '15888888886', 0, '/uploads/avatar/2020/12/18/0df4d61431b603bb0d52f152c813c968.jpeg', '$2b$12$z6HNb1GaoW5PlZbXjy8fdOUqldmlCx1WEqK/vENe4QBS8NKGgGopu', 1, 0, '127.0.0.1', '2024-05-26 19:48:03', 'admin', '2018-03-16 11:33:00', 'admin', '2024-06-06 15:58:01', '管理员', 0);
+INSERT INTO `mxx_system_admin` VALUES (2, 'admin1', '飞舞九天1', 0, '79678112@qq.com', '15888883113', 1, '/uploads/avatar/2020/12/18/0df4d61431b603bb0d52f152c813c968.jpeg', '$2b$12$/BUBqR.mVZFuLZ7mb3zuVuOL5/NFevymcjAQDvx9AcUBY6DtVUMMu', 1, 0, '192.168.0.200', '2022-05-27 15:36:25', 'admin', '2018-03-16 11:33:00', 'admin', '2024-06-07 11:47:41', '普通管理员', 0);
+INSERT INTO `mxx_system_admin` VALUES (3, 'sdsadasdasd', 'sadasd', 0, '', '15110206660', 1, '', '$2b$12$G40nqj5HhnurH5PS9ZVaL.IV2GDf9u9LFVaAvpmSY5D8UbIyvfWJ2', 1, 0, '', NULL, '', '2024-06-08 22:00:15', '', '2024-06-10 22:15:46', '', 0);
+INSERT INTO `mxx_system_admin` VALUES (4, 'admin2', 'tertegfdte ', 0, '79678@ff.com', '15110206661', 1, '', '$2b$12$pXicCR0wkl/InrURl.pje..pH98JUl.wDaGbO3HASTaIgUncsQgOa', 1, 0, '', NULL, '', '2024-06-10 18:46:12', '', '2024-06-10 22:15:35', 'fssfffdssdf', 0);
 
 -- ----------------------------
 -- Table structure for mxx_system_admin_depts_merge
@@ -28383,13 +28384,41 @@ CREATE TABLE `mxx_system_admin_depts_merge`  (
   `depts_id` bigint NOT NULL,
   `create_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of mxx_system_admin_depts_merge
 -- ----------------------------
 INSERT INTO `mxx_system_admin_depts_merge` VALUES (1, 1, 102, '2024-05-20 22:21:01');
-INSERT INTO `mxx_system_admin_depts_merge` VALUES (2, 2, 108, '2024-05-20 23:33:19');
+INSERT INTO `mxx_system_admin_depts_merge` VALUES (9, 2, 108, '2024-06-07 11:47:40');
+INSERT INTO `mxx_system_admin_depts_merge` VALUES (10, 2, 109, '2024-06-07 11:47:40');
+INSERT INTO `mxx_system_admin_depts_merge` VALUES (14, 4, 103, '2024-06-10 22:15:35');
+INSERT INTO `mxx_system_admin_depts_merge` VALUES (15, 4, 104, '2024-06-10 22:15:35');
+INSERT INTO `mxx_system_admin_depts_merge` VALUES (16, 4, 106, '2024-06-10 22:15:35');
+
+-- ----------------------------
+-- Table structure for mxx_system_admin_post_merge
+-- ----------------------------
+DROP TABLE IF EXISTS `mxx_system_admin_post_merge`;
+CREATE TABLE `mxx_system_admin_post_merge`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `admin_id` int NOT NULL COMMENT '用户ID',
+  `post_id` int NOT NULL COMMENT '角色ID',
+  `create_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '添加时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mxx_system_admin_post_merge
+-- ----------------------------
+INSERT INTO `mxx_system_admin_post_merge` VALUES (1, 1, 8, '2024-06-05 21:44:34');
+INSERT INTO `mxx_system_admin_post_merge` VALUES (2, 1, 12, '2024-06-05 21:44:41');
+INSERT INTO `mxx_system_admin_post_merge` VALUES (15, 2, 8, '2024-06-07 11:47:41');
+INSERT INTO `mxx_system_admin_post_merge` VALUES (16, 2, 10, '2024-06-07 11:47:41');
+INSERT INTO `mxx_system_admin_post_merge` VALUES (17, 2, 11, '2024-06-07 11:47:41');
+INSERT INTO `mxx_system_admin_post_merge` VALUES (18, 2, 12, '2024-06-07 11:47:41');
+INSERT INTO `mxx_system_admin_post_merge` VALUES (21, 4, 8, '2024-06-10 22:15:35');
+INSERT INTO `mxx_system_admin_post_merge` VALUES (22, 4, 10, '2024-06-10 22:15:35');
 
 -- ----------------------------
 -- Table structure for mxx_system_admin_role_merge
@@ -28401,13 +28430,19 @@ CREATE TABLE `mxx_system_admin_role_merge`  (
   `role_id` bigint NOT NULL COMMENT '角色ID',
   `create_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '添加时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of mxx_system_admin_role_merge
 -- ----------------------------
 INSERT INTO `mxx_system_admin_role_merge` VALUES (1, 1, 1, '2024-05-24 09:40:10');
 INSERT INTO `mxx_system_admin_role_merge` VALUES (2, 1, 2, '2024-05-27 22:44:25');
+INSERT INTO `mxx_system_admin_role_merge` VALUES (15, 2, 1, '2024-06-07 11:47:41');
+INSERT INTO `mxx_system_admin_role_merge` VALUES (16, 2, 2, '2024-06-07 11:47:41');
+INSERT INTO `mxx_system_admin_role_merge` VALUES (17, 2, 3, '2024-06-07 11:47:41');
+INSERT INTO `mxx_system_admin_role_merge` VALUES (21, 4, 1, '2024-06-10 22:15:35');
+INSERT INTO `mxx_system_admin_role_merge` VALUES (22, 4, 2, '2024-06-10 22:15:35');
+INSERT INTO `mxx_system_admin_role_merge` VALUES (23, 3, 2, '2024-06-10 22:15:46');
 
 -- ----------------------------
 -- Table structure for mxx_system_config
@@ -28817,19 +28852,19 @@ INSERT INTO `mxx_system_menus` VALUES (9, 0, '财务', 7, 'Finance', '/finance',
 INSERT INTO `mxx_system_menus` VALUES (10, 0, '仓储', 8, 'Storage', '/storage', 'storage', NULL, NULL, 'M', 0, 0, NULL, 1, 'storage:module', 'fa fa-cubes', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (11, 0, '物流', 9, 'Shipping', '/shipping', 'shipping', NULL, NULL, 'M', 0, 0, NULL, 1, 'shipping:module', 'fa fa-truck', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (13, 0, '统计', 1, 'Statistics', '/statistics', 'statistics', NULL, NULL, 'M', 0, 0, NULL, 1, 'statistics:module', 'fa fa-pie-chart', 0, NULL, 0, 'admin', '2022-09-02 03:22:20', 'admin', '2022-09-02 03:39:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (14, 1, '计划任务', 7, 'SettingTask', '/setting/task', 'setting/task', NULL, NULL, 'C', 0, 0, NULL, 1, 'task:fff', 'iconfont icon-diannao1', 0, '#E41111', 0, 'admin', '2022-06-28 09:39:50', 'admin', '2022-06-28 09:42:08', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (15, 1, '系统日志', 8, 'Logs', '/setting/log', 'setting/log', NULL, NULL, 'C', 0, 1, NULL, 1, 'log:list', 'fa fa-list-ol', 0, NULL, 0, 'admin', '2022-08-12 22:29:24', 'admin', '2022-08-12 22:31:54', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (16, 1, '字典管理', 6, 'SettingDic', '/setting/dict', 'system/dict/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'dict:type:list:show', 'iconfont icon-juxingkaobei', 0, NULL, 0, 'admin', '2022-06-26 01:42:26', 'admin', '2022-06-26 23:57:29', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (17, 1, '角色管理', 4, 'SettingRole', '/setting/role', 'system/role/index', NULL, NULL, 'C', 0, 0, NULL, 1, NULL, 'ele-UserFilled', 0, NULL, 0, 'admin', '2022-06-23 00:46:05', 'admin', '2022-06-27 11:52:31', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (18, 1, '管理员列表', 3, 'SettingUser', '/system/user', 'system/user/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'admin:list:show', 'iconfont icon-icon-', 0, NULL, 0, 'admin', '2022-06-27 11:50:18', 'admin', '2022-06-27 11:52:02', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (19, 1, '菜单管理', 2, 'SysteMenuList', '/setting/menu', 'system/menu/index', '', NULL, 'C', 0, 0, NULL, 1, 'system:admin:list', 'iconfont icon-neiqianshujuchucun', 0, NULL, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2022-06-27 11:52:40', '用户管理菜单', 1);
+INSERT INTO `mxx_system_menus` VALUES (14, 1, '计划任务', 9, 'SettingTask', '/setting/task', 'setting/task', NULL, NULL, 'C', 0, 0, NULL, 1, 'task:fff', 'iconfont icon-diannao1', 0, '#E41111', 0, 'admin', '2022-06-28 09:39:50', 'admin', '2022-06-28 09:42:08', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (15, 1, '系统日志', 12, 'Logs', '/setting/log', 'setting/log', NULL, NULL, 'C', 0, 1, NULL, 1, 'log:list', 'fa fa-list-ol', 0, NULL, 0, 'admin', '2022-08-12 22:29:24', 'admin', '2022-08-12 22:31:54', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (16, 1, '字典管理', 8, 'SettingDic', '/setting/dict', 'system/dict/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'dict:type:list:show', 'iconfont icon-juxingkaobei', 0, NULL, 0, 'admin', '2022-06-26 01:42:26', 'admin', '2022-06-26 23:57:29', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (17, 1, '角色管理', 3, 'SettingRole', '/setting/role', 'system/role/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'role:index', 'ele-UserFilled', 0, NULL, 0, 'admin', '2022-06-23 00:46:05', 'admin', '2022-06-27 11:52:31', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (18, 1, '管理员列表', 2, 'SettingUser', '/system/user', 'system/user/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'admin:list:show', 'iconfont icon-icon-', 0, NULL, 0, 'admin', '2022-06-27 11:50:18', 'admin', '2022-06-27 11:52:02', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (19, 1, '菜单管理', 6, 'SysteMenuList', '/setting/menu', 'system/menu/index', '', NULL, 'C', 0, 0, NULL, 1, 'system:admin:list', 'iconfont icon-neiqianshujuchucun', 0, NULL, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2022-06-27 11:52:40', '用户管理菜单', 1);
 INSERT INTO `mxx_system_menus` VALUES (20, 1, '系统设置', 1, 'SystemSetting', '/system/setting', 'system/setting/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'system:setting', 'iconfont icon-zujian', 0, NULL, 0, 'admin', '2022-06-26 01:28:57', 'admin', '2022-06-26 01:35:13', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (21, 1, '扩展配置', 9, 'Config', '/setting/config', 'system/config/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'config:list:show', 'iconfont icon-neiqianshujuchucun', 0, NULL, 0, 'admin', '2023-05-22 10:42:33', 'admin', '2023-07-03 19:00:29', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (22, 1, '语言设置', 5, 'LanguageList', '/language/list', 'system/language/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'language:list', 'fa fa-language', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (23, 1, '模板管理', 5, 'TemplateList', '/template/list', 'template/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'template:list', 'fa fa-puzzle-piece', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (24, 1, '消息设置', 5, 'MessageIndex', '/message/list', 'system/message/index', NULL, NULL, 'M', 0, 0, NULL, 1, 'message:index', 'fa fa-comments', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (25, 1, '组织管理', 0, 'DeptList', '/system/dept', 'system/dept/index', NULL, NULL, 'C', 0, 1, '', 1, 'dept:list:show', 'fa fa-male', 0, '', 0, 'admin', '2024-06-01 18:29:17', 'admin', '2024-06-01 18:29:17', '', 1);
-INSERT INTO `mxx_system_menus` VALUES (26, 1, '岗位管理', 0, 'PostList', '/system/post', 'system/post/index', NULL, NULL, 'C', 0, 1, '', 1, 'post:list:show', 'fa fa-male', 0, '', 0, 'admin', '2024-06-01 18:29:17', 'admin', '2024-06-01 18:29:17', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (21, 1, '扩展配置', 7, 'Config', '/setting/config', 'system/config/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'config:list:show', 'iconfont icon-neiqianshujuchucun', 0, NULL, 0, 'admin', '2023-05-22 10:42:33', 'admin', '2023-07-03 19:00:29', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (22, 1, '语言设置', 11, 'LanguageList', '/language/list', 'system/language/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'language:list', 'fa fa-language', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (23, 2, '模板管理', 5, 'TemplateList', '/template/list', 'template/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'template:index', 'fa fa-puzzle-piece', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (24, 1, '消息设置', 10, 'MessageIndex', '/message/list', 'system/message/index', NULL, NULL, 'M', 0, 0, NULL, 1, 'message:index', 'fa fa-comments', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (25, 1, '组织管理', 4, 'DeptList', '/system/dept', 'system/dept/index', NULL, NULL, 'C', 0, 1, '', 1, 'dept:list:show', 'fa fa-male', 0, '', 0, 'admin', '2024-06-01 18:29:17', 'admin', '2024-06-01 18:29:17', '', 1);
+INSERT INTO `mxx_system_menus` VALUES (26, 1, '岗位管理', 5, 'PostList', '/system/post', 'system/post/index', NULL, NULL, 'C', 0, 1, '', 1, 'post:list:show', 'fa fa-male', 0, '', 0, 'admin', '2024-06-01 18:29:17', 'admin', '2024-06-01 18:29:17', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (27, 2, '导航管理', 0, 'Navbar', '/system/navbar', 'system/navbar', NULL, NULL, 'C', 0, 1, '', 1, 'navbar:list:show', 'fa fa-male', 0, '', 0, 'admin', '2024-06-01 18:29:17', 'admin', '2024-06-01 18:29:17', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (28, 23, '店铺消息', 5, 'ShopTemplateList', '/system/message/list', 'system/message/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'system:message:list', 'fa fa-bell', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
 INSERT INTO `mxx_system_menus` VALUES (29, 23, '会员消息', 5, 'UserTemplateList', '/user-vip/list', 'user-vip/index', NULL, NULL, 'C', 0, 0, NULL, 1, 'userVIP:list', 'fa fa-bell', 0, NULL, 0, 'admin', '2024-05-14 15:34:25', 'admin', '2024-05-14 15:34:28', '', 1);
@@ -28963,7 +28998,6 @@ INSERT INTO `mxx_system_role_menus_merge` VALUES (138007897783156741, 2, 2469, '
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140467852182306821, 1, 1, '2024-05-19 13:36:25', '2024-05-19 13:36:25', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140467852706594821, 1, 20, '2024-05-19 13:36:25', '2024-05-19 13:36:25', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140467853231931397, 1, 19, '2024-05-19 13:36:26', '2024-05-19 13:36:26', 0);
-INSERT INTO `mxx_system_role_menus_merge` VALUES (140467853756219397, 1, 21, '2024-05-19 13:36:26', '2024-05-19 13:36:26', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140467854281555973, 1, 2, '2024-05-19 13:36:27', '2024-05-19 13:36:27', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140467856905093125, 1, 3, '2024-05-19 13:36:29', '2024-05-19 13:36:29', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140467857429381125, 1, 4, '2024-05-19 13:36:30', '2024-05-19 13:36:30', 0);
@@ -28981,7 +29015,6 @@ INSERT INTO `mxx_system_role_menus_merge` VALUES (140467865306284037, 1, 11, '20
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471225906380805, 3, 1, '2024-05-19 14:30:02', '2024-05-19 14:30:02', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471226430668805, 3, 20, '2024-05-19 14:30:03', '2024-05-19 14:30:03', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471226956005381, 3, 19, '2024-05-19 14:30:03', '2024-05-19 14:30:03', 0);
-INSERT INTO `mxx_system_role_menus_merge` VALUES (140471227480293381, 3, 21, '2024-05-19 14:30:04', '2024-05-19 14:30:04', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471228005629957, 3, 2, '2024-05-19 14:30:04', '2024-05-19 14:30:04', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471230628118533, 3, 3, '2024-05-19 14:30:07', '2024-05-19 14:30:07', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471231677743109, 3, 4, '2024-05-19 14:30:08', '2024-05-19 14:30:08', 0);
@@ -29032,12 +29065,6 @@ INSERT INTO `mxx_system_role_menus_merge` VALUES (140471256862441477, 3, 81, '20
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471257386729477, 3, 64, '2024-05-19 14:30:32', '2024-05-19 14:30:32', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471257911017477, 3, 62, '2024-05-19 14:30:33', '2024-05-19 14:30:33', 0);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140471258960642053, 3, 69, '2024-05-19 14:30:34', '2024-05-19 14:30:34', 0);
-INSERT INTO `mxx_system_role_menus_merge` VALUES (140908465650417669, 1, 22, '2024-05-24 10:19:47', '2024-05-24 10:19:47', 1);
-INSERT INTO `mxx_system_role_menus_merge` VALUES (140908466174705669, 3, 22, '2024-05-24 10:19:47', '2024-05-24 10:19:47', 1);
-INSERT INTO `mxx_system_role_menus_merge` VALUES (140908478050877445, 1, 23, '2024-05-24 10:19:58', '2024-05-24 10:19:58', 1);
-INSERT INTO `mxx_system_role_menus_merge` VALUES (140908478575165445, 3, 23, '2024-05-24 10:19:59', '2024-05-24 10:19:59', 1);
-INSERT INTO `mxx_system_role_menus_merge` VALUES (140908488938242053, 1, 24, '2024-05-24 10:20:09', '2024-05-24 10:20:09', 1);
-INSERT INTO `mxx_system_role_menus_merge` VALUES (140908489462530053, 3, 24, '2024-05-24 10:20:09', '2024-05-24 10:20:09', 1);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140908525865943045, 3, 40, '2024-05-24 10:20:44', '2024-05-24 10:20:44', 1);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140908539988164613, 1, 41, '2024-05-24 10:20:58', '2024-05-24 10:20:58', 1);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (140908540513501189, 3, 41, '2024-05-24 10:20:58', '2024-05-24 10:20:58', 1);
@@ -29050,47 +29077,21 @@ INSERT INTO `mxx_system_role_menus_merge` VALUES (140908568551374853, 3, 42, '20
 INSERT INTO `mxx_system_role_menus_merge` VALUES (141665559483793413, 3, 63, '2024-06-01 18:53:28', '2024-06-01 18:53:28', 1);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (141815747353526277, 1, 25, '2024-06-03 10:40:38', '2024-06-03 10:40:38', 1);
 INSERT INTO `mxx_system_role_menus_merge` VALUES (141815747877814277, 3, 25, '2024-06-03 10:40:38', '2024-06-03 10:40:38', 1);
+INSERT INTO `mxx_system_role_menus_merge` VALUES (142301256541552645, 1, 21, '2024-06-08 19:17:36', '2024-06-08 19:17:36', 1);
+INSERT INTO `mxx_system_role_menus_merge` VALUES (142301257077374981, 3, 21, '2024-06-08 19:17:36', '2024-06-08 19:17:36', 1);
+INSERT INTO `mxx_system_role_menus_merge` VALUES (142301336492326917, 1, 24, '2024-06-08 19:18:52', '2024-06-08 19:18:52', 1);
+INSERT INTO `mxx_system_role_menus_merge` VALUES (142301337017663493, 3, 24, '2024-06-08 19:18:52', '2024-06-08 19:18:52', 1);
+INSERT INTO `mxx_system_role_menus_merge` VALUES (142301349266079749, 1, 22, '2024-06-08 19:19:04', '2024-06-08 19:19:04', 1);
+INSERT INTO `mxx_system_role_menus_merge` VALUES (142301349790367749, 3, 22, '2024-06-08 19:19:04', '2024-06-08 19:19:04', 1);
+INSERT INTO `mxx_system_role_menus_merge` VALUES (142301436295790597, 1, 23, '2024-06-08 19:20:27', '2024-06-08 19:20:27', 1);
+INSERT INTO `mxx_system_role_menus_merge` VALUES (142301436820078597, 3, 23, '2024-06-08 19:20:27', '2024-06-08 19:20:27', 1);
 
 -- ----------------------------
--- Table structure for mxx_user_account
+-- Table structure for mxx_user
 -- ----------------------------
-DROP TABLE IF EXISTS `mxx_user_account`;
-CREATE TABLE `mxx_user_account`  (
-  `uid` int UNSIGNED NOT NULL COMMENT '用户id',
-  `balance` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '余额',
-  `frozen_balance` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '冻结余额',
-  `deal_pwd` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '交易密码',
-  `deal_salt` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '盐值',
-  `totalRecharge` decimal(11, 2) NOT NULL COMMENT '充值的总额'
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户账户表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mxx_user_account
--- ----------------------------
-
--- ----------------------------
--- Table structure for mxx_user_invite
--- ----------------------------
-DROP TABLE IF EXISTS `mxx_user_invite`;
-CREATE TABLE `mxx_user_invite`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `to_user_id` bigint NOT NULL COMMENT '被邀请人id',
-  `form_user_id` bigint NOT NULL COMMENT '邀请人ID',
-  `status` int NULL DEFAULT 0 COMMENT '状态',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '邀请时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mxx_user_invite
--- ----------------------------
-
--- ----------------------------
--- Table structure for mxx_users
--- ----------------------------
-DROP TABLE IF EXISTS `mxx_users`;
-CREATE TABLE `mxx_users`  (
-  `id` bigint UNSIGNED NOT NULL COMMENT '用户的 UID',
+DROP TABLE IF EXISTS `mxx_user`;
+CREATE TABLE `mxx_user`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户的 UID',
   `short_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '短网址，访问用户主页使用',
   `user_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT 'EMAIL',
@@ -29113,51 +29114,117 @@ CREATE TABLE `mxx_users`  (
   `notification_unread` int NOT NULL DEFAULT 0 COMMENT '未读系统通知',
   `inbox_unread` int NOT NULL DEFAULT 0 COMMENT '未读短信息',
   `inbox_recv` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0-所有人可以发给我,1-我关注的人',
-  `fans_count` int NOT NULL DEFAULT 0 COMMENT '粉丝数',
-  `friend_count` int NOT NULL DEFAULT 0 COMMENT '观众数',
-  `invite_count` int NOT NULL DEFAULT 0 COMMENT '邀请我回答数量',
-  `article_count` int NOT NULL DEFAULT 0 COMMENT '文章数量',
-  `question_count` int NOT NULL DEFAULT 0 COMMENT '问题数量',
-  `answer_count` int NOT NULL DEFAULT 0 COMMENT '回答数量',
-  `topic_focus_count` int NOT NULL DEFAULT 0 COMMENT '关注话题数量',
-  `invitation_available` int NOT NULL DEFAULT 0 COMMENT '邀请数量',
+  `now_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '账户余额',
+  `integral` int NULL DEFAULT 0 COMMENT '用户剩余积分',
   `group_id` int NULL DEFAULT 0 COMMENT '用户组',
-  `reputation_group` int NULL DEFAULT 0 COMMENT '威望对应组',
-  `forbidden` tinyint(1) NULL DEFAULT 0 COMMENT '是否禁止用户',
+  `status` tinyint(1) NULL DEFAULT 0 COMMENT '是否禁止用户',
   `valid_email` tinyint(1) NULL DEFAULT 0 COMMENT '邮箱验证',
-  `is_first_login` tinyint(1) NULL DEFAULT 1 COMMENT '首次登录标记',
-  `agree_count` int NULL DEFAULT 0 COMMENT '赞同数量',
-  `thanks_count` int NULL DEFAULT 0 COMMENT '感谢数量',
-  `views_count` int NULL DEFAULT 0 COMMENT '个人主页查看数量',
-  `reputation` int NULL DEFAULT 0 COMMENT '威望',
-  `reputation_update_time` int NULL DEFAULT 0 COMMENT '威望更新',
-  `weibo_visit` tinyint(1) NULL DEFAULT 1 COMMENT '微博允许访问',
-  `integral` int NULL DEFAULT 0,
-  `common_email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '常用邮箱',
-  `theme` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '主题',
-  `column_count` int NOT NULL DEFAULT 0 COMMENT '专栏数量',
-  `skin` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT 'common.css' COMMENT '皮肤',
   `is_del` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除0正常1删除',
   `reason` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT '' COMMENT '删除/封禁原因',
   `valid_mobile` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '手机认证',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_name`(`user_name` ASC) USING BTREE,
   INDEX `email`(`email` ASC) USING BTREE,
-  INDEX `reputation`(`reputation` ASC) USING BTREE,
-  INDEX `reputation_update_time`(`reputation_update_time` ASC) USING BTREE,
   INDEX `group_id`(`group_id` ASC) USING BTREE,
-  INDEX `agree_count`(`agree_count` ASC) USING BTREE,
-  INDEX `thanks_count`(`thanks_count` ASC) USING BTREE,
-  INDEX `forbidden`(`forbidden` ASC) USING BTREE,
+  INDEX `forbidden`(`status` ASC) USING BTREE,
   INDEX `valid_email`(`valid_email` ASC) USING BTREE,
   INDEX `last_active`(`last_active` ASC) USING BTREE,
-  INDEX `integral`(`integral` ASC) USING BTREE,
-  INDEX `answer_count`(`answer_count` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+  INDEX `integral`(`integral` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of mxx_users
+-- Records of mxx_user
 -- ----------------------------
-INSERT INTO `mxx_users` VALUES (313363831842406397, 'sun', 'admin', '79678111@qq.com', '15110206660', '$2a$10$rIyyNrbmibrtRsa.ouK50ewPhIZQeS9bmaKeE4aAhULZG2Ilw1aV.', NULL, '熏悟空的薰', NULL, 0, NULL, 0, 0, 0, '2023-11-08 10:32:28', NULL, '2023-11-08 10:44:10', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, 0, 'common.css', 0, '', '');
+INSERT INTO `mxx_user` VALUES (1, 'sun', 'admin', '79678111@qq.com', '15110206660', '$2a$10$rIyyNrbmibrtRsa.ouK50ewPhIZQeS9bmaKeE4aAhULZG2Ilw1aV.', NULL, '熏悟空的薰', NULL, 0, NULL, 0, 0, 0, '2023-11-08 10:32:28', NULL, '2023-11-08 10:44:10', NULL, NULL, NULL, 0, 0, 0, 0.00, 0, 0, 0, 0, 0, '', '');
+
+-- ----------------------------
+-- Table structure for mxx_user_account
+-- ----------------------------
+DROP TABLE IF EXISTS `mxx_user_account`;
+CREATE TABLE `mxx_user_account`  (
+  `uid` int UNSIGNED NOT NULL COMMENT '用户id',
+  `balance` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '余额',
+  `frozen_balance` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '冻结余额',
+  `deal_pwd` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '交易密码',
+  `deal_salt` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '盐值',
+  `totalRecharge` decimal(11, 2) NOT NULL COMMENT '充值的总额'
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户账户表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mxx_user_account
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for mxx_user_address
+-- ----------------------------
+DROP TABLE IF EXISTS `mxx_user_address`;
+CREATE TABLE `mxx_user_address`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '站点id',
+  `user_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `alias` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '别名',
+  `name` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '姓名',
+  `tel` char(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '电话',
+  `province` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '所在省',
+  `city` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '所在市',
+  `county` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '所在县/区',
+  `address` char(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '详细地址',
+  `lng` decimal(13, 10) NOT NULL DEFAULT 0.0000000000 COMMENT '经度',
+  `lat` decimal(13, 10) NOT NULL DEFAULT 0.0000000000 COMMENT '纬度',
+  `idcard_name` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '身份证姓名',
+  `idcard_number` char(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '身份证号码',
+  `idcard_front` char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '身份证人像面图片',
+  `idcard_back` char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '身份证国微面图片',
+  `is_default` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否默认地址（0否, 1是）',
+  `is_delete_time` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除（0否，1删除时间戳）',
+  `add_time` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加时间',
+  `upd_time` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `user_id`(`user_id` ASC) USING BTREE,
+  INDEX `is_delete_time`(`is_delete_time` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户地址' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mxx_user_address
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for mxx_user_integral_log
+-- ----------------------------
+DROP TABLE IF EXISTS `mxx_user_integral_log`;
+CREATE TABLE `mxx_user_integral_log`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `user_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `type` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '操作类型（0减少, 1增加）',
+  `original_integral` int NOT NULL DEFAULT 0 COMMENT '原始积分',
+  `new_integral` int NOT NULL DEFAULT 0 COMMENT '最新积分',
+  `operation_integral` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '操作积分',
+  `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '操作原因',
+  `operation_id` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '操作人员id',
+  `add_time` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `user_id`(`user_id` ASC) USING BTREE,
+  INDEX `type`(`type` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户积分日志' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mxx_user_integral_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for mxx_user_invite
+-- ----------------------------
+DROP TABLE IF EXISTS `mxx_user_invite`;
+CREATE TABLE `mxx_user_invite`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `to_user_id` bigint NOT NULL COMMENT '被邀请人id',
+  `form_user_id` bigint NOT NULL COMMENT '邀请人ID',
+  `status` int NULL DEFAULT 0 COMMENT '状态',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '邀请时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mxx_user_invite
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
