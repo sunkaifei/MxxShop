@@ -8,6 +8,7 @@
 //! 版权所有，侵权必究！
 //!
 
+use std::result;
 use actix_web::HttpResponse;
 use rbatis::rbdc::datetime::DateTime;
 use rbatis::plugin::{Page, PageRequest};
@@ -16,7 +17,7 @@ use crate::core::web::response::ResVO;
 use crate::modules::system::entity::admin_entity::{AdminRolesMerge};
 use crate::modules::system::entity::admin_model::UpdateAdminRoleRequest;
 use crate::modules::system::entity::role_entity::{RoleMenuMerge, SystemRole};
-use crate::modules::system::entity::role_model::{RoleDTO};
+use crate::modules::system::entity::role_model::{RoleAdminMerge, RoleDTO};
 use crate::modules::system::mapper::role_mapper;
 use crate::pool;
 use crate::utils::snowflake_id::{generate_snowflake_id};
@@ -75,7 +76,6 @@ pub async fn insert_batch(menu_ids: Vec<Option<u64>>, role_id: &Option<u64>) -> 
     return match role_menu_result {
         Ok(_) => {
             let mut menu_role: Vec<RoleMenuMerge> = Vec::new();
-
             for menu_id in &menu_ids {
                 menu_role.push(RoleMenuMerge {
                     id: Option::from(generate_snowflake_id()),
@@ -191,6 +191,27 @@ pub async fn update_role(payload: &RoleDTO) -> Result<u64> {
     }
 }
 
+///批量更新用户和角色关联关系
+pub async fn batch_update_role(role_ids: &Option<Vec<Option<u64>>>, admin_id: &Option<u64>) -> Result<u64> {
+    AdminRolesMerge::delete_by_column(pool!(), "admin_id", admin_id).await?;
+    let result = match role_ids {
+        Some(role_vec) if !role_vec.is_empty() && !role_vec.iter().all(|item| item.is_none()) => {
+            let sys_role_admin_list: Vec<AdminRolesMerge> = role_vec
+                .iter()
+                .map(|role_id| AdminRolesMerge {
+                    id: None,
+                    create_time: Some(DateTime::now()),
+                    role_id: role_id.clone(),
+                    admin_id: *admin_id,
+                })
+                .collect();
+            AdminRolesMerge::insert_batch(pool!(), &sys_role_admin_list, 20).await?.rows_affected
+        }
+        _ => 0,
+    };
+    Ok(result)
+}
+
 /// 查询角色名称是否已存在
 pub async fn find_role_by_name_unique(role_name: Option<String>, id: Option<u64>) -> Result<u64> {
     return Ok(role_mapper::find_role_by_name_unique(pool!(), &role_name, &id).await.unwrap_or_default());
@@ -204,10 +225,29 @@ pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemRole
 }
 
 ///根据用户id查询角色信息
-pub async fn select_by_ids(user_ids: &Vec<Option<u64>>) -> rbatis::Result<Vec<SystemRole>> {
-    let result_merge = AdminRolesMerge::select_in_column(pool!(), "admin_id", user_ids).await?;
+pub async fn select_by_admin_id(admin_id: &Option<u64>) -> rbatis::Result<Vec<SystemRole>> {
+    let result_merge = AdminRolesMerge::select_by_column(pool!(), "admin_id", admin_id).await?;
     let id_list: Vec<Option<u64>> = result_merge.iter().map(|data| data.role_id).collect();
-    Ok(SystemRole::select_in_column(pool!(), "id", &id_list).await?)
+    if !id_list.is_empty() {
+        Ok(SystemRole::select_in_column(pool!(), "id", &id_list).await?)
+    }else{
+        Ok(vec![])
+    }
+}
+
+///根据管理员列表id查询关联角色信息
+pub async fn select_by_ids(admin_ids: &Vec<Option<u64>>) -> rbatis::Result<Vec<RoleAdminMerge>> {
+    let result_merge = AdminRolesMerge::select_in_column(pool!(), "admin_id", admin_ids).await?;
+    let mut list_data: Vec<RoleAdminMerge> = Vec::new();
+
+    for merge in result_merge {
+        let result_role = SystemRole::select_by_column(pool!(), "id", &merge.role_id).await?;
+        for role in result_role {
+            list_data.push(RoleAdminMerge { admin_id: merge.admin_id, role_name: role.role_name });
+        }
+    }
+
+    Ok(list_data)
 }
 
 ///角色id查询所有关联的菜单id

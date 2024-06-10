@@ -24,7 +24,7 @@ pub struct User {
     ///用户手机
     pub mobile: Option<String>,
     ///用户密码
-    pub password: String,
+    pub password: Option<String>,
     ///用户附加混淆码
     pub salt: Option<String>,
     ///昵称
@@ -32,15 +32,15 @@ pub struct User {
     ///头像文件
     pub avatar_file: Option<String>,
     ///性别
-    pub sex: i8,
+    pub sex: Option<i8>,
     ///生日
     pub birthday: Option<String>,
     ///省
-    pub province: i64,
+    pub province: Option<u64>,
     ///市
-    pub city: i64,
+    pub city: Option<u64>,
     ///职业ID
-    pub job_id: u64,
+    pub job_id: Option<u64>,
     ///注册时间
     pub reg_time: Option<DateTime>,
     ///注册IP
@@ -54,62 +54,21 @@ pub struct User {
     ///最后活跃时间
     pub last_active: Option<DateTime>,
     ///未读系统通知
-    pub notification_unread: i8,
+    pub notification_unread: Option<i8>,
     ///未读短信息
-    pub inbox_unread: i8,
+    pub inbox_unread: Option<i8>,
     ///0-所有人可以发给我,1-我关注的人
-    pub inbox_recv: i8,
-    ///粉丝数
-    pub fans_count: i32,
-    ///观众数
-    pub friend_count: i32,
-    ///邀请我回答数量
-    pub invite_count: i32,
-    ///文章数量
-    pub article_count: i32,
-    ///问题数量
-    pub question_count: i32,
-    ///回答数量
-    pub answer_count: i32,
-    ///关注话题数量
-    pub topic_focus_count: i32,
-    ///邀请数量
-    pub invitation_available: i32,
-    ///用户组
-    pub group_id: u64,
-    ///威望对应组
-    pub reputation_group: i32,
+    pub inbox_recv: Option<i8>,
+    ///用户余额
+    pub now_money: Option<i32>,
+    ///用户剩余积分
+    pub integral: Option<i32>,
     ///是否禁止用户,0-正常,1-禁止
-    pub forbidden: i8,
+    pub status: Option<i8>,
     ///邮箱验证
-    pub valid_email: i8,
-    ///首次登录标记
-    pub is_first_login: i32,
-    ///赞同数量
-    pub agree_count: i32,
-    ///感谢数量
-    pub thanks_count: i32,
-    ///个人主页查看数量
-    pub views_count: i32,
-    ///威望
-    pub reputation: i32,
-    ///威望更新
-    pub reputation_update_time: Option<DateTime>,
-    ///微博允许访问
-    pub weibo_visit: i32,
-
-    pub integral: i64,
-    ///常用邮箱
-    pub common_email: Option<String>,
-
-    ///主题
-    pub theme: Option<String>,
-    ///专栏数量
-    pub column_count: i32,
-    ///皮肤
-    pub skin: Option<String>,
+    pub valid_email: Option<i8>,
     ///是否删除0正常1删除
-    pub is_del: i8,
+    pub is_del: Option<i8>,
     ///删除/封禁原因
     pub reason: Option<String>,
     ///手机认证

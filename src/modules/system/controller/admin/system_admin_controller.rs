@@ -18,7 +18,7 @@ use rbatis::rbdc::DateTime;
 use crate::core::permission::jwt_util::JWTToken;
 use crate::core::web::entity::common::{BathIdRequest, InfoId};
 use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
-use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateAdminPasswordRequest, AdminListVO, UserListRequest, UserLoginRequest, UserLoginResponse, AdminUpdateRequest, RoleAndPostVO, UpdateAdminStatusRequest, RoleNameDTO, DeptsNameDTO, UpdateAdminRoleRequest};
+use crate::modules::system::entity::admin_model::{AdminSaveRequest, SystemAdminVO, UpdateAdminPasswordRequest, AdminListVO, UserListRequest, UserLoginRequest, UserLoginResponse, AdminUpdateRequest, RoleAndPostVO, UpdateAdminStatusRequest, RoleNameDTO, DeptsNameDTO, UpdateAdminRoleRequest, UpdateLoginRequest};
 use crate::modules::system::entity::menus_model::{Router};
 use crate::modules::system::service::{admin_service, depts_service, menus_service, post_service, role_service, system_log_service};
 use crate::core::errors::error::WhoUnfollowedError;
@@ -34,20 +34,24 @@ pub async fn save_admin(item: web::Json<AdminSaveRequest>) -> HttpResponse {
         return HttpResponse::Ok().json(ResVO::<String>::error_msg("用户名称不能为空".to_string()));
     }
     if item.password.as_ref().map_or(true, |password| password.trim().is_empty()) {
-        return HttpResponse::Ok().json(ResVO::<String>::error_msg("密码名称不能为空".to_string()));
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("密码不能为空".to_string()));
     }
-
-    let user = admin_service::select_by_username(&item.user_name).await;
-    if let Ok(user_op) = user {
-        if let Some(_) = user_op {
-            return HttpResponse::Ok().json(ResVO::<String>::error_msg("该登录用户名已被占用".to_string()));
+    if admin_service::find_by_name_unique(&item.user_name, &None).await.unwrap_or_default(){
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("用户名已存在".to_string()));
+    }
+    if admin_service::find_by_mobile_unique(&item.mobile, &None).await.unwrap_or_default(){
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("手机号已存在".to_string()));
+    }
+    if item.email.is_some() {
+        if admin_service::find_by_email_unique(&item.email, &None).await.unwrap_or_default(){
+            return HttpResponse::Ok().json(ResVO::<String>::error_msg("邮箱已存在".to_string()));
         }
     }
-    let admin = admin_service::save_admin(item.0).await;
-    if admin.unwrap_or_default() == 0 {
-        return HttpResponse::Ok().json(ResVO::<String>::error_msg("保存失败".to_string()));
+    if admin_service::find_by_nick_name_unique(&item.nick_name, &None).await.unwrap_or_default(){
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("昵称已存在".to_string()));
     }
-    return HttpResponse::Ok().json(ResVO::<String>::error_msg("用户添加成功".to_string()));
+    let result = admin_service::save_admin(item.0).await;
+    return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result));
 }
 
 /// 后台用户登录
@@ -122,6 +126,18 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
                     let setting = Settings::get();
                     return match JWTToken::new(user_info.id.clone(), user_info.user_name.clone(), admin_role.clone()).create_token(&setting.server.jwt_secret) {
                         Ok(token) => {
+
+                            // 记录登录日志
+                            let method = request.method().to_string();
+                            system_log_service::save_system_log(&request, Some("用户登录".to_string()), Some(0),Some("system_admin_controller::login".to_string()), Some(method.to_string()),Some(1)).await.unwrap_or_default();
+
+                            let update_user:SystemAdmin = UpdateLoginRequest {
+                                id: user_info.id,
+                                login_ip: Option::from(request.connection_info().realip_remote_addr().unwrap_or_default().to_string()),
+                                login_date: DateTime::now().into(),
+                            }.into();
+                            admin_service::update_admin(update_user).await.unwrap_or_default();
+
                             let user_login = UserLoginResponse {
                                 token,
                                 user_info: user_info.clone(),
@@ -129,27 +145,6 @@ pub async fn login(request: HttpRequest, item: web::Json<UserLoginRequest>) -> H
                                 permissions: admin_role.clone(),
                                 username: user_info.user_name.clone(),
                             };
-                            // 记录登录日志
-                            let method = request.method().to_string();
-                            let _ = system_log_service::save_system_log(&request, Some("用户登录".to_string()), Some(0),Some("system_admin_controller::login".to_string()), Some(method.to_string()),Some(1)).await;
-
-                            let update_user = AdminUpdateRequest{
-                                id: user_info.id.clone(),
-                                mobile: None,
-                                user_name: None,
-                                user_type: None,
-                                nick_name: None,
-                                avatar: None,
-                                email: None,
-                                sex: None,
-                                login_ip: Option::from(request.connection_info().realip_remote_addr().unwrap_or_default().to_string()),
-                                login_date: Option::from(DateTime::now()),
-                                sort: None,
-                                status: None,
-                                remark: None,
-                            };
-                            let _ = admin_service::update_by_user(update_user).await;
-                            
                             HttpResponse::Ok().json(ResVO::ok_with_data(user_login))
                         }
                         Err(err) => {
@@ -203,31 +198,47 @@ pub async fn update_user_role(item: web::Json<UpdateAdminRoleRequest>) -> HttpRe
 
 
 // 更新用户信息
-#[put("/system/admin/edit")]
-pub async fn user_update(item: web::Json<AdminUpdateRequest>) -> HttpResponse {
-    //log::info!("user_update params: {:?}", &item);
-
-    let user = item.0;
-    let result = admin_service::get_by_detail(&user.id).await;
+#[put("/system/admin/update")]
+pub async fn admin_update(item: web::Json<AdminUpdateRequest>) -> HttpResponse {
+    let item = item.0;
+    if let Some(id) = item.id {
+        if id == 1 && item.status == Option::from(0) {
+            return HttpResponse::Ok().json(ResVO::<String>::error_msg("超级管理员不能禁用".to_string()));
+        }
+    } else {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("更新的用户id不能为空".to_string()));
+    }
+    if admin_service::find_by_name_unique(&item.user_name, &item.id).await.unwrap_or_default(){
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("用户名已存在".to_string()));
+    }
+    if admin_service::find_by_mobile_unique(&item.mobile, &item.id).await.unwrap_or_default(){
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("手机号已存在".to_string()));
+    }
+    if item.email.is_some() {
+        if admin_service::find_by_email_unique(&item.email, &item.id).await.unwrap_or_default(){
+            return HttpResponse::Ok().json(ResVO::<String>::error_msg("邮箱已存在".to_string()));
+        }
+    }
+    if admin_service::find_by_nick_name_unique(&item.nick_name, &item.id).await.unwrap_or_default(){
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("昵称已存在".to_string()));
+    }
+    
+    let result = admin_service::get_by_detail(&item.id).await;
     match result {
-        Ok(data_op) => {
-            match data_op {
-                Some(data) => {
-                    if user.id == data.id{
-                        let result = admin_service::update_by_user(user).await;
-                        HttpResponse::Ok().json(ResVO::<u64>::handle_result(result))
-                    }else{
-                        HttpResponse::Ok().json(ResVO::<String>::error_msg("用户不存在或者id错误".to_string()))
-                    }
-                }
-                None => {
-                    HttpResponse::Ok().json(ResVO::<String>::error_msg("用户不存在".to_string()))
-                }
-            }
+        Ok(Some(_)) => {
+            depts_service::batch_update_dept(&item.dept_ids, &item.id).await.unwrap_or_default();
+            post_service::batch_update_post(&item.post_ids, &item.id).await.unwrap_or_default();
+            role_service::batch_update_role(&item.role_ids, &item.id).await.unwrap_or_default();
+            let admin: SystemAdmin = item.into();
+            let result = admin_service::update_admin(admin).await;
+            HttpResponse::Ok().json(ResVO::<u64>::handle_result(result))
+        }
+        Ok(None) => {
+            HttpResponse::Ok().json(ResVO::<String>::error_msg("用户不存在".to_string()))
         }
         Err(err) => {
-            log::error!("查询用户信息异常: {:?}",err);
-            HttpResponse::Ok().json(ResVO::<String>::error_msg("用户查询异常".to_string()))
+            log::error!("更新用户信息异常: {:?}", err);
+            HttpResponse::Ok().json(ResVO::<String>::error_msg("更新用户信息异常".to_string()))
         }
     }
 }
@@ -314,11 +325,6 @@ pub async fn update_admin_status(item: web::Json<UpdateAdminStatusRequest>) -> H
 }
 
 
-// 退出登录
-#[get("/system/logout")]
-pub async fn logout() -> HttpResponse {
-    return HttpResponse::Ok().json(ResVO::<String>::ok_msg("退出成功".to_string()))
-}
 
 #[get("/system/admin/detail/{id}")]
 pub async fn get_user_detail(item: web::Path<InfoId>) -> HttpResponse {
@@ -328,12 +334,33 @@ pub async fn get_user_detail(item: web::Path<InfoId>) -> HttpResponse {
     return match admin_service::get_by_detail(&item.id).await {
         Ok(user_op) => match user_op {
             Some(admin) => {
-                
-                let admin_detail: SystemAdminVO = admin.into();
+                let mut admin_detail: SystemAdminVO = admin.into();
+                // 查询用户关联的角色
+                let result_roles = role_service::select_by_admin_id(&admin_detail.id).await.unwrap_or_default();
+                let mut role_data: Vec<Option<u64>> = Vec::new();
+                for role in result_roles {
+                    role_data.push(role.id);
+                }
+                admin_detail.role_ids = Option::from(role_data);
+                // 查询用户关联的部门
+                let result_depts = depts_service::select_by_admin_id(&admin_detail.id).await.unwrap_or_default();
+                let mut dept_data: Vec<Option<u64>> = Vec::new();
+                for dept in result_depts {
+                    dept_data.push(dept.id);
+                }
+                admin_detail.dept_ids = Option::from(dept_data);
+                // 查询用户关联的岗位
+                let result_posts = post_service::select_by_admin_id(&admin_detail.id).await.unwrap_or_default();
+                let mut post_data: Vec<Option<u64>> = Vec::new();
+                for post in result_posts {
+                    post_data.push(post.id);
+                }
+                admin_detail.post_ids = Option::from(post_data);
+
                 HttpResponse::Ok().json(ResVO::ok_with_data(admin_detail))
             }
             None => {
-                HttpResponse::Ok().json(ResVO::<String>::error_msg("角色信息不存在".to_string()))
+                HttpResponse::Ok().json(ResVO::<String>::error_msg("用户信息不存在".to_string()))
             }
         }
         Err(err) => {
@@ -360,29 +387,34 @@ pub async fn admin_list(item: web::Query<UserListRequest>) -> HttpResponse {
         Ok(page) => {
             //获取名字id列表
             let id_list: Vec<Option<u64>> = page.records.iter().map(|data| data.id).collect();
-            let result_role_name = role_service::select_by_ids(&id_list).await.unwrap_or_default();
-            let result_dept_name = depts_service::select_by_ids(&id_list).await.unwrap_or_default();
+            let result_role_name = role_service::select_by_ids(&id_list).await;
+            let result_dept_name = depts_service::select_by_ids(&id_list).await;
             let mut list_data: Vec<AdminListVO> = Vec::new();
             for user in page.records {
                 let mut role_data: Vec<RoleNameDTO> = Vec::new();
-                match result_role_name.iter().find(|data| data.id == user.id) {
-                    Some(role) => {
-                        role_data.push(RoleNameDTO {
-                            role_name: role.role_name.clone(),
-                        });
+                match result_role_name {
+                    Ok(ref role_list) => {
+                        for role_entity in role_list {
+                            if role_entity.admin_id == user.id {
+                                role_data.push(RoleNameDTO{ role_name: role_entity.role_name.clone() });
+                            }
+                        }
                     }
-                    None => {}
-                }
-                let mut depts_data: Vec<DeptsNameDTO> = Vec::new();
-                match result_dept_name.iter().find(|data| data.id == user.id) {
-                    Some(dept) => {
-                        depts_data.push(DeptsNameDTO {
-                            dept_name: dept.dept_name.clone(),
-                        });
-                    }
-                    None => {}
+                    Err(_) => {}
                 }
                 
+                let mut depts_data: Vec<DeptsNameDTO> = Vec::new();
+                match result_dept_name {
+                    Ok(ref dept_list) => {
+                        for dept_entity in dept_list {
+                            if dept_entity.admin_id == user.id {
+                                depts_data.push(DeptsNameDTO {dept_name: dept_entity.dept_name.clone()});
+                            }
+                        }
+                    }
+                    Err(_) => {}
+                }
+
                 list_data.push(AdminListVO {
                     id: user.id,
                     sort: user.sort,
@@ -409,4 +441,11 @@ pub async fn admin_list(item: web::Query<UserListRequest>) -> HttpResponse {
             ))
         }
     }
+}
+
+
+// 退出登录
+#[get("/system/logout")]
+pub async fn logout() -> HttpResponse {
+    return HttpResponse::Ok().json(ResVO::<String>::ok_msg("退出成功".to_string()))
 }

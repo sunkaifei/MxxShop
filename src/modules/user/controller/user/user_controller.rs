@@ -36,7 +36,7 @@ pub async fn post_login(request: HttpRequest, item: web::Json<UserLoginRequest>)
                     HttpResponse::Ok().json(ResVO::<String>::error_msg("用户不存在".to_string()))
                 }
                 Some(user_info) => {
-                    let valid = verify(&item.password.clone().unwrap_or_default(), &user_info.password).unwrap_or_default();
+                    let valid = verify(&item.password.clone().unwrap_or_default(), &user_info.password.unwrap_or_default()).unwrap_or_default();
                     if !valid {
                         return HttpResponse::Ok().json(ResVO::<String>::error_msg("密码不正确".to_string()));
                     }

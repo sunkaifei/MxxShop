@@ -8,12 +8,13 @@
 //! 版权所有，侵权必究！
 //!
 
+use rbatis::rbdc::DateTime;
 use crate::core::web::entity::common::BathIdRequest;
 
 use crate::core::errors::error::{Error, Result};
-use crate::modules::system::entity::admin_entity::AdminDeptsMerge;
+use crate::modules::system::entity::admin_entity::{AdminDeptsMerge, AdminPostMerge};
 use crate::modules::system::entity::depts_entity::SystemDept;
-use crate::modules::system::entity::depts_model::{DeptPageDTO, DeptPageRequest, DeptSaveRequest, DeptTree, DeptTreeData, DeptUpdateRequest};
+use crate::modules::system::entity::depts_model::{DeptAdminMerge, DeptPageDTO, DeptPageRequest, DeptSaveRequest, DeptTree, DeptTreeData, DeptUpdateRequest};
 use crate::modules::system::mapper::depts_mapper;
 use crate::pool;
 use crate::utils::snowflake_id::generate_snowflake_id;
@@ -54,7 +55,26 @@ pub async fn update_dept(payload: DeptUpdateRequest) -> Result<u64> {
     return Ok(result.unwrap_or_default().rows_affected);
 }
 
-
+/// 根据管理员ID查询关联的部门列表
+pub async fn batch_update_dept(dept_ids: &Option<Vec<Option<u64>>>, admin_id: &Option<u64>) -> Result<u64> {
+    AdminDeptsMerge::delete_by_column(pool!(), "admin_id", admin_id).await?;
+    let result = match dept_ids {
+        Some(dept_vec) if !dept_vec.is_empty() && !dept_vec.iter().all(|item| item.is_none()) => {
+            let sys_dept_admin_list: Vec<AdminDeptsMerge> = dept_vec
+                .iter()
+                .map(|depts_id| AdminDeptsMerge {
+                    id: None,
+                    create_time: Some(DateTime::now()),
+                    depts_id: depts_id.clone(),
+                    admin_id: *admin_id,
+                })
+                .collect();
+            AdminDeptsMerge::insert_batch(pool!(), &sys_dept_admin_list, 20).await?.rows_affected
+        }
+        _ => 0,
+    };
+    Ok(result)
+}
 
 
 // 用户部门组转树
@@ -89,7 +109,7 @@ pub async fn all_dept_list_tree() -> rbatis::Result<Vec<DeptTree>> {
     Ok(dept_list)
 }
 
-// 路由数组转树
+/// 路由数组转树
 pub fn dept_list_to_tree(re_list: &mut Vec<DeptTreeData>, ori_arr: Vec<SystemDept>, pid: Option<u64>) {
     let default_pid = if pid.is_none() {
         ori_arr.iter().map(|dept| dept.parent_id).min().unwrap_or_default()
@@ -126,11 +146,36 @@ pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemDept
     Ok(st)
 }
 
-/// 根据管理员ID查询关联的查询部门列表
-pub async fn select_by_ids(ids: &Vec<Option<u64>>) -> rbatis::Result<Vec<SystemDept>> {
-    let result_merge = AdminDeptsMerge::select_in_column(pool!(), "admin_id", ids).await?;
+/// # 根据管理员ID查询关联的部门列表
+/// ## admin_id: 用户id
+///
+/// * 返回值: 部门列表
+///
+pub async fn select_by_admin_id(admin_id: &Option<u64>) -> rbatis::Result<Vec<SystemDept>> {
+    let result_merge = AdminDeptsMerge::select_by_column(pool!(), "admin_id", admin_id).await?;
     let id_list: Vec<Option<u64>> = result_merge.iter().map(|data| data.depts_id).collect();
-    Ok(SystemDept::select_in_column(pool!(), "id", &id_list).await?)
+    if !id_list.is_empty() {
+        Ok(SystemDept::select_in_column(pool!(), "id", &id_list).await?)
+    }else{
+        Ok(vec![])
+    }
+}
+
+/// 根据管理员列表ID关联的部门列表
+pub async fn select_by_ids(ids: &Vec<Option<u64>>) -> rbatis::Result<Vec<DeptAdminMerge>> {
+    let result_merge = AdminDeptsMerge::select_in_column(pool!(), "admin_id", ids).await?;
+    let mut list_data: Vec<DeptAdminMerge> = Vec::new();
+    for merge in result_merge {
+        let result_dept = SystemDept::select_by_column(pool!(), "id", &merge.depts_id).await?;
+        for dept in result_dept {
+            list_data.push(DeptAdminMerge {
+                admin_id: merge.admin_id,
+                dept_name: dept.dept_name,
+            })
+        }
+    }
+    
+    return Ok(list_data)
 }
 
 // 查询部门所有数据列表

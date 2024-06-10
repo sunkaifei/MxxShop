@@ -11,7 +11,7 @@ use rbatis::{py_sql, RBatis};
 use crate::modules::system::entity::navigation_entity::Navigation;
 use crate::modules::system::entity::navigation_model::NavigationPageBO;
 
-///增删改查导航菜单
+//增删改查导航菜单
 rbatis::crud!(Navigation {}, "mxx_navigation");
 
 /// 查询导航名称是否已存在

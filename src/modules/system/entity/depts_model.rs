@@ -85,6 +85,13 @@ impl From<DeptUpdateRequest> for SystemDept {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all(serialize = "camelCase"))]
+pub struct DeptAdminMerge {
+    pub admin_id: Option<u64>,
+    pub dept_name: Option<String>,
+}
+
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
@@ -113,7 +120,6 @@ impl From<DeptPageRequest> for DeptPageDTO {
 pub struct DeptTree {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<DeptTree>>,
-    #[serde(serialize_with = "serialize_option_u64_to_string")]
     pub id: Option<u64>,
     pub label: String,
     pub is_disabled: bool,

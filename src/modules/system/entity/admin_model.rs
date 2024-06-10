@@ -10,6 +10,7 @@
 
 use rbatis::rbdc::DateTime;
 use serde::{Deserialize, Serialize};
+use validator::Validate;
 
 use crate::modules::system::entity::admin_entity::SystemAdmin;
 use crate::modules::system::entity::menus_model::Router;
@@ -17,7 +18,7 @@ use crate::modules::system::entity::post_entity::SystemPost;
 use crate::modules::system::entity::role_entity::SystemRole;
 use crate::utils::string_utils::{serialize_option_u64_to_string,deserialize_string_to_u64,deserialize_string_to_i8,deserialize_string_to_i32};
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Validate, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AdminSaveRequest {
     ///用户账号
@@ -25,13 +26,19 @@ pub struct AdminSaveRequest {
     ///用户昵称
     pub nick_name: Option<String>,
     ///用户类型：0普通用户，1超级管理员
-    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub user_type: Option<i8>,
+    ///岗位
+    pub post_ids: Option<Vec<Option<u64>>>,
+    ///角色
+    pub role_ids: Option<Vec<Option<u64>>>,
+    ///部门
+    pub dept_ids: Option<Vec<Option<u64>>>,
     ///用户邮箱
     pub email: Option<String>,
     ///手机号码
     pub mobile: Option<String>,
     ///用户性别（0男 1女 2未知）
+    #[validate(range(min = 0, max = 1))]
     #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub sex: Option<i8>,
     ///头像地址
@@ -39,16 +46,10 @@ pub struct AdminSaveRequest {
     ///密码
     pub password: Option<String>,
     ///帐号状态（0正常 1停用）
-    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub status: Option<i8>,
     ///备注
     pub remark: Option<String>,
-    ///岗位
-    pub post_ids: Option<Vec<String>>,
-    ///角色
-    pub role_ids: Option<Vec<String>>,
     ///用户排序
-    #[serde(deserialize_with = "deserialize_string_to_i32")]
     pub sort: Option<i32>,
 }
 
@@ -78,21 +79,33 @@ impl From<AdminSaveRequest> for SystemAdmin {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+
+#[derive(Debug, Validate, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AdminUpdateRequest {
-    #[serde(deserialize_with = "deserialize_string_to_u64")]
     pub id: Option<u64>,
-    pub mobile: Option<String>,
+    #[validate(length(min = 3, max = 38))]
     pub user_name: Option<String>,
+    #[validate(range(min = 0, max = 1))]
     pub user_type: Option<i8>,
+    #[validate(length(min = 3, max = 38))]
     pub nick_name: Option<String>,
+    ///手机号码
+    pub mobile: Option<String>,
+    ///岗位
+    pub post_ids: Option<Vec<Option<u64>>>,
+    ///角色
+    pub role_ids: Option<Vec<Option<u64>>>,
+    ///部门
+    pub dept_ids: Option<Vec<Option<u64>>>,
+    ///头像地址
     pub avatar: Option<String>,
+    #[validate(email)]
     pub email: Option<String>,
     ///用户性别（0男 1女 2未知）
+    #[validate(range(min = 0, max = 1))]
+    #[serde(deserialize_with = "deserialize_string_to_i8")]
     pub sex: Option<i8>,
-    pub login_ip: Option<String>,
-    pub login_date: Option<DateTime>,
     pub sort: Option<i32>,
     pub status: Option<i8>,
     pub remark: Option<String>,
@@ -124,6 +137,43 @@ impl From<AdminUpdateRequest> for SystemAdmin {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateLoginRequest {
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub id: Option<u64>,
+    pub login_ip: Option<String>,
+    pub login_date: Option<DateTime>,
+}
+
+impl From<UpdateLoginRequest> for SystemAdmin {
+    fn from(req: UpdateLoginRequest) -> Self {
+        Self {
+            id: req.id,
+            user_name: None,
+            nick_name: None,
+            user_type: None,
+            email: None,
+            mobile: None,
+            sex: None,
+            avatar: None,
+            password: None,
+            status: None,
+            del_flag: None,
+            login_ip: req.login_ip,
+            login_date: req.login_date,
+            create_by: None,
+            create_time:None,
+            update_by: None,
+            update_time: None,
+            remark: None,
+            sort: None,
+        }
+    }
+}
+
+
+
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all(serialize = "camelCase"))]
 pub struct UserLoginResponse {
@@ -147,27 +197,6 @@ pub struct UserLoginRequest {
     pub uuid: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
-pub struct QueryUserRoleReq {
-    pub user_id: i32,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct QueryUserRoleData {
-    pub sys_role_list: Vec<UserRoleList>,
-    pub user_role_ids: Vec<u64>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct UserRoleList {
-    pub id: u64,
-    pub status: i32,
-    pub sort: i32,
-    pub role_name: String,
-    pub remark: String,
-    pub create_time: String,
-    pub update_time: String,
-}
 
 /// 角色和岗位列表
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -175,17 +204,6 @@ pub struct UserRoleList {
 pub struct RoleAndPostVO {
     pub role_list: Vec<SystemRole>,
     pub post_list: Vec<SystemPost>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct MenuUserList {
-    pub id: u64,
-    pub parent_id: i32,
-    pub name: String,
-    pub path: String,
-    pub api_url: String,
-    pub menu_type: i32,
-    pub icon: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -335,8 +353,8 @@ impl From<UpdateAdminStatusRequest> for SystemAdmin{
             sort: None,
         }
     }
-    
 }
+
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

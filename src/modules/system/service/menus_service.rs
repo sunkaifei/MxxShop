@@ -8,7 +8,6 @@
 //! 版权所有，侵权必究！
 //!
 
-use crate::core::errors::error::Error;
 use actix_web::{HttpResponse};
 use rbatis::executor::RBatisTxExecutor;
 use rbatis::rbdc::{DateTime};

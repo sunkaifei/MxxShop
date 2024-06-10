@@ -9,8 +9,10 @@
 //!
 
 use rbatis::{Page, PageRequest};
+use rbatis::rbdc::DateTime;
 use crate::core::errors::error::{Error, Result};
-use crate::modules::system::entity::post_entity::SystemPost;
+use crate::modules::system::entity::admin_entity::{AdminPostMerge};
+use crate::modules::system::entity::post_entity::{SystemPost};
 use crate::modules::system::entity::post_model::{PostPageBO, PostSaveRequest, PostUpdateRequest};
 use crate::modules::system::mapper::post_mapper;
 use crate::pool;
@@ -40,6 +42,27 @@ pub async fn update_post(item: PostUpdateRequest) -> Result<u64> {
     Ok(rows.rows_affected)
 }
 
+/// 批量更新职位和管理员关联关系
+pub async fn batch_update_post(post_ids: &Option<Vec<Option<u64>>>, admin_id: &Option<u64>) -> Result<u64> {
+    AdminPostMerge::delete_by_column(pool!(), "admin_id", admin_id).await?;
+    let result = match post_ids {
+        Some(post_vec) if !post_vec.is_empty() && !post_vec.iter().all(|item| item.is_none()) => {
+            let sys_post_admin_list: Vec<AdminPostMerge> = post_vec
+                .iter()
+                .map(|post_id| AdminPostMerge {
+                    id: None,
+                    create_time: Some(DateTime::now()),
+                    post_id: post_id.clone(),
+                    admin_id: *admin_id,
+                })
+                .collect();
+            AdminPostMerge::insert_batch(pool!(), &sys_post_admin_list, 20).await?.rows_affected
+        }
+        _ => 0,
+    };
+    Ok(result)
+}
+
 /// 根据名称查询职位是否唯一
 pub async fn find_by_name(post_name: &Option<String>, id: &Option<u64>) -> Result<bool> {
     let result = post_mapper::find_by_name_unique(pool!(), post_name, id).await?;
@@ -55,6 +78,21 @@ pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemPost
     Ok(SystemPost::select_by_column(pool!(),"id", id).await?
         .into_iter()
         .next())
+}
+
+/// # 根据管理员ID查询关联的部门列表
+/// ## admin_id: 用户id
+///
+/// * 返回值: 部门列表
+///
+pub async fn select_by_admin_id(admin_id: &Option<u64>) -> rbatis::Result<Vec<SystemPost>> {
+    let result_merge = AdminPostMerge::select_by_column(pool!(), "admin_id", admin_id).await?;
+    let id_list: Vec<Option<u64>> = result_merge.iter().map(|data| data.post_id).collect();
+    if !id_list.is_empty() {
+        Ok(SystemPost::select_in_column(pool!(), "id", &id_list).await?)
+    } else {
+        Ok(vec![])
+    }
 }
 
 ///查询所有职位列表

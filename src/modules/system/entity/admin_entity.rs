@@ -78,3 +78,15 @@ pub struct AdminRolesMerge {
     ///创建时间
     pub create_time: Option<DateTime>,
 }
+
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct AdminPostMerge {
+    /// ID
+    pub id: Option<u64>,
+    /// 用户id
+    pub admin_id: Option<u64>,
+    /// 岗位id
+    pub post_id: Option<u64>,
+    /// 创建日期
+    pub create_time: Option<DateTime>,
+}

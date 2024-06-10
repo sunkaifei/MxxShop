@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 use crate::modules::system::entity::admin_entity::SystemAdmin;
 
 use crate::modules::system::entity::role_entity::SystemRole;
+use crate::routes::system_routes::Role;
 use crate::utils::string_utils::{deserialize_string_to_u64,serialize_option_u64_to_string};
 
 #[derive(Debug, Deserialize)]
@@ -97,7 +98,21 @@ impl SystemRole {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all(serialize = "camelCase"))]
+pub struct RoleAdminMerge {
+    pub admin_id: Option<u64>,
+    pub role_name: Option<String>,
+}
 
+impl From<SystemRole> for RoleAdminMerge {
+    fn from(s: SystemRole) -> Self {
+        Self {
+            admin_id: s.id,
+            role_name: s.role_name,
+        }
+    }
+}
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all(serialize = "camelCase"))]

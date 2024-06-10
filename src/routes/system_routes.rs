@@ -60,7 +60,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             .service(system_admin_controller::save_admin) // 添加管理员
             .service(system_admin_controller::user_delete)// 删除管理员
             .service(system_admin_controller::update_user_role)// 更新用户角色
-            .service(system_admin_controller::user_update)
+            .service(system_admin_controller::admin_update)
             .service(system_admin_controller::update_admin_password)//更新其他管理员密码
             .service(system_admin_controller::update_my_password)
             .service(system_admin_controller::update_admin_status)// 更新管理员状态

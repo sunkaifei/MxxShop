@@ -10,7 +10,7 @@
 
 
 use rbatis::{crud, impl_select_page, py_sql, RBatis};
-use crate::modules::system::entity::post_entity::SystemPost;
+use crate::modules::system::entity::post_entity::{SystemPost};
 use crate::modules::system::entity::post_model::{PostPageBO};
 
 crud!(SystemPost {},"mxx_system_post");

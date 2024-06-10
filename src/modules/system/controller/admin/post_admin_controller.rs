@@ -13,8 +13,7 @@ use actix_web::{delete, get, HttpResponse, post, put, web};
 use crate::core::web::entity::common::{BathIdRequest, InfoId};
 use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
 use crate::modules::system::entity::post_model::{PostListVO, PostPageBO, PostPageRequest, PostSaveRequest, PostUpdateRequest};
-use crate::modules::system::entity::role_model::{RoleDetail, RoleDetailVO};
-use crate::modules::system::service::{post_service, role_service};
+use crate::modules::system::service::{post_service};
 
 #[post("/system/post/save")]
 pub async fn save_post(item: web::Json<PostSaveRequest>) -> HttpResponse {
