@@ -11,26 +11,40 @@
 
 
 use std::collections::HashMap;
-use serde_json::Value;
+use minijinja::{Error, ErrorKind, Value};
+use minijinja::value::Rest;
+//use serde_json::Value;
+use crate::core::web::tags::url_tage::CURRENT_REQUEST;
 
 
 /// 模板国际化元素标签
 /// 模板调用示例：{{ lang(info="system_site_login",locale="zh-CN",name="admin") }}
 /// 你好，%{name}
-pub fn lang_function(args: &HashMap<String, Value>) -> tera::Result<Value> {
-    let info = args.get("info").ok_or_else(|| tera::Error::msg("lang标签缺少info参数".to_string()))?;
-    let info_str = info.as_str().unwrap_or_default();
-    let tags = if let Some(locale) = args.get("locale").and_then(|l| l.as_str()) {
-        if let Some(name) = args.get("name").and_then(|n| n.as_str()) {
-            t!(info_str, locale = locale, name = name)
-        } else {
-            t!(info_str, locale = locale)
-        }
-    } else {
-        t!(info_str)
-    };
+// pub fn lang_function(args: &HashMap<String, Value>) -> tera::Result<Value> {
+//     let info = args.get("info").ok_or_else(|| tera::Error::msg("lang标签缺少info参数".to_string()))?;
+//     let info_str = info.as_str().unwrap_or_default();
+//     let tags = if let Some(locale) = args.get("locale").and_then(|l| l.as_str()) {
+//         if let Some(name) = args.get("name").and_then(|n| n.as_str()) {
+//             t!(info_str, locale = locale, name = name)
+//         } else {
+//             t!(info_str, locale = locale)
+//         }
+//     } else {
+//         t!(info_str)
+//     };
+//
+//     Ok(Value::String(tags.to_string()))
+// }
 
-    Ok(Value::String(tags.to_string()))
+
+
+pub fn lang_function(name: &str, args: Rest<String>) -> Result<Value, Error> {
+    log::info!("================={:}",name);
+    if name.is_empty() {
+        return Err(Error::new(ErrorKind::InvalidOperation, "lang标签缺少info参数".to_string()));
+    }
+    let locale= "zh-CN";
+    let lang = t!(name, locale = locale);
+    Ok(Value::from(lang.to_string()))
 }
-
 

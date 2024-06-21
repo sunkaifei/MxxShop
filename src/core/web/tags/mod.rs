@@ -10,3 +10,4 @@
 
 
 pub mod i18n_tags;
+pub mod url_tage;

@@ -15,16 +15,16 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Attach {
-    pub id: u64,
-    pub name: String,
-    pub path: String,
-    pub upload_url: String,
-    pub ext: String,
-    pub size: u64,
-    pub md5: String,
-    pub r#type: i32,
-    pub status: i32,
-    pub add_time: DateTime,
+    pub id: Option<u64>,
+    pub name: Option<String>,
+    pub path: Option<String>,
+    pub upload_url: Option<String>,
+    pub ext: Option<String>,
+    pub size: Option<u64>,
+    pub md5: Option<String>,
+    pub r#type: Option<i8>,
+    pub status: Option<i8>,
+    pub add_time: Option<DateTime>,
 }
 
 #[derive(Debug, MultipartForm)]
@@ -35,8 +35,8 @@ pub struct ImageForm {
 
 #[derive(Serialize)]
 pub struct ImageData {
-    pub id: u32,
-    pub url: String,
+    pub id: Option<u64>,
+    pub url: Option<String>,
 }
 
 #[derive(MultipartForm)]

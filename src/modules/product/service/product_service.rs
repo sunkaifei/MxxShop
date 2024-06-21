@@ -53,6 +53,14 @@ pub async fn find_by_name_unique(product_name: &Option<String>, id: &Option<u64>
     }
 }
 
+///根据短链接查询产品详情
+pub async fn get_by_short_url(short_url: &Option<String>) -> Result<Option<Product>>{
+    let result = Product::select_by_column(pool!(),"short_url", short_url).await?
+        .into_iter()
+        .next();
+    return Ok(result);
+}
+
 ///根据id查询产品详情
 pub async fn get_by_detail(id: Option<u64>) -> rbatis::Result<Option<Product>>{
     Ok(Product::select_by_column(pool!(),"id", id).await?

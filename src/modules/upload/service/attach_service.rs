@@ -15,7 +15,7 @@ use crate::utils::settings::Settings;
 use crate::utils::snowflake_id::generate_snowflake_id;
 use crate::utils::time_utils::current_date;
 use crate::modules::system::service::config_service;
-use crate::modules::upload::entity::attach_model::AttachPageBO;
+use crate::modules::upload::entity::attach_model::{AttachPageBO, AttachPageRequest};
 
 pub async fn upload_product_image(module: String, form: ImageForm) -> HttpResponse {
     let file_name = form.file.file_name.unwrap_or_else(|| "".to_string());
@@ -277,8 +277,9 @@ pub async fn update_attach(item: &Attach) -> Result<u64> {
     return Ok(result.unwrap_or_default().rows_affected); 
 }
 
-pub async fn select_attach_page(item: AttachPageBO) -> rbatis::Result<Page<Attach>> {
-    let page_req = &PageRequest::new(item.page_num.clone(), item.page_size.clone());
+pub async fn get_page_list(item: AttachPageRequest) -> rbatis::Result<Page<Attach>> {
+    let item: AttachPageBO = item.into();
+    let page_req = &PageRequest::new(item.page_num.clone().unwrap_or_default(), item.page_size.clone().unwrap_or_default());
     let result = Attach::select_attach_page(pool!(), page_req, item).await;
     Ok(result?)
 }

@@ -8,14 +8,16 @@
 //! 版权所有，侵权必究！
 //!
 
+use actix_http::StatusCode;
 use crate::modules::articles::entity::article_model::ArticleUser;
 use crate::modules::user::service::user_service;
 use actix_identity::Identity;
 use actix_session::Session;
 
 use actix_web::{get, HttpResponse};
+use minijinja::context;
 use tera::Context;
-use crate::core::errors::error::Error;
+use crate::core::errors::error::{Error, Result};
 
 use crate::core::service::templates_service;
 use crate::modules::articles::entity::article_model::{ArticlesListData, ArticlesListRequest};
@@ -23,9 +25,10 @@ use crate::modules::articles::service::article_service;
 use crate::modules::system::service::config_service;
 use crate::modules::user::entity::user_model::{UserLoginSession};
 use rust_i18n::t;
+use crate::get_template;
 
 #[get("/")]
-pub async fn index() -> HttpResponse {
+pub async fn index() -> Result<HttpResponse> {
     let mut tera_ctx = Context::new();
     // let select_list = ArticlesListRequest {
     //     category_id: None,
@@ -104,16 +107,16 @@ pub async fn index() -> HttpResponse {
     // }
 
     let locale = "zh-CN";
-    
-    tera_ctx.insert("lang_login", &t!("system.site.login", locale = locale));
-    tera_ctx.insert("lang_signup", &t!("system.site.register", locale = locale));
-    let rendered = tera.await.render("index.html", &tera_ctx).unwrap_or_default();
-
+    let ctx = context!(
+        lang_login => &t!("user.login", locale = locale),
+        lang_signup => &t!("user.register", locale = locale)
+    );
     // 将渲染后的 HTML 内容写入静态文件
     //let mut file = File::create("static/index.html").unwrap();
     //file.write_all(rendered.as_bytes()).unwrap();
+    let out = get_template("default/index.html", ctx)?;
 
-    HttpResponse::Ok().body(rendered)
+    Ok(HttpResponse::build(StatusCode::OK).body(out))
 }
 
 

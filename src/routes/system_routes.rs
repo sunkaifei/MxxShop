@@ -18,6 +18,7 @@ use crate::core::permission::jwt_util::JWTToken;
 use crate::modules::articles::controller::admin::{article_admin_controller, article_category_admin_controller};
 use crate::modules::product::controller::admin::product_admin_controller;
 use crate::modules::system::controller::admin::{config_admin_controller, depts_admin_controller, ip_admin_controller, menus_admin_controller, post_admin_controller, role_admin_controller, system_admin_controller, system_dict_controller};
+use crate::modules::upload::controller::admin::upload_admin_controller;
 use crate::utils::settings::Settings;
 
 async fn extract(req: &ServiceRequest) -> Result<HashSet<String>, Error> {
@@ -108,6 +109,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             .service(article_admin_controller::get_article_list)
             .service(article_category_admin_controller::category_list_tree)
             .service(ip_admin_controller::ip_address_page)
+            .service(upload_admin_controller::get_page_list)    // 附件列表
             //.service(web::resource("/system/ip/batch_delete").route(web::delete().to(ip_admin_controller::batch_delete_ip)))
             //.service(web::resource("/system/ip/update").route(web::put().to(ip_admin_controller::update_ip)))
             //.service(web::resource("/system/ip/detail/{id}").route(web::get().to(ip_admin_controller::get_ip_detail)))

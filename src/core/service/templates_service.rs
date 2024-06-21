@@ -14,7 +14,6 @@ use serde_json::{to_value};
 use tera::{Error, Result, Tera, try_get_value, Value};
 use crate::modules::system::service::config_service;
 use crate::utils::time_utils::compare_with_current_time;
-use crate::core::web::tags::i18n_tags::lang_function;
 
 pub async fn get_templates() -> Tera {
     let config_template = config_service::select_by_key(&Option::from("pc_template".to_string()))
@@ -32,7 +31,7 @@ pub async fn get_templates() -> Tera {
     tera.register_filter("html_filter", html_filter);
     tera.register_function("format_time", time_function);
     tera.register_function("format_json", json_function);
-    tera.register_function("lang", lang_function);
+    //tera.register_function("lang", lang_function);
     let _ = tera.full_reload();
     tera
 }

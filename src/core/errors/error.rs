@@ -12,6 +12,7 @@ use std::error::Error as StdError;
 use thiserror::Error;
 use std::fmt::{self, Debug, Display};
 use std::io;
+use actix_web::{HttpResponse, ResponseError};
 
 use serde::de::Visitor;
 use serde::ser::{Serialize, Serializer};
@@ -73,6 +74,18 @@ impl From<Error> for std::io::Error {
 impl From<rbatis::Error> for Error {
     fn from(arg: rbatis::Error) -> Self {
         Error::E(arg.to_string())
+    }
+}
+
+impl From<&(dyn actix_web::ResponseError + 'static)> for Error {
+    fn from(arg: &(dyn actix_web::ResponseError + 'static)) -> Self {
+        Error::E(arg.to_string())
+    }
+}
+
+impl ResponseError for Error {
+    fn error_response(&self) -> HttpResponse {
+        HttpResponse::InternalServerError().body(self.to_string())
     }
 }
 

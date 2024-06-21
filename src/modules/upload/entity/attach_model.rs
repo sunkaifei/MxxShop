@@ -15,20 +15,20 @@ use crate::modules::upload::entity::attach_entity::Attach;
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UploadResult {
     ///图片地址
-    pub src: String,
+    pub src: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AttachUpdateRequest {
-    pub id: u64,
-    pub name: String,
-    pub path: String,
-    pub upload_url: String,
-    pub ext: String,
-    pub size: u64,
-    pub md5: String,
-    pub r#type: i32,
-    pub status: i32,
+    pub id: Option<u64>,
+    pub name: Option<String>,
+    pub path: Option<String>,
+    pub upload_url: Option<String>,
+    pub ext: Option<String>,
+    pub size: Option<u64>,
+    pub md5: Option<String>,
+    pub r#type: Option<i8>,
+    pub status: Option<i8>,
 }
 
 impl From<AttachUpdateRequest> for Attach {
@@ -43,7 +43,7 @@ impl From<AttachUpdateRequest> for Attach {
             md5: req.md5,
             r#type: req.r#type,
             status: req.status,
-            add_time: DateTime::now(),
+            add_time: Option::from(DateTime::now()),
         }
     }
     
@@ -52,42 +52,48 @@ impl From<AttachUpdateRequest> for Attach {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AttachPageRequest {
-    pub config_name: Option<String>,
-    pub config_key: Option<String>,
+    pub name: Option<String>,
     // 状态查询（0和空都是所有，1查询为0的数据，2查询为1的数据）
-    pub config_type: Option<String>,
+    pub r#type: Option<i8>,
     // 当前页码数
-    pub page_num: u64,
+    pub page_num: Option<u64>,
     // 每页条数
-    pub page_size: u64,
+    pub page_size: Option<u64>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AttachPageBO {
-    pub config_name: Option<String>,
-    pub config_key: Option<String>,
+    pub name: Option<String>,
     // 状态查询（0所有，1查询为0的数据，2查询为1的数据）
-    pub config_type: Option<i8>,
+    pub r#type: Option<i8>,
     // 当前页码数
-    pub page_num: u64,
+    pub page_num: Option<u64>,
     // 每页条数
-    pub page_size: u64,
+    pub page_size: Option<u64>,
 }
 
 
 impl From<AttachPageRequest> for AttachPageBO {
     fn from(req: AttachPageRequest) -> Self {
         Self {
-            config_name: req.config_name,
-            config_key: req.config_key,
-            config_type: req.config_type.map(|s| {
-                s.parse::<i8>().unwrap_or_else(|_| {
-                    0
-                })
-            }),
+            name: req.name,
+            r#type: req.r#type,
             page_num: req.page_num,
             page_size: req.page_size,
         }
     }
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct AttachPageVO {
+    pub id: Option<u64>,
+    pub name: Option<String>,
+    pub path: Option<String>,
+    pub upload_url: Option<String>,
+    pub ext: Option<String>,
+    pub size: Option<u64>,
+    pub md5: Option<String>,
+    pub r#type: Option<i8>,
+    pub status: Option<i8>,
+    pub add_time: Option<String>,
+}
