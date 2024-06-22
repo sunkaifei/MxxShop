@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct SystemConfig {
     ///配置id
-    pub config_id: u64,
+    pub config_id: Option<u64>,
     ///参数名称
     pub config_name: Option<String>,
     ///参数键名

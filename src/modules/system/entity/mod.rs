@@ -35,4 +35,5 @@ pub mod post_entity;
 pub mod post_model;
 pub mod navigation_entity;
 pub mod navigation_model;
+pub mod site_links_entity;
 

@@ -8,12 +8,70 @@
 //! 版权所有，侵权必究！
 //!
 
-use actix_web::{get, HttpResponse, web};
-use crate::core::web::entity::common::InfoId;
+use actix_web::{delete, get, HttpResponse, post, put, web};
+use crate::core::web::entity::common::{BathIdRequest, InfoId};
 use crate::core::web::response::{ok_result_page, ResultPage, ResVO};
-use crate::modules::system::entity::config_model::{ConfigPageBO, ConfigPageRequest, ConfigVO, SystemConfigVO};
+use crate::modules::system::entity::config_model::{ConfigPageBO, ConfigPageRequest, ConfigSaveRequest, ConfigUpdateRequest, ConfigVO, SystemConfigVO};
 use crate::modules::system::service::{config_service};
 
+
+#[post("/system/config/save")]
+pub async fn save_config(item: web::Json<ConfigSaveRequest>) -> HttpResponse {
+    if item.config_key.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息key不能为空".to_string()));
+    }
+    if item.config_name.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息名称不能为空".to_string()));
+    }
+    if config_service::find_by_key_unique(&item.config_key, &None).await.unwrap_or_default() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息key已存在".to_string()));
+    }
+    if config_service::find_by_name_unique(&item.config_name, &None).await.unwrap_or_default() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息name已存在".to_string()));
+    }
+    return match config_service::save_config(item.0).await {
+        Ok(user_op) => {
+            HttpResponse::Ok().json(ResVO::ok_with_data(user_op))
+        }
+        Err(err) => {
+            HttpResponse::Ok().json(ResVO::<String>::error_msg(err.to_string()))
+        }
+    }
+}
+
+#[delete("/system/config/batch_delete")]
+pub async fn batch_delete(item: web::Json<BathIdRequest>) -> HttpResponse {
+    let ids = item.0;
+    let result = config_service::batch_delete(ids).await;
+    return HttpResponse::Ok().json(ResVO::<u64>::handle_result(result));
+}
+
+#[put("/system/config/update")]
+pub async fn update_config(item: web::Json<ConfigUpdateRequest>) -> HttpResponse {
+    if item.config_id.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息id不能为空".to_string()));
+    };
+    if item.config_key.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息key不能为空".to_string()));
+    };
+    if item.config_name.is_none() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息名称不能为空".to_string()));
+    };
+    if config_service::find_by_key_unique(&item.config_key, &None).await.unwrap_or_default() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息key已存在".to_string()));
+    };
+    if config_service::find_by_name_unique(&item.config_name, &None).await.unwrap_or_default() {
+        return HttpResponse::Ok().json(ResVO::<String>::error_msg("配置信息name已存在".to_string()));
+    };
+    return match config_service::update_config(item.0).await {
+        Ok(user_op) => {
+            HttpResponse::Ok().json(ResVO::ok_with_data(user_op))
+        }
+        Err(err) => {
+            HttpResponse::Ok().json(ResVO::<String>::error_msg(err.to_string()))
+        }
+    }
+}
 
 #[get("/system/config/detail/{id}")]
 pub async fn get_config_detail(item: web::Path<InfoId>) -> HttpResponse {

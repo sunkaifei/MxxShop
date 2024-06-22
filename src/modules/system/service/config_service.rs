@@ -9,21 +9,61 @@
 //!
 
 use rbatis::{Page, PageRequest};
-use crate::core::errors::error::Result;
+use crate::core::errors::error::{Error, Result};
+use crate::core::web::entity::common::BathIdRequest;
 use crate::modules::system::entity::config_entity::SystemConfig;
-use crate::modules::system::entity::config_model::{ConfigPageBO, ConfigSaveRequest};
+use crate::modules::system::entity::config_model::{ConfigPageBO, ConfigSaveRequest, ConfigUpdateRequest};
+use crate::modules::system::mapper::{config_mapper};
 use crate::pool;
-use crate::utils::snowflake_id::generate_snowflake_id;
 
 pub async fn save_config(item: ConfigSaveRequest) -> Result<u64> {
     let mut config_entity :SystemConfig  = item.into();
-    config_entity.config_id = generate_snowflake_id();
     Ok(SystemConfig::insert(pool!(), &config_entity).await?.rows_affected)
 }
 
+pub async fn batch_delete(item: BathIdRequest) -> Result<u64> {
+    return if let Some(ids_vec) = item.ids.clone() {
+        if ids_vec.is_empty() {
+            Err(Error::from("删除的ID不能为空!".to_string()))
+        } else {
+            let result = SystemConfig::delete_in_column(pool!(), "config_id", &ids_vec).await?;
+            Ok(result.rows_affected)
+        }
+    } else {
+        Err(Error::from("删除的ID不能为空!".to_string()))
+    }
+}
+
+/// 更新配置信息
+pub async fn update_config(item: ConfigUpdateRequest) -> Result<u64> {
+    let mut config_entity :SystemConfig  = item.into();
+    Ok(SystemConfig::update_by_column(pool!(), &config_entity, "config_id").await?.rows_affected)
+}
+
+/// 查询config_name的参数名称是否已存在
+pub async fn find_by_name_unique(config_name: &Option<String>, id: &Option<u64>) -> Result<bool> {
+    let result = config_mapper::find_by_name_unique(pool!(), config_name, id).await?;
+    return if result > 0 {
+        Ok(true)
+    } else {
+        Ok(false)
+    }
+}
+
+/// 查询config_key是否已存在
+pub async fn find_by_key_unique(config_key: &Option<String>, id: &Option<u64>) -> Result<bool> {
+    let result = config_mapper::find_by_key_unique(pool!(), config_key, id).await?;
+    return if result > 0 {
+        Ok(true)
+    } else {
+        Ok(false)
+    }
+}
+
+
 ///按id查询配置信息
 pub async fn get_by_detail(id: &Option<u64>) -> rbatis::Result<Option<SystemConfig>> {
-    let st = SystemConfig::select_by_column(pool!(), "id", id).await?
+    let st = SystemConfig::select_by_column(pool!(), "config_id", id).await?
         .into_iter()
         .next();
     Ok(st)
@@ -37,7 +77,7 @@ pub async fn select_by_key(config_key: &Option<String>) -> rbatis::Result<Option
 }
 
 pub async fn select_by_page(item: ConfigPageBO) -> rbatis::Result<Page<SystemConfig>> {
-    let page_req = &PageRequest::new(item.page_num.clone(), item.page_size.clone());
+    let page_req = &PageRequest::new(item.page_num.clone().unwrap_or_default(), item.page_size.clone().unwrap_or_default());
     let result = SystemConfig::select_by_page(pool!(),page_req, item).await;
     Ok(result?)
 }

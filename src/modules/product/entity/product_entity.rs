@@ -73,3 +73,16 @@ pub struct Product {
     pub create_time: Option<DateTime>,
 }
 
+
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Favorites {
+    /// 自增id
+    pub id: Option<u64>,
+    /// 商品id
+    pub product_id: Option<u64>,
+    /// 用户id
+    pub user_id: Option<u64>,
+    /// 添加时间
+    pub create_time: Option<DateTime>,
+}

@@ -12,3 +12,4 @@
 pub mod product_entity;
 pub mod product_model;
 pub mod category_entity;
+mod car_entity;

@@ -19,10 +19,10 @@ rbatis::crud!(SystemConfig {}, "mxx_system_config");
 #[py_sql("
   `select count(*) from mxx_system_config`
   ` where config_name = #{config_name} `
-  if id != null:
-    ` and id != #{id}`
+  if config_id != null:
+    ` and config_id != #{config_id}`
   ")]
-pub async fn find_by_name_unique(rb: &RBatis, config_name: Option<String>, id: Option<u64>, ) -> rbatis::Result<u64> {
+pub async fn find_by_name_unique(rb: &RBatis, config_name: &Option<String>, config_id: &Option<u64>, ) -> rbatis::Result<u64> {
     impled!()
 }
 
@@ -30,10 +30,10 @@ pub async fn find_by_name_unique(rb: &RBatis, config_name: Option<String>, id: O
 #[py_sql("
   `select count(*) from mxx_system_config`
   ` where config_key = #{config_key} `
-  if id != null:
-    ` and id != #{id}`
+  if config_id != null:
+    ` and config_id != #{config_id}`
   ")]
-pub async fn find_by_key_unique(rb: &RBatis, config_key: Option<String>, id: Option<u64>, ) -> rbatis::Result<u64> {
+pub async fn find_by_key_unique(rb: &RBatis, config_key: &Option<String>, config_id: &Option<u64>, ) -> rbatis::Result<u64> {
     impled!()
 }
 

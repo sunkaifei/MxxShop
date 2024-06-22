@@ -11,7 +11,7 @@
 use rbatis::rbdc::DateTime;
 use serde::{Deserialize, Serialize};
 use crate::modules::system::entity::config_entity::SystemConfig;
-use crate::utils::string_utils::{string_to_u64,u64_to_string};
+use crate::utils::string_utils::{deserialize_string_to_u64,serialize_option_u64_to_string};
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct ConfigSaveRequest {
@@ -32,7 +32,7 @@ pub struct ConfigSaveRequest {
 impl From<ConfigSaveRequest> for SystemConfig {
     fn from(item: ConfigSaveRequest) -> Self {
         Self {
-            config_id: 0,
+            config_id: None,
             config_name: item.config_name,
             config_key: item.config_key,
             config_value: item.config_value,
@@ -53,8 +53,8 @@ impl From<ConfigSaveRequest> for SystemConfig {
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct ConfigUpdateRequest {
     ///参数主键
-    #[serde(deserialize_with = "string_to_u64")]
-    pub config_id: u64,
+    #[serde(deserialize_with = "deserialize_string_to_u64")]
+    pub config_id: Option<u64>,
     ///参数名称
     pub config_name: Option<String>,
     ///参数键名
@@ -95,9 +95,9 @@ pub struct ConfigPageRequest {
     // 状态查询（0和空都是所有，1查询为0的数据，2查询为1的数据）
     pub config_type: Option<String>,
     // 当前页码数
-    pub page_num: u64,
+    pub page_num: Option<u64>,
     // 每页条数
-    pub page_size: u64,
+    pub page_size: Option<u64>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -107,9 +107,9 @@ pub struct ConfigPageBO {
     // 状态查询（0所有，1查询为0的数据，2查询为1的数据）
     pub config_type: Option<i8>,
     // 当前页码数
-    pub page_num: u64,
+    pub page_num: Option<u64>,
     // 每页条数
-    pub page_size: u64,
+    pub page_size: Option<u64>,
 }
 
 
@@ -133,7 +133,7 @@ impl From<ConfigPageRequest> for ConfigPageBO {
 #[serde(rename_all = "camelCase")]
 pub struct SystemConfigVO {
     ///参数主键
-    #[serde(serialize_with = "u64_to_string")]
+    #[serde(serialize_with = "serialize_option_u64_to_string")]
     pub config_id: u64,
     ///参数名称
     pub config_name: Option<String>,
@@ -155,8 +155,8 @@ pub struct SystemConfigVO {
 #[serde(rename_all = "camelCase")]
 pub struct ConfigVO {
     ///参数主键
-    #[serde(serialize_with = "u64_to_string")]
-    pub config_id: u64,
+    #[serde(serialize_with = "serialize_option_u64_to_string")]
+    pub config_id: Option<u64>,
     ///参数名称
     pub config_name: Option<String>,
     ///参数键名
